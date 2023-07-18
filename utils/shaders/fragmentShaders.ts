@@ -1,5 +1,5 @@
 const sphereFragmentShader = `
-#include <normal_pars_fragment>
+// #include <normal_pars_fragment>
 
 
 uniform float uIorR;
@@ -53,25 +53,25 @@ float specular(vec3 light, float shininess, float diffuseness) {
 const int LOOP = 16;
 
 void main() {
-  #include <normal_fragment_begin>
+  // #include <normal_fragment_begin>
 
   float iorRatioRed = 1.0/uIorR;
   float iorRatioGreen = 1.0/uIorG;
   float iorRatioBlue = 1.0/uIorB;
 
   vec2 uv = gl_FragCoord.xy / winResolution.xy;
-  vec3 normal = worldNormal;
+  vec3 normal1 = worldNormal;
   vec3 color = vec3(0.0);
 
   for ( int i = 0; i < LOOP; i ++ ) {
     float slide = float(i) / float(LOOP) * 0.1;
 
-    vec3 refractVecR = refract(eyeVector, normal,(1.0/uIorR));
-    vec3 refractVecY = refract(eyeVector, normal, (1.0/uIorY));
-    vec3 refractVecG = refract(eyeVector, normal, (1.0/uIorG));
-    vec3 refractVecC = refract(eyeVector, normal, (1.0/uIorC));
-    vec3 refractVecB = refract(eyeVector, normal, (1.0/uIorB));
-    vec3 refractVecP = refract(eyeVector, normal, (1.0/uIorP));
+    vec3 refractVecR = refract(eyeVector, normal1,(1.0/uIorR));
+    vec3 refractVecY = refract(eyeVector, normal1, (1.0/uIorY));
+    vec3 refractVecG = refract(eyeVector, normal1, (1.0/uIorG));
+    vec3 refractVecC = refract(eyeVector, normal1, (1.0/uIorC));
+    vec3 refractVecB = refract(eyeVector, normal1, (1.0/uIorB));
+    vec3 refractVecP = refract(eyeVector, normal1, (1.0/uIorP));
 
     float r = texture2D(uTexture, uv + refractVecR.xy * (uRefractPower + slide * 1.0) * uChromaticAberration).x * 0.5;
 
@@ -110,7 +110,7 @@ void main() {
   color += specularLight;
 
   // Fresnel
-  float f = fresnel(eyeVector, normal, uFresnelPower);
+  float f = fresnel(eyeVector, normal1, uFresnelPower);
   color.rgb += f * vec3(1.0);
 
   gl_FragColor = vec4(color, 1.0);
