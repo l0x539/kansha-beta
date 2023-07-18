@@ -13,7 +13,8 @@ const UnstableSphere = () => {
   const noise = useMemo(() => makeNoise4D(Date.now()), []);
   // This reference gives us direct access to our mesh
   const mesh = useRef<THREE.Mesh<THREE.SphereGeometry, THREE.RawShaderMaterial>>(null);
-
+  const sphereGeometry = useRef<THREE.SphereGeometry>(null);
+  
   // This is our main render target where we'll render and store the scene as a texture
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
@@ -108,9 +109,31 @@ const UnstableSphere = () => {
     []
   );
 
+  const v3 = useMemo(() => new THREE.Vector3, []);
+  const positionData = useMemo<THREE.Vector3[]>(() => [], []);
+
+  useEffect(() => {
+    if (sphereGeometry.current) {
+      for (let i = 0; i < sphereGeometry.current.attributes.position.count; i++){
+        v3.fromBufferAttribute(sphereGeometry.current.attributes.position, i);
+        positionData.push(v3.clone());
+      }
+    }
+  }, []);
+
   useFrame((state) => {
     const { gl, scene, camera } = state;
-    if (!mesh.current) return;
+    if (!mesh.current || !sphereGeometry.current) return;
+
+    let t = state.clock.getElapsedTime() / 1.;
+    positionData.forEach((p, idx) => {
+        let setNoise = noise(p.x, p.y, p.z, t * 1.05);
+        v3.copy(p).addScaledVector(p, setNoise);
+        sphereGeometry.current?.attributes.position.setXYZ(idx, v3.x, v3.y, v3.z);
+    })
+    sphereGeometry.current.computeVertexNormals();
+    sphereGeometry.current.attributes.position.needsUpdate = true;
+
     
     mesh.current.visible = false;
 
@@ -155,7 +178,7 @@ const UnstableSphere = () => {
     <>
       <color attach="background" args={["black"]} />
       <mesh ref={mesh}>
-        <sphereGeometry args={[3, 256, 256]} />
+        <sphereGeometry ref={sphereGeometry} args={[3, 256, 256]} />
         <shaderMaterial
           key={uuidv4()}
           vertexShader={sphereVertexShader}
