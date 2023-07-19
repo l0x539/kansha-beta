@@ -9,7 +9,7 @@ const MainCanvas = () => {
   return (
     <>
       <Leva collapsed />
-      <Canvas camera={{ position: [4, -2, 7] }} dpr={[1, 2]}>
+      <Canvas camera={{ position: [0, 0, 7] }} dpr={[1, 2]}>
         <ambientLight intensity={1.0} />
         <MainScene />
         <OrbitControls
