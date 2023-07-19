@@ -1,6 +1,6 @@
-import { OrbitControls, useFBO, Float, Text, Image } from "@react-three/drei";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { Leva, folder, useControls } from "leva";
+import { useFBO, Text } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { folder, useControls } from "leva";
 import { useMemo, useRef, useEffect, useState, Suspense } from "react";
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
@@ -34,7 +34,12 @@ const UnstableSphere = () => {
     iorP,
     saturation,
     chromaticAberration,
-    refraction
+    refraction,
+    noiseX,
+    noiseY,
+    noiseZ,
+    noiseSpeed,
+    noiseStrenth
   } = useControls({
     light: {
       value: {
@@ -60,17 +65,47 @@ const UnstableSphere = () => {
       iorB: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
       iorP: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 }
     }),
-    saturation: { value: 1.14, min: 1, max: 1.25, step: 0.01 },
+    saturation: { value: 1.03, min: 1, max: 1.25, step: 0.01 },
     chromaticAberration: {
-      value: 0.5,
+      value: 0.04,
       min: 0,
       max: 1.5,
       step: 0.01
     },
     refraction: {
-      value: 0.25,
+      value: 0.22,
       min: 0,
       max: 1,
+      step: 0.01
+    },
+    noiseX: {
+      value: 1,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseY: {
+      value: 1,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseZ: {
+      value: 1,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseSpeed: {
+      value: 1.05,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseStrenth: {
+      value: 0.17,
+      min: -2,
+      max: 2,
       step: 0.01
     }
   });
@@ -127,8 +162,8 @@ const UnstableSphere = () => {
 
     let t = state.clock.getElapsedTime() / 1.;
     positionData.forEach((p, idx) => {
-        let setNoise = noise(p.x, p.y, p.z, t * 1.05);
-        v3.copy(p).addScaledVector(p, setNoise);
+        let setNoise = noise(p.x * noiseX, p.y * noiseY, p.z * noiseZ, t * noiseSpeed);
+        v3.copy(p).addScaledVector(p, setNoise*noiseStrenth);
         sphereGeometry.current?.attributes.position.setXYZ(idx, v3.x, v3.y, v3.z);
     })
     sphereGeometry.current.computeVertexNormals();
@@ -178,7 +213,7 @@ const UnstableSphere = () => {
     <>
       <color attach="background" args={["black"]} />
       <mesh ref={mesh}>
-        <sphereGeometry ref={sphereGeometry} args={[3, 256, 256]} />
+        <sphereGeometry ref={sphereGeometry} args={[2, 256, 256]} />
         <shaderMaterial
           key={uuidv4()}
           vertexShader={sphereVertexShader}
