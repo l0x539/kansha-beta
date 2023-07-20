@@ -3,7 +3,7 @@
 import { closeMenu, openMenu, selectApp } from "@/store/features/app/appSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Link from "next/link";
-import { FC, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 
 const Menu = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -30,11 +30,31 @@ const Menu = () => {
     ${isMenuOpen ? 'block' : 'hidden'}`}>
       <div>
         <ul>
-          <li className="text-white text-7xl mb-4"><Link href={'/'}>Home</Link></li>
-          <li className="text-white text-7xl mb-4"><Link href={'/aboutus'}>About Us</Link></li>
-          <li className="text-white text-7xl mb-4"><Link href={'/services'}>Services</Link></li>
-          <li className="text-white text-7xl mb-4"><Link href={'/experience'}>Experience</Link></li>
-          <li className="text-white text-7xl mb-4"><Link href={'/contactus'}>Contact Us</Link></li>
+          <li>
+            <NavLink href={'/'}>
+              Home
+            </NavLink>
+          </li>
+          <li>
+            <NavLink href={'/aboutus'}>
+              About Us
+            </NavLink>
+          </li>
+          <li>
+            <NavLink href={'/services'}>
+              Services
+            </NavLink>
+          </li>
+          <li>
+            <NavLink href={'/experience'}>
+              Experience
+            </NavLink>
+          </li>
+          <li>
+            <NavLink href={'/contactus'}>
+              Contact Us
+            </NavLink>
+          </li>
         </ul>
       </div>
       <div>
@@ -46,6 +66,20 @@ const Menu = () => {
       </div>
     </div>
   </>);
+};
+
+const NavLink: FC<{
+  href: string;
+  children: ReactNode;
+}> = ({ href, children }) => {
+  return (
+    <div className="flex text-white text-7xl mb-4 group">
+      <Link href={'/'}>
+        {children}
+        <span className="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-white"></span>
+      </Link>
+    </div>
+  );
 };
 
 const CloseButton = () => {
