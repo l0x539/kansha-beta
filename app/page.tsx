@@ -1,10 +1,7 @@
-import MainCanvas from '@/components/MainCanvas'
-import Image from 'next/image'
+import HomePage from '@/components/gui/HomePage';
 
 export default function Home() {
   return (
-    <main className='absolute top-0 left-0 h-screen w-screen'>
-      <MainCanvas />
-    </main>
+      <HomePage />
   )
-}
+};

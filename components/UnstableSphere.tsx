@@ -154,6 +154,7 @@ const UnstableSphere = () => {
         positionData.push(v3.clone());
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useFrame((state) => {
