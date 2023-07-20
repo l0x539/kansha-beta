@@ -14,6 +14,7 @@ module.exports = {
       },
       fontFamily: {
         main: ['Helvetica', 'Raleway'],
+        flink: ['Inter', 'Helvetica', 'Raleway'],
       },
     },
   },
