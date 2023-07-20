@@ -20,6 +20,7 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
+    "framer-motion": "^10.13.0",
     "leva": "^0.9.35",
     "next": "13.4.10",
     "open-simplex-noise": "^2.5.0",

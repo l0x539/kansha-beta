@@ -4,11 +4,32 @@ import { closeMenu, openMenu, selectApp } from "@/store/features/app/appSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Link from "next/link";
 import { FC, ReactNode, useState } from "react";
+import { motion } from "framer-motion";
 
 const Menu = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   // const { isMenuOpen } = useAppSelector(selectApp)
   // const dispatch = useAppDispatch();
+
+  const linkVariants = {
+    open: {
+      opacity: 1,
+      y: 0,
+    },
+    closed: {
+      opacity: 0,
+      y: '200%',
+    },
+  }
+
+  const menuVariants = {
+    open: {
+      opacity: 1,
+    },
+    closed: {
+      opacity: 0,
+    },
+  }
 
   const handleOpenMenu = () => {
     // dispatch(openMenu)
@@ -20,49 +41,83 @@ const Menu = () => {
   };
 
   return (<>
-    <div className={isMenuOpen ? 'hidden' : 'block'}><BurgerButton onClick={handleOpenMenu} /></div>
-    <div className={`absolute top-0 left-0 w-screen h-screen py-14 
-    px-16 bg-[#535353] opacity-[0.99] mix-blend-multiply 
-    ${isMenuOpen ? 'block' : 'hidden'}`}>
+    <motion.div
+      variants={menuVariants}
+      animate={isMenuOpen ? 'closed' : 'open'}
+      className={isMenuOpen ? 'hidden' : 'block'}
+    >
+      <BurgerButton onClick={handleOpenMenu} />
+    </motion.div>
+    <motion.div
+      variants={menuVariants}
+      animate={isMenuOpen ? 'open' : 'closed'}
+      className={`absolute top-0 left-0 w-screen h-screen py-14 
+      px-16 bg-[#535353] opacity-[0.99] mix-blend-multiply 
+      ${isMenuOpen ? 'block' : 'hidden'}`}
+    >
 
-    </div>
+    </motion.div>
     <div className={`absolute top-0 left-0 flex justify-between w-screen h-screen py-14 px-28 
     ${isMenuOpen ? 'block' : 'hidden'}`}>
       <div>
         <ul>
-          <li>
+          <motion.li
+            variants={linkVariants}
+            animate={isMenuOpen ? 'open' : 'closed'}
+            transition={{delay: 0}}
+          >
             <NavLink href={'/'}>
               Home
             </NavLink>
-          </li>
-          <li>
+          </motion.li>
+          <motion.li
+            variants={linkVariants}
+            animate={isMenuOpen ? 'open' : 'closed'}
+            transition={{delay: 0.1}}
+          >
             <NavLink href={'/aboutus'}>
               About Us
             </NavLink>
-          </li>
-          <li>
+          </motion.li>
+          <motion.li
+            variants={linkVariants}
+            animate={isMenuOpen ? 'open' : 'closed'}
+            transition={{delay: 0.2}}
+          >
             <NavLink href={'/services'}>
               Services
             </NavLink>
-          </li>
-          <li>
+          </motion.li>
+          <motion.li
+            variants={linkVariants}
+            animate={isMenuOpen ? 'open' : 'closed'}
+            transition={{delay: 0.3}}
+          >
             <NavLink href={'/experience'}>
               Experience
             </NavLink>
-          </li>
-          <li>
+          </motion.li>
+          <motion.li
+            variants={linkVariants}
+            animate={isMenuOpen ? 'open' : 'closed'}
+            transition={{delay: 0.4}}
+          >
             <NavLink href={'/contactus'}>
               Contact Us
             </NavLink>
-          </li>
+          </motion.li>
         </ul>
       </div>
       <div>
-        <div className="flex flex-row-reverse">
+        <motion.div
+          variants={menuVariants}
+          animate={isMenuOpen ? 'open' : 'closed'}
+          className="flex flex-row-reverse"
+        >
           <div className="cursor-pointer" onClick={handleCloseMenu}>
             <CloseButton />
           </div>
-        </div>
+        </motion.div>
       </div>
     </div>
   </>);
