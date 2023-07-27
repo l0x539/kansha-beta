@@ -1,14 +1,9 @@
-import Button from "../Button";
+import CookiesConsent from "../CookiesConsent";
 import MainCanvas from "../MainCanvas";
 
 const HomePage = () => {
   return (<>
-    <Button>
-      Accept
-    </Button>
-    <Button type="secondary">
-      Decline
-    </Button>
+    <CookiesConsent />
     <MainCanvas />
   </>);
 };

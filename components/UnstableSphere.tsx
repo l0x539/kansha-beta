@@ -1,4 +1,4 @@
-import { useFBO, Text } from "@react-three/drei";
+import { useFBO, Text, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { folder, useControls } from "leva";
 import { useMemo, useRef, useEffect, useState, Suspense } from "react";
@@ -14,6 +14,8 @@ const UnstableSphere = () => {
   // This reference gives us direct access to our mesh
   const mesh = useRef<THREE.Mesh<THREE.SphereGeometry, THREE.RawShaderMaterial>>(null);
   const sphereGeometry = useRef<THREE.SphereGeometry>(null);
+
+  const [logo] = useTexture(['/assets/images/Logo.png']);
   
   // This is our main render target where we'll render and store the scene as a texture
   const mainRenderTarget = useFBO();
@@ -214,7 +216,7 @@ const UnstableSphere = () => {
     <>
       <color attach="background" args={["black"]} />
       <mesh ref={mesh}>
-        <sphereGeometry ref={sphereGeometry} args={[2, 256, 256]} />
+        <sphereGeometry ref={sphereGeometry} args={[2.5, 256, 256]} />
         <shaderMaterial
           key={uuidv4()}
           vertexShader={sphereVertexShader}
@@ -228,19 +230,25 @@ const UnstableSphere = () => {
         <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial color="white" />
         </mesh>*/}
-      <Text
-        color={"#FFFFFF"} /* color */
-        fontSize={5} /* size */
-        maxWidth={200} /* max width */
-        lineHeight={1} /* line height */
-        letterSpacing={0.02} /* letter spacing */
-        textAlign={"left"} /* align text */
-        anchorX="center" /* anchor x */
-        anchorY="middle" /* anchor y */
+      <sprite
         position={[0, 0, -5]} /* position */
+        scale={new THREE.Vector3(64.5/3, 9.125/3, 1)}
+      >
+        <spriteMaterial map={logo} />
+      </sprite>
+      {/* <Text
+        color={"#FFFFFF"}
+        fontSize={5} 
+        maxWidth={200} 
+        lineHeight={1}
+        letterSpacing={0.02}
+        textAlign={"left"}
+        anchorX="center"
+        anchorY="middle"
+        position={[0, 0, -5]}
       >
         KANSHA
-      </Text>
+      </Text> */}
       {/*<mesh position={[0, 0, -10]}>
         <Image scale={23} url="/FMB full_square.png" transparent opacity={1} />
         </mesh>*/}
@@ -249,3 +257,5 @@ const UnstableSphere = () => {
 };
 
 export default UnstableSphere;
+
+useTexture.preload('/assets/images/Logo.png');
