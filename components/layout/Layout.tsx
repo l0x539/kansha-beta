@@ -4,6 +4,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import { Provider } from "react-redux";
 import store from "@/store/store";
+import MainCanvas from "../MainCanvas";
 
 const Layout: FC<{
   children: ReactNode;
@@ -14,6 +15,7 @@ const Layout: FC<{
         <Header />
         <Footer />
         {children}
+        <MainCanvas/>
       </main>
     </Provider>
     );
