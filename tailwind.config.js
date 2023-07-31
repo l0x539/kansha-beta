@@ -16,6 +16,19 @@ module.exports = {
         main: ['Helvetica', 'Raleway'],
         flink: ['Inter', 'Helvetica', 'Raleway'],
       },
+      keyframes: {
+        float: {
+          '0%': {
+            transform: 'translatey(0px)'
+          },
+          '50%': {
+            transform: 'translatey(-20px)'
+          },
+          '100%': {
+            transform: 'translatey(0px)'
+          }
+        }
+      }
     },
   },
   plugins: [],

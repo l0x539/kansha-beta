@@ -173,7 +173,7 @@ const NavLink: FC<{
 }> = ({ href, children }) => {
   return (
     <div className="flex text-white text-4xl 2xl:text-7xl mb-4 group">
-      <Link href={'/'}>
+      <Link href={href}>
         {children}
         <span className="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-white"></span>
       </Link>
