@@ -1,3 +1,4 @@
+'use client'
 import { useFBO, Text, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { folder, useControls } from "leva";
@@ -8,6 +9,9 @@ import { makeNoise4D } from "open-simplex-noise";
 import { EffectComposer, SSAO, Bloom } from "@react-three/postprocessing";
 import sphereVertexShader from "@/utils/shaders/vertexShaders";
 import sphereFragmentShader from "@/utils/shaders/fragmentShaders";
+import { usePathname } from 'next/navigation';
+import { useSpring } from "@react-spring/three";
+import { lerp } from "three/src/math/MathUtils";
 
 const UnstableSphere = () => {
   const noise = useMemo(() => makeNoise4D(Date.now()), []);
@@ -20,6 +24,24 @@ const UnstableSphere = () => {
   // This is our main render target where we'll render and store the scene as a texture
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
+
+  const pathname = usePathname();
+  console.log(pathname);
+  
+  const {methods: {
+    curve: methodsCurve
+  }} = useMemo(() => {
+    return {
+      methods: {
+        curve: new THREE.CatmullRomCurve3( [
+          new THREE.Vector3(),
+          new THREE.Vector3( -1, 0, 2.1 ),
+          new THREE.Vector3( 0, 0, 4.2 )
+        ])
+      }
+    }
+  }, []);
+  
 
   // const positionData = useMemo(() => {}, []);
 
@@ -159,6 +181,11 @@ const UnstableSphere = () => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const { progressSpring } = useSpring({
+    progressSpring: '/services/our-method' === pathname ? 1 : 0,
+    config: { mass: 1, tension: 280, friction: 200 }
+  });
+
   useFrame((state) => {
     const { gl, scene, camera } = state;
     if (!mesh.current || !sphereGeometry.current) return;
@@ -166,7 +193,11 @@ const UnstableSphere = () => {
     let t = state.clock.getElapsedTime() / 1.;
     positionData.forEach((p, idx) => {
         let setNoise = noise(p.x * noiseX, p.y * noiseY, p.z * noiseZ, t * noiseSpeed);
-        v3.copy(p).addScaledVector(p, setNoise*noiseStrenth);
+        if (pathname === '/services/our-method')
+          v3.copy(p).addScaledVector(p, setNoise*lerp(noiseStrenth, 0.02, progressSpring.get()));
+        else 
+          v3.copy(p).addScaledVector(p, setNoise*noiseStrenth);
+
         sphereGeometry.current?.attributes.position.setXYZ(idx, v3.x, v3.y, v3.z);
     })
     sphereGeometry.current.computeVertexNormals();
@@ -191,8 +222,13 @@ const UnstableSphere = () => {
     mesh.current.material.uniforms.uIorB.value = iorB;
     mesh.current.material.uniforms.uIorP.value = iorP;
 
-    mesh.current.material.uniforms.uSaturation.value = saturation;
-    mesh.current.material.uniforms.uChromaticAberration.value = chromaticAberration;
+    if (pathname === '/services/our-method') {
+      mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.5, progressSpring.get());
+      mesh.current.material.uniforms.uSaturation.value = lerp(saturation, 1, progressSpring.get());
+    } else {
+      mesh.current.material.uniforms.uSaturation.value = saturation;
+      mesh.current.material.uniforms.uChromaticAberration.value = chromaticAberration;
+    }
     mesh.current.material.uniforms.uRefractPower.value = refraction;
 
     gl.setRenderTarget(backRenderTarget);
@@ -210,6 +246,12 @@ const UnstableSphere = () => {
     mesh.current.material.side = THREE.FrontSide;
 
     gl.setRenderTarget(null);
+
+    switch (pathname) {
+      case '/services/our-method':
+        const newPos = methodsCurve.getPointAt(progressSpring.get());
+        mesh.current.position.set(newPos.x, newPos.y, newPos.z);
+    }
   });
 
   return (
