@@ -3,8 +3,8 @@ import Footer from "../layout/Footer";
 
 const HomePage = () => {
   return (<>
-    <CookiesConsent />
     <Footer />
+    <CookiesConsent />
   </>);
 };
 

@@ -8,8 +8,8 @@ import { motion } from "framer-motion";
 
 const Menu = () => {
   return (<>
-    <div className="visible 2xl:hidden"><MenuMobile /></div>
-    <div className="hidden 2xl:visible 2xl:block"><MenuDesktop /></div>
+    <div className="visible xl:hidden"><MenuMobile /></div>
+    <div className="hidden xl:visible xl:block"><MenuDesktop /></div>
   </>);
 };
 
@@ -101,7 +101,7 @@ const MenuMobile = () => {
     >
 
     </motion.div>
-    <div className={`absolute top-0 left-0 flex justify-between w-screen h-screen py-14 px-14 2xl:px-28 
+    <div className={`absolute top-0 left-0 flex justify-between w-screen h-screen py-14 px-14 xl:px-28 
     ${isMenuOpen ? 'block' : 'hidden'}`}>
       <div>
         <ul>
@@ -172,7 +172,7 @@ const NavLink: FC<{
   children: ReactNode;
 }> = ({ href, children }) => {
   return (
-    <div className="flex text-white text-4xl 2xl:text-7xl mb-4 group">
+    <div className="flex text-white text-4xl xl:text-7xl mb-4 group">
       <Link href={href}>
         {children}
         <span className="block max-w-0 group-hover:max-w-full transition-all duration-400 h-0.5 bg-white"></span>
