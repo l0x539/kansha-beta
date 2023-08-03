@@ -30,7 +30,7 @@ const Tabs: FC<{
           return child
         }
 
-        return <TabButton key={index} onClick={setActiveTab} label={child.props.label}>
+        return <TabButton key={index} onClick={setActiveTab} label={child.props.label} isActive={activeTab === child.props.label}>
           {child.props.title}
         </TabButton>
       })}
@@ -42,14 +42,16 @@ const TabButton: FC<{
   children: ReactNode;
   onClick: (value: string) => void;
   label: string;
+  isActive?: boolean;
 }> = ({
   children,
   onClick,
-  label
+  label,
+  isActive = false
 }) => {
   return (<button
     onClick={() => onClick(label)}
-    className="my-5 flex justify-center text-[#5E5E5E] hover:text-white text-sm hover:font-extrabold transition-all duration-300"
+    className={`my-5 flex justify-center ${isActive ? 'text-white font-extrabold' : 'text-[#5E5E5E]'} hover:text-white text-sm hover:font-extrabold transition-all duration-300`}
     >
     {children}
   </button>);
