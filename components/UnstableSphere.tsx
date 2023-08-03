@@ -183,7 +183,7 @@ const UnstableSphere = () => {
 
   const { progressSpring } = useSpring({
     progressSpring: '/services/our-method' === pathname ? 1 : 0,
-    config: { mass: 1, tension: 280, friction: 200 }
+    config: { mass: 1, tension: 280, friction: 100 }
   });
 
   useFrame((state) => {
@@ -246,12 +246,9 @@ const UnstableSphere = () => {
     mesh.current.material.side = THREE.FrontSide;
 
     gl.setRenderTarget(null);
-
-    switch (pathname) {
-      case '/services/our-method':
-        const newPos = methodsCurve.getPointAt(progressSpring.get());
-        mesh.current.position.set(newPos.x, newPos.y, newPos.z);
-    }
+    const newPos = methodsCurve.getPointAt(progressSpring.get());
+    mesh.current.position.set(newPos.x, newPos.y, newPos.z);
+   
   });
 
   return (
