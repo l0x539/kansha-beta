@@ -206,14 +206,11 @@ const UnstableSphere = () => {
     
     mesh.current.visible = false;
 
-    mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
-    mesh.current.material.uniforms.uShininess.value = shininess;
     mesh.current.material.uniforms.uLight.value = new THREE.Vector3(
       light.x,
       light.y,
       light.z
     );
-    mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
 
     mesh.current.material.uniforms.uIorR.value = iorR;
     mesh.current.material.uniforms.uIorY.value = iorY;
@@ -225,7 +222,15 @@ const UnstableSphere = () => {
     if (pathname === '/services/our-method') {
       mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.5, progressSpring.get());
       mesh.current.material.uniforms.uSaturation.value = lerp(saturation, 1, progressSpring.get());
+      mesh.current.material.uniforms.uDiffuseness.value = lerp(diffuseness, -0.1, progressSpring.get());
+      mesh.current.material.uniforms.uShininess.value = lerp(shininess, 80.0, progressSpring.get());
+      mesh.current.material.uniforms.uFresnelPower.value = lerp(fresnelPower, 6.7, progressSpring.get());
+      
     } else {
+      mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
+      mesh.current.material.uniforms.uShininess.value = shininess;
+      mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
+      
       mesh.current.material.uniforms.uSaturation.value = saturation;
       mesh.current.material.uniforms.uChromaticAberration.value = chromaticAberration;
     }

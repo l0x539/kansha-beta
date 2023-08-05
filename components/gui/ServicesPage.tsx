@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ScopeButton from "../ScopeButton";
+import FooterContent from "../FooterContent";
 
 const ServicesPage = () => {
   return (<>
@@ -24,10 +25,8 @@ const ServicesPage = () => {
             6
           </ScopeButton>
         </Link>
+        <FooterContent />
       </div>
-      <footer className="absolute bottom-0 left-0 w-screen flex justify-center px-28 pb-20">
-        <span className="text-white text-sm uppercase pointer-events-none">Content Lab / IT services & Consulting</span>
-      </footer>
     </>
   );
 };

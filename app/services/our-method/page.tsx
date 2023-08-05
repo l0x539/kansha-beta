@@ -1,8 +1,12 @@
+import FooterContent from "@/components/FooterContent";
 import OurMethodPage from "@/components/gui/OurMethodPage";
 
 const OurMethod = () => {
   return (
-    <OurMethodPage />
+    <>
+      <OurMethodPage />
+      <FooterContent />
+    </>
   );
 };
 

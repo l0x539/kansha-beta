@@ -1,31 +1,36 @@
 'use client'
+import DesignDevelopment from "../DesignDevelopment";
+import FinesseLaunch from "../FinesseLaunch";
+import ResearchDiscovery from "../ResearchDiscovery";
+import StrategyDirection from "../StrategyDirection";
+import SupportManagement from "../SupportManagement";
 import Tabs, { Tab } from "../layout/Tabs";
 
 const TABS = [
   {
     label: 'research',
     title: 'RESEARCH & DISCOVERY',
-    content: <div className="pointer-events-none absolute flex justify-center items-center w-screen h-screen text-3xl top-0 left-0 text-white"><span>RESEARCH</span></div>
+    content: <ResearchDiscovery />
   },
   {
     label: 'strategy',
     title: 'STRATEGY & DIRECTION',
-    content: <div className="pointer-events-none absolute flex justify-center items-center w-screen h-screen text-3xl top-0 left-0 text-white"><span>STRATEGY</span></div>
+    content: <StrategyDirection />
   },
   {
     label: 'design',
     title: 'DESIGN & DEVELOPMENT',
-    content: <div className="pointer-events-none absolute flex justify-center items-center w-screen h-screen text-3xl top-0 left-0 text-white"><span>DESIGN</span></div>
+    content: <DesignDevelopment />
   },
   {
     label: 'finesse',
     title: 'FINESSE & LAUNCH',
-    content: <div className="pointer-events-none absolute flex justify-center items-center w-screen h-screen text-3xl top-0 left-0 text-white"><span>FINESSE</span></div>
+    content: <FinesseLaunch />
   },
   {
     label: 'support',
     title: 'SUPPORT & MANAGEMENT',
-    content: <div className="pointer-events-none absolute flex justify-center items-center w-screen h-screen text-3xl top-0 left-0 text-white"><span>SUPPORT</span></div>
+    content: <SupportManagement />
   },
 ];
 

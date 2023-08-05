@@ -51,7 +51,7 @@ const TabButton: FC<{
 }) => {
   return (<button
     onClick={() => onClick(label)}
-    className={`my-5 flex justify-center ${isActive ? 'text-white font-extrabold' : 'text-[#5E5E5E]'} hover:text-white text-sm hover:font-extrabold transition-all duration-300`}
+    className={`py-5 flex border-t justify-center ${isActive ? 'text-white font-extrabold border-slate-50' : 'text-[#5E5E5E] border-slate-700'} hover:border-slate-50 hover:text-white text-sm hover:font-extrabold transition-all duration-300`}
     >
     {children}
   </button>);
