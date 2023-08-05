@@ -4,17 +4,18 @@ import Header from "./Header";
 import { Provider } from "react-redux";
 import store from "@/store/store";
 import MainCanvas from "../MainCanvas";
+import NavigationControls from "../gui/NavigationControls";
 
 const Layout: FC<{
   children: ReactNode;
 }> = ({children}) => {
   return (
     <Provider store={store}>
-      <main className='absolute top-0 left-0 h-screen w-screen bg-transparent font-main'>
+      <NavigationControls>
         <Header />
         {children}
         <MainCanvas/>
-      </main>
+      </NavigationControls>
     </Provider>
     );
 };

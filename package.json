@@ -17,11 +17,13 @@
     "@types/react": "18.2.15",
     "@types/react-dom": "18.2.7",
     "@types/three": "^0.154.0",
+    "@use-gesture/react": "^10.2.27",
     "autoprefixer": "10.4.14",
     "eslint": "8.45.0",
     "eslint-config-next": "13.4.10",
     "framer-motion": "^10.13.0",
     "leva": "^0.9.35",
+    "lodash": "^4.17.21",
     "next": "13.4.10",
     "open-simplex-noise": "^2.5.0",
     "postcss": "8.4.26",
@@ -34,6 +36,7 @@
     "uuid": "^9.0.0"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.196",
     "@types/uuid": "^9.0.2"
   }
 }

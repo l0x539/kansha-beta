@@ -3,11 +3,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
 import appReducer from './features/app/appSlice';
+import glReducer from './features/gl/glSlice';
 
 export function makeStore() {
   return configureStore({
     reducer: {
-      app: appReducer
+      app: appReducer,
+      gl: glReducer
     },
   })
 }
