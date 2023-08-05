@@ -5,24 +5,24 @@ import FooterContent from "../FooterContent";
 const ServicesPage = () => {
   return (<>
       <div className="">
-        <ScopeButton className='-ml-[42rem] -mt-64' >
-          1
+        <ScopeButton number={1} className='-ml-[32vw] -mt-[32vh]' >
+          Discovery
         </ScopeButton>
-        <ScopeButton className='-ml-64 -mt-28' >
-          2
+        <ScopeButton number={2} className='-ml-[15vw] -mt-[13vh]' >
+          MVP Development
         </ScopeButton>
-        <ScopeButton className='ml-96 -mt-60' >
-          3
+        <ScopeButton number={3} className='ml-[18vw] -mt-[33vh]' >
+          Product Team
         </ScopeButton>
-        <ScopeButton className='-ml-[38rem] mt-20' >
-          4
+        <ScopeButton number={4} className='-ml-[33vw] mt-[2vh]' >
+          Product Design
         </ScopeButton>
-        <ScopeButton className='-ml-20 mt-36' >
-          5
+        <ScopeButton number={5} className='-ml-[5vw] mt-[12vh]' >
+          All services
         </ScopeButton>
         <Link href={'/services/our-method'}>
-          <ScopeButton className='ml-64 mt-16' >
-            6
+          <ScopeButton number={6} className='ml-[15vw] mt-[5vh]' >
+            Our method
           </ScopeButton>
         </Link>
         <FooterContent />
