@@ -182,7 +182,7 @@ const UnstableSphere = () => {
   }, []);
 
   const { progressSpring } = useSpring({
-    progressSpring: '/services/our-method' === pathname ? 1 : 0,
+    progressSpring: '/services' === pathname ? 1 : 0,
     config: { mass: 1, tension: 280, friction: 100 }
   });
 
@@ -193,7 +193,7 @@ const UnstableSphere = () => {
     let t = state.clock.getElapsedTime() / 1.;
     positionData.forEach((p, idx) => {
         let setNoise = noise(p.x * noiseX, p.y * noiseY, p.z * noiseZ, t * noiseSpeed);
-        if (pathname === '/services/our-method')
+        if (pathname === '/services')
           v3.copy(p).addScaledVector(p, setNoise*lerp(noiseStrenth, 0.02, progressSpring.get()));
         else 
           v3.copy(p).addScaledVector(p, setNoise*noiseStrenth);
@@ -219,7 +219,7 @@ const UnstableSphere = () => {
     mesh.current.material.uniforms.uIorB.value = iorB;
     mesh.current.material.uniforms.uIorP.value = iorP;
 
-    if (pathname === '/services/our-method') {
+    if (pathname === '/services') {
       mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.5, progressSpring.get());
       mesh.current.material.uniforms.uSaturation.value = lerp(saturation, 1, progressSpring.get());
       mesh.current.material.uniforms.uDiffuseness.value = lerp(diffuseness, -0.1, progressSpring.get());
@@ -253,6 +253,7 @@ const UnstableSphere = () => {
     gl.setRenderTarget(null);
     const newPos = methodsCurve.getPointAt(progressSpring.get());
     mesh.current.position.set(newPos.x, newPos.y, newPos.z);
+    mesh.current.rotateY(progressSpring.get()*((1 - progressSpring.get())*0.5))
    
   });
 
