@@ -2,7 +2,7 @@ const DesignDevelopment = () => {
   return (
     <div className="flex w-screen justify-center">
       <div className="mt-14 2xl:w-[1536px] xl:w-[1280px] lg:w-[1024px] md:w-[768px] sm:w-[640px] pl-14">
-        <h1 className="mb-44 text-8xl text-white font-semibold leading-[86.558px] tracking-[-0.456px]">
+        <h1 className="mb-[15vh] 2xl:text-8xl xl:text-6xl text-white font-semibold leading-[86.558px] tracking-[-0.456px]">
         Design<br/>& Development
         </h1>
         <div className="flex">
