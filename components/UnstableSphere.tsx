@@ -197,7 +197,7 @@ const UnstableSphere = () => {
   } = useSpring({
     progressSpring: '/services' === pathname ? 1 : 0,
     progressDiscoverySpring: '/services/discovery' === pathname ? 1 : 0,
-    progressHomeSpring: '/' === pathname ? 1 : 0,
+    progressHomeSpring: '/' === pathname || '/services/our-method' === pathname ? 1 : 0,
     config: { mass: 1, tension: 280, friction: 100 }
   });
 
