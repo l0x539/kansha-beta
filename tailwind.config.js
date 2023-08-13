@@ -15,6 +15,7 @@ module.exports = {
       fontFamily: {
         main: ['Helvetica', 'Raleway'],
         flink: ['Inter', 'Helvetica', 'Raleway'],
+        gothic: ['Gothic A1', 'Helvetica', 'Raleway'],
       },
       keyframes: {
         float: {
@@ -32,4 +33,16 @@ module.exports = {
     },
   },
   plugins: [],
+  safelist: [
+    'translate-x-[100vw]',
+    'translate-x-[200vw]',
+    'translate-x-[300vw]',
+    'translate-x-[400vw]',
+    'translate-x-[500vw]',
+    'translate-x-[-100vw]',
+    'translate-x-[-200vw]',
+    'translate-x-[-300vw]',
+    'translate-x-[-400vw]',
+    'translate-x-[-500vw]',
+  ]
 }
