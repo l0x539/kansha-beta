@@ -5,9 +5,11 @@ import FooterContent from "../FooterContent";
 const ServicesPage = () => {
   return (<>
       <div className="">
-        <ScopeButton number={1} className='-ml-[32vw] -mt-[32vh]' >
-          Discovery
-        </ScopeButton>
+        <Link href={'/services/discovery'}>
+          <ScopeButton number={1} className='-ml-[32vw] -mt-[32vh]' >
+            Discovery
+          </ScopeButton>
+        </Link>
         <ScopeButton number={2} className='-ml-[15vw] -mt-[13vh]' >
           MVP Development
         </ScopeButton>
