@@ -2,7 +2,7 @@
 import { useFBO, Text, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { folder, useControls } from "leva";
-import { useMemo, useRef, useEffect, useState, Suspense } from "react";
+import { useMemo, useRef, useEffect, useLayoutEffect, useState, Suspense } from "react";
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
 import { makeNoise4D } from "open-simplex-noise";
@@ -15,7 +15,7 @@ import { lerp } from "three/src/math/MathUtils";
 const UnstableSphere = () => {
   const noise = useMemo(() => makeNoise4D(Date.now()), []);
   // This reference gives us direct access to our mesh
-  const mesh = useRef<THREE.Mesh<THREE.SphereGeometry, THREE.RawShaderMaterial>>(null);
+  const mesh = useRef<THREE.InstancedMesh<THREE.SphereGeometry, THREE.RawShaderMaterial>>(null);
   const meshSprite = useRef<THREE.Sprite>(null);
   const sphereGeometry = useRef<THREE.SphereGeometry>(null);
 
@@ -31,7 +31,8 @@ const UnstableSphere = () => {
     methods: {
       curve: methodsCurve
     },
-    discoveryPosition,
+    discoveryPosition1,
+    discoveryPosition2,
     defaultPosition,
     discoveryTextColor,
     homeTextColor,
@@ -44,7 +45,8 @@ const UnstableSphere = () => {
           new THREE.Vector3( 0, 0, 4.2 )
         ])
       },
-      discoveryPosition: new THREE.Vector3(-4, 0.5, 0),
+      discoveryPosition1: new THREE.Vector3(-4.5, 0.5, -2),
+      discoveryPosition2: new THREE.Vector3(-8.5, -2.6, -6),
       defaultPosition: new THREE.Vector3(),
       discoveryTextColor: new THREE.Color("#6f6f6f"),
       homeTextColor: new THREE.Color("#FFFFFF")
@@ -179,17 +181,28 @@ const UnstableSphere = () => {
 
   const v3 = useMemo(() => new THREE.Vector3, []);
   const positionData = useMemo<THREE.Vector3[]>(() => [], []);
+  const positionData1 = useMemo<THREE.Vector3[]>(() => [], []);
+  const instanceDummy = useMemo(() => new THREE.Object3D(), []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (sphereGeometry.current) {
       for (let i = 0; i < sphereGeometry.current.attributes.position.count; i++){
+        instanceDummy.position.set(0, 0, 0);
+        instanceDummy.updateMatrix();
+        mesh.current?.setMatrixAt(0, instanceDummy.matrix);
         v3.fromBufferAttribute(sphereGeometry.current.attributes.position, i);
         positionData.push(v3.clone());
+      }
+      for (let i = 0; i < sphereGeometry.current.attributes.position.count; i++){
+        instanceDummy.position.set(-10, -10, 0);
+        instanceDummy.updateMatrix();
+        mesh.current?.setMatrixAt(1, instanceDummy.matrix);
+        v3.fromBufferAttribute(sphereGeometry.current.attributes.position, i);
+        positionData1.push(v3.clone());
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   const {
     progressSpring,
     progressDiscoverySpring,
@@ -240,40 +253,7 @@ const UnstableSphere = () => {
     mesh.current.material.uniforms.uIorC.value = iorC;
     mesh.current.material.uniforms.uIorB.value = iorB;
     mesh.current.material.uniforms.uIorP.value = iorP;
-    const newPos = methodsCurve.getPointAt(progressSpring.get());
-
-    switch (pathname) {
-      case '/services':
-        mesh.current.position.lerp(newPos, progressSpring.get());
-        mesh.current.rotateY(progressSpring.get()*((1 - progressSpring.get())*0.5))
-        mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.5, progressSpring.get());
-        mesh.current.material.uniforms.uSaturation.value = lerp(saturation, 1, progressSpring.get());
-        mesh.current.material.uniforms.uDiffuseness.value = lerp(diffuseness, -0.1, progressSpring.get());
-        mesh.current.material.uniforms.uShininess.value = lerp(shininess, 80.0, progressSpring.get());
-        mesh.current.material.uniforms.uFresnelPower.value = lerp(fresnelPower, 6.7, progressSpring.get());
-        break;
-      case '/services/discovery':
-        const newVecPos = mesh.current.position.lerp(discoveryPosition, progressDiscoverySpring.get())
-        mesh.current.position.set(newVecPos.x, newVecPos.y, newVecPos.z);
-        mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
-        mesh.current.material.uniforms.uShininess.value = shininess;
-        mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
-        
-        mesh.current.material.uniforms.uSaturation.value = saturation;
-
-        mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.01, progressDiscoverySpring.get());
-        break;
-      default:
-        mesh.current.position.lerp(defaultPosition, progressHomeSpring.get());
-        mesh.current.rotateY(progressSpring.get()*((1 - progressSpring.get())*0.5))
-        mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
-        mesh.current.material.uniforms.uShininess.value = shininess;
-        mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
-        
-        mesh.current.material.uniforms.uSaturation.value = saturation;
-        mesh.current.material.uniforms.uChromaticAberration.value = chromaticAberration;
-        break;
-    }
+    
     mesh.current.material.uniforms.uRefractPower.value = refraction;
     const newColor = homeTextColor.clone().lerp(discoveryTextColor, progressDiscoverySpring.get())
     meshSprite.current?.material.color.set(newColor);
@@ -293,13 +273,88 @@ const UnstableSphere = () => {
     mesh.current.material.side = THREE.FrontSide;
 
     gl.setRenderTarget(null);
-   
+    const newPos = methodsCurve.getPointAt(progressSpring.get());
+
+    switch (pathname) {
+      case '/services':
+        // const pos = mesh.current.position.clone().lerp(newPos, progressSpring.get());
+        instanceDummy.position.set(newPos.x, newPos.y, newPos.z);
+        instanceDummy.rotateY(progressSpring.get()*((1 - progressSpring.get())*Math.PI/2));
+        instanceDummy.updateMatrix();
+        mesh.current.setMatrixAt(0, instanceDummy.matrix);
+
+        const pos1 = mesh.current.position.clone().lerp(new THREE.Vector3, progressSpring.get())
+        instanceDummy.position.set(pos1.x, pos1.y, pos1.z);
+        instanceDummy.rotation.set((1-progressSpring.get()) * instanceDummy.rotation.x, (1-progressSpring.get()) * instanceDummy.rotation.y, (1-progressSpring.get()) * instanceDummy.rotation.z);
+        instanceDummy.updateMatrix();
+        mesh.current.setMatrixAt(1, instanceDummy.matrix);
+
+        mesh.current.updateMatrix();
+        mesh.current.matrixWorldNeedsUpdate = true;
+        mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.5, progressSpring.get());
+        mesh.current.material.uniforms.uSaturation.value = lerp(saturation, 1, progressSpring.get());
+        mesh.current.material.uniforms.uDiffuseness.value = lerp(diffuseness, -0.1, progressSpring.get());
+        mesh.current.material.uniforms.uShininess.value = lerp(shininess, 80.0, progressSpring.get());
+        mesh.current.material.uniforms.uFresnelPower.value = lerp(fresnelPower, 6.7, progressSpring.get());
+        break;
+      case '/services/discovery':
+        const newVecPos = mesh.current.position.clone()
+        newVecPos.lerp(discoveryPosition1, progressDiscoverySpring.get())
+        instanceDummy.position.set(newVecPos.x, newVecPos.y, newVecPos.z);
+        instanceDummy.rotation.set(progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0);
+        instanceDummy.updateMatrix();
+        mesh.current.setMatrixAt(0, instanceDummy.matrix);
+
+        const newVecPos1 = mesh.current.position.clone();
+        newVecPos1.lerp(discoveryPosition2, progressDiscoverySpring.get());
+        instanceDummy.position.set(newVecPos1.x, newVecPos1.y, newVecPos1.z);
+        instanceDummy.rotation.set((1-progressDiscoverySpring.get()) * instanceDummy.rotation.x, (1-progressDiscoverySpring.get()) * instanceDummy.rotation.y, (1-progressDiscoverySpring.get()) * instanceDummy.rotation.z);
+        instanceDummy.updateMatrix();
+        mesh.current.setMatrixAt(1, instanceDummy.matrix);
+
+        mesh.current.updateMatrix();
+        mesh.current.matrixWorldNeedsUpdate = true;
+        mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
+        mesh.current.material.uniforms.uShininess.value = shininess;
+        mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
+        
+        mesh.current.material.uniforms.uSaturation.value = saturation;
+
+        mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.01, progressDiscoverySpring.get());
+        break;
+      default:
+        const newDefPos = mesh.current.position.clone();
+        newDefPos.lerp(defaultPosition, progressHomeSpring.get())
+        instanceDummy.position.set(newDefPos.x, newDefPos.y, newDefPos.z);
+        instanceDummy.rotation.set((1-progressHomeSpring.get()) * instanceDummy.rotation.x, (1-progressHomeSpring.get()) * instanceDummy.rotation.y, (1-progressHomeSpring.get()) * instanceDummy.rotation.z);
+        instanceDummy.updateMatrix();
+
+        const newDefPos1 = mesh.current.position.clone();
+        newDefPos1.lerp(new THREE.Vector3, progressDiscoverySpring.get())
+        instanceDummy.position.set(newDefPos1.x, newDefPos1.y, newDefPos1.z);
+        instanceDummy.rotation.set(progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0);
+        instanceDummy.updateMatrix();
+        mesh.current.setMatrixAt(1, instanceDummy.matrix);
+
+        mesh.current.updateMatrix();
+        mesh.current.setMatrixAt(0, instanceDummy.matrix);
+        mesh.current.matrixWorldNeedsUpdate = true;
+        mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
+        mesh.current.material.uniforms.uShininess.value = shininess;
+        mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
+        
+        mesh.current.material.uniforms.uSaturation.value = saturation;
+        mesh.current.material.uniforms.uChromaticAberration.value = chromaticAberration;
+        break;
+    }
+    mesh.current.instanceMatrix.needsUpdate = true;
+    mesh.current.material.needsUpdate = true
   });
 
   return (
     <>
       <color attach="background" args={["black"]} />
-      <mesh ref={mesh}>
+      <instancedMesh ref={mesh} args={[undefined, undefined, 2]}>
         <sphereGeometry ref={sphereGeometry} args={[2.5, 256, 256]} />
         <shaderMaterial
           key={uuidv4()}
@@ -309,7 +364,7 @@ const UnstableSphere = () => {
             ...uniforms
           }}
         />
-      </mesh>
+      </instancedMesh>
       {/*<mesh position={[0, 2, 10]}>
         <sphereGeometry args={[1, 32, 32]} />
         <meshBasicMaterial color="white" />
@@ -321,6 +376,7 @@ const UnstableSphere = () => {
       >
         <spriteMaterial map={logo} />
       </sprite>
+      {/* <Bubble /> */}
     </>
   );
 };

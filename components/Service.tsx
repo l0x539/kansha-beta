@@ -51,7 +51,7 @@ const Carousel: FC<{
     </div>
     <div>
       <ul className="relative -bottom-72 inline-flex gap-3.5">
-        {[0, 1, 2, 3, 4].map((number) => (<SelectButton onClick={() => setSelected(number)} active={number === selected}>{number+1}</SelectButton>))}
+        {[0, 1, 2, 3, 4].map((number) => (<SelectButton key={number} onClick={() => setSelected(number)} active={number === selected}>{number+1}</SelectButton>))}
         
       </ul>
     </div>
