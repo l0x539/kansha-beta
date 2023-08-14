@@ -1,5 +1,5 @@
 import { useFBO } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { usePathname } from "next/navigation";
 import { useSpring } from "@react-spring/three";
 import { useRef } from "react";
@@ -12,16 +12,16 @@ const HomeEffects = () => {
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
   const pathname = usePathname();
-
+  const {gl} = useThree();
   const camRef = useRef<PerspectiveCamera>(null)
   const transRef = useRef<Effect>(null);
 
   const { progressSpring } = useSpring({
-    progressSpring: '/services' === pathname ? 1 : 0,
+    progressSpring: '/services/discovery' === pathname ? 0 : 1,
     config: { mass: 1, tension: 280, friction: 100 }
   });
 
-  useFrame(({gl, scene, camera, set}) => {
+  useFrame(({scene, camera, set}) => {
     if (!transRef.current) return;
 
     const uProgress = transRef.current?.uniforms.get('u_progress')
@@ -31,16 +31,22 @@ const HomeEffects = () => {
     // });
 
     uProgress && (uProgress.value = progressSpring.get());
+
     gl.setRenderTarget(backRenderTarget);
     gl.render(scene, camera);
     const uFrom = transRef.current?.uniforms.get('u_fromScene')
     uFrom && (uFrom.value = backRenderTarget.texture);
-    gl.setRenderTarget(null);
+    // gl.setRenderTarget(mainRenderTarget);
+    // gl.render(scene, camera);
+    // const uTo = transRef.current?.uniforms.get('u_toScene')
+    // uTo && (uTo.value = mainRenderTarget.texture);
+    // gl.setRenderTarget(null);
   });
 
   return (<>
-    <perspectiveCamera ref={camRef} position={[5, 5, 5]} />
-    <EffectComposer disableNormalPass stencilBuffer>
+    <perspectiveCamera frustumCulled ref={camRef} position={[10, 0, 7]} />
+    <EffectComposer disableNormalPass>
+      
       <TransitionEffect
         ref={transRef}
         u_fromScene={new Texture()}

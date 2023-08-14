@@ -34,7 +34,7 @@ class TransitionEffectImpl extends Effect {
     uTime && (uTime.value = this.time);
     const from = this.uniforms.get('u_fromScene');
     const invert = this.uniforms.get('u_fromScene')?.value;
-    from && (from.value = this.u_fromScene);
+    from && (from.value = inputBuffer?.texture);
     const to = this.uniforms.get('u_toScene');
     to && (to.value = inputBuffer?.texture);
   }
