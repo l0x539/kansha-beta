@@ -14,7 +14,9 @@ const Layout: FC<{
       <NavigationControls>
         <Header />
         {children}
-        <MainCanvas/>
+        <div className="fixed top-0 left-0 w-screen h-screen z-[-1]">
+          <MainCanvas/>
+        </div>
       </NavigationControls>
     </Provider>
     );

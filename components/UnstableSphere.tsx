@@ -258,21 +258,6 @@ const UnstableSphere = () => {
     const newColor = homeTextColor.clone().lerp(discoveryTextColor, progressDiscoverySpring.get())
     meshSprite.current?.material.color.set(newColor);
     
-    gl.setRenderTarget(backRenderTarget);
-    gl.render(scene, camera);
-
-    mesh.current.material.uniforms.uTexture.value = backRenderTarget.texture;
-    mesh.current.material.side = THREE.BackSide;
-
-    mesh.current.visible = true;
-
-    gl.setRenderTarget(mainRenderTarget);
-    gl.render(scene, camera);
-
-    mesh.current.material.uniforms.uTexture.value = mainRenderTarget.texture;
-    mesh.current.material.side = THREE.FrontSide;
-
-    gl.setRenderTarget(null);
     const newPos = methodsCurve.getPointAt(progressSpring.get());
 
     switch (pathname) {
@@ -347,6 +332,23 @@ const UnstableSphere = () => {
         mesh.current.material.uniforms.uChromaticAberration.value = chromaticAberration;
         break;
     }
+
+    gl.setRenderTarget(backRenderTarget);
+    gl.render(scene, camera);
+
+    mesh.current.material.uniforms.uTexture.value = backRenderTarget.texture;
+    mesh.current.material.side = THREE.BackSide;
+
+    mesh.current.visible = true;
+
+    gl.setRenderTarget(mainRenderTarget);
+    gl.render(scene, camera);
+
+    mesh.current.material.uniforms.uTexture.value = mainRenderTarget.texture;
+    mesh.current.material.side = THREE.FrontSide;
+
+    gl.setRenderTarget(null);
+      
     mesh.current.instanceMatrix.needsUpdate = true;
     mesh.current.material.needsUpdate = true
   });

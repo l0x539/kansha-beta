@@ -11,6 +11,10 @@ module.exports = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic':
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'crypto-mate': "url('/assets/images/cryptomate.png')",
+        'la-palma': "url('/assets/images/lapalma.png')",
+        'lazo': "url('/assets/images/lazo.png')",
+        'soy-rada': "url('/assets/images/soyrada.png')"
       },
       fontFamily: {
         main: ['Helvetica', 'Raleway'],
@@ -29,6 +33,9 @@ module.exports = {
             transform: 'translatey(0px)'
           }
         }
+      },
+      gridTemplateColumns: {
+        'footer': '1.3fr 0.6fr  1fr 1fr',
       }
     },
   },
@@ -44,5 +51,9 @@ module.exports = {
     'translate-x-[-300vw]',
     'translate-x-[-400vw]',
     'translate-x-[-500vw]',
+    'bg-crypto-mate',
+    'bg-la-palma',
+    'bg-lazo',
+    'bg-soy-rada'
   ]
 }
