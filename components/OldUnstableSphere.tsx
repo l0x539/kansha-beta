@@ -75,30 +75,75 @@ const UnstableSphere = () => {
     noiseZ,
     noiseSpeed,
     noiseStrenth
-  } = useMemo(() => ({
+  } = useControls({
     light: {
-      x: -1,
-      y: 1,
-      z: 1
+      value: {
+        x: -1,
+        y: 1,
+        z: 1
+      }
     },
-    diffuseness: 0.2,
-    shininess: 15.0,
-    fresnelPower: 8.0,
-    iorR: 1.15,
-    iorY: 1.16,
-    iorG: 1.18,
-    iorC: 1.22,
-    iorB: 1.22,
-    iorP: 1.22,
-    saturation: 1.03,
-    chromaticAberration: 0.04,
-    refraction: 0.22,
-    noiseX: 1,
-    noiseY: 1,
-    noiseZ: 1,
-    noiseSpeed: 1.05,
-    noiseStrenth: 0.17
-  }), []);
+    diffuseness: {
+      value: 0.2
+    },
+    shininess: {
+      value: 15.0
+    },
+    fresnelPower: {
+      value: 8.0
+    },
+    ior: folder({
+      iorR: { min: 1.0, max: 2.333, step: 0.001, value: 1.15 },
+      iorY: { min: 1.0, max: 2.333, step: 0.001, value: 1.16 },
+      iorG: { min: 1.0, max: 2.333, step: 0.001, value: 1.18 },
+      iorC: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
+      iorB: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
+      iorP: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 }
+    }),
+    saturation: { value: 1.03, min: 1, max: 1.25, step: 0.01 },
+    chromaticAberration: {
+      value: 0.04,
+      min: 0,
+      max: 1.5,
+      step: 0.01
+    },
+    refraction: {
+      value: 0.22,
+      min: 0,
+      max: 1,
+      step: 0.01
+    },
+    noiseX: {
+      value: 1,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseY: {
+      value: 1,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseZ: {
+      value: 1,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseSpeed: {
+      value: 1.05,
+      min: -2,
+      max: 2,
+      step: 0.01
+    },
+    noiseStrenth: {
+      value: 0.17,
+      min: -2,
+      max: 2,
+      step: 0.01
+    }
+  });
 
   const uniforms = useMemo(
     () => ({
@@ -303,7 +348,7 @@ const UnstableSphere = () => {
     mesh.current.material.side = THREE.FrontSide;
 
     gl.setRenderTarget(null);
-
+      
     mesh.current.instanceMatrix.needsUpdate = true;
     mesh.current.material.needsUpdate = true
   });
