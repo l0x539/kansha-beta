@@ -4,7 +4,7 @@ import { useAppDispatch } from "@/store/hooks";
 import { FC, ReactNode, useEffect, useState } from "react";
 
 const Service = () => {
-  return (<div className="w-screen h-[50vh] flex justify-center pt-48 overflow-x-hidden">
+  return (<div className="w-screen h-[50vh] flex justify-center mt-48 overflow-x-hidden">
     <div className="ml-72 w-96">
       <Carousel />
     </div>
