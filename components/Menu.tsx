@@ -146,7 +146,7 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0.4}}
           >
-            <NavLink href={'/contactus'}>
+            <NavLink href={'/contact'}>
               Contact Us
             </NavLink>
           </motion.li>
