@@ -2,13 +2,20 @@ import { useFBO } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { usePathname } from "next/navigation";
 import { useSpring } from "@react-spring/three";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { PerspectiveCamera, Texture } from "three";
 import TransitionEffect from "./TransitionEffect";
 import { Effect } from 'postprocessing'
 import { EffectComposer } from "@react-three/postprocessing";
+import { getGPUTier } from "detect-gpu";
 
 const HomeEffects = () => {
+  const [gpuTier, setGpuTier] = useState(3);
+  useEffect(() => {
+    getGPUTier().then((gpuTier) => {
+      setGpuTier(gpuTier.tier);
+    })
+  }, []);
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
   const pathname = usePathname();
@@ -45,15 +52,19 @@ const HomeEffects = () => {
 
   return (<>
     <perspectiveCamera frustumCulled ref={camRef} position={[10, 0, 7]} />
-    <EffectComposer disableNormalPass>
-      
-      <TransitionEffect
-        ref={transRef}
-        u_fromScene={new Texture()}
-        u_progress={transRef.current?.uniforms.get('u_progress')?.value ?? 0}
-        t u_time={0}
-      />
-    </EffectComposer>
+    {
+      navigator.userAgent.indexOf('Mac OS X') == -1 ? 
+        <EffectComposer disableNormalPass>
+          
+          {gpuTier > 1 ? <TransitionEffect
+            ref={transRef}
+            u_fromScene={new Texture()}
+            u_progress={transRef.current?.uniforms.get('u_progress')?.value ?? 0}
+            t u_time={0}
+          /> : <></>}
+        </EffectComposer>
+      : <></>
+    }
   </>);
 };
 
