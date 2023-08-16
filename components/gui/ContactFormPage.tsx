@@ -1,8 +1,17 @@
-import { FC, ReactNode } from "react";
+'use client'
+
+import { FC, ReactNode, useEffect } from "react";
 import { FooterLink } from "../layout/Footer";
 import Link from "next/link";
+import { useAppDispatch } from "@/store/hooks";
+import { updateView } from "@/store/features/gl/glSlice";
 
 const ContactFormPage = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(updateView(5));
+  }, [dispatch]);
+
   return (<>
   <div className="pt-40">
     <h1 className="mx-32 mb-28 text-8xl text-white">

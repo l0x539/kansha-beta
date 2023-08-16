@@ -1,8 +1,18 @@
+'use client'
+
 import Link from "next/link";
 import ScopeButton from "../ScopeButton";
 import FooterContent from "../FooterContent";
+import { updateView } from "@/store/features/gl/glSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { useEffect } from "react";
 
 const ServicesPage = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(updateView(1));
+  }, [dispatch]);
+
   return (<>
       <div className="">
         <Link href={'/services/discovery'}>

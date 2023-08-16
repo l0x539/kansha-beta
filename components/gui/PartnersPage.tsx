@@ -2,11 +2,18 @@
 
 import Button from "@/components/Button";
 import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { FC, ReactNode, useEffect } from "react";
 import FooterContent from "../FooterContent";
 import Logo from "../Logo";
+import { updateView } from "@/store/features/gl/glSlice";
+import { useAppDispatch } from "@/store/hooks";
 
 const PartnersPage = () => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(updateView(3));
+  }, [dispatch]);
+
   return (<div className="relative">
     <h1 className="mx-32 text-8xl text-white pt-40">
       Partners

@@ -1,5 +1,7 @@
 'use client'
-import { FC, ReactNode, useState } from "react";
+import { updateView } from "@/store/features/gl/glSlice";
+import { useAppDispatch } from "@/store/hooks";
+import { FC, ReactNode, useEffect, useState } from "react";
 
 const Service = () => {
   return (<div className="w-screen h-[50vh] flex justify-center pt-48 overflow-x-hidden">
@@ -14,6 +16,11 @@ const Carousel: FC<{
 }> = ({
   defaultSelected = 0
 }) => {
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(updateView(7));
+  }, [dispatch]);
+
   const [selected, setSelected] = useState(defaultSelected);
   
   return (<>
