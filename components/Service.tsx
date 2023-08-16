@@ -2,7 +2,7 @@
 import { FC, ReactNode, useState } from "react";
 
 const Service = () => {
-  return (<div className="w-screen h-[50vh] flex justify-center mt-48 overflow-x-hidden">
+  return (<div className="w-screen h-[50vh] flex justify-center pt-48 overflow-x-hidden">
     <div className="ml-72 w-96">
       <Carousel />
     </div>
@@ -75,7 +75,7 @@ const Pan: FC<{
   </div>);
 };
 
-const SelectButton: FC<{
+export const SelectButton: FC<{
   children: ReactNode;
   active?: boolean;
   onClick: () => void

@@ -8,7 +8,7 @@ import Logo from "../Logo";
 
 const PartnersPage = () => {
   return (<div className="relative">
-    <h1 className="mx-32 text-8xl text-white mt-20">
+    <h1 className="mx-32 text-8xl text-white pt-40">
       Partners
     </h1>
     <div>
@@ -43,7 +43,7 @@ const PartnersPage = () => {
           <span className="text-xs">Drop us a line</span>
         </Button>
       </Link>
-      <Link href={""}>
+      <Link href={"/contact/form"}>
         <Button icon type="primary" notFixedWidth size="xl" onClick={() => {}}>
         <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45" fill="none">
           <path d="M29.641 21.7177L15.9908 21.7177M23.3751 15.3593L29.6454 21.7177L23.3751 28.1288" stroke="currentColor" stroke-miterlimit="8" stroke-linecap="square"/>

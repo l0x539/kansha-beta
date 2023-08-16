@@ -29,12 +29,13 @@ const Footer = () => {
   </footer>);
 };
 
-const FooterLink: FC<{
+export const FooterLink: FC<{
   href: string;
   children: ReactNode;
   opener?: boolean;
-}> = ({href, children, opener = false}) => {
-  return (<a {...(opener ? {target: "_blank", rel:"noopener noreferrer"} : {})} className="text-flink text-base text-[#535353] hover:text-white transition-all" href={href}>{children}</a>);
+  type?: 'primary' | 'secondary';
+}> = ({href, children, opener = false, type = 'primary'}) => {
+  return (<a {...(opener ? {target: "_blank", rel:"noopener noreferrer"} : {})} className={`text-flink text-base ${type === 'primary' ? 'text-[#535353] hover:text-white' :'text-white hover:text-white' } transition-all`} href={href}>{children}</a>);
 }
 
 export default Footer;

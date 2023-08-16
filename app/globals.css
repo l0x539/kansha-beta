@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Helvetica';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Helvetica'), url('/assets/fonts/HelveticaNeueMedium.woff') format('woff');
+}
+@font-face {
+  font-family: 'Helvetica';
+  font-style: italic;
+  font-weight: 500;
+  src: local('Helvetica'), url('/assets/fonts/HelveticaNeueMediumItalic.woff') format('woff');
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
