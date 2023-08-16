@@ -13,7 +13,7 @@ const ContactPage = () => {
         </h1>
         <div>
           <Link href={'/contact/form'} className="relative group w-24 h-24 hover:cursor-pointer select-none">
-            <div  className={`w-24 h-24 flex justify-center items-center rounded-full border group-hover:bg-[#5E5E5E] group-hover:border-transparent mix-blend-difference shadow-[0px_2.2926828861236572px_2.2926828861236572px_0px_rgba(0,0,0,0.25)_inset] backdrop-opacity-70`}></div>
+            <div  className={`absolute top-0 w-24 h-24 flex justify-center items-center rounded-full border group-hover:bg-[#5E5E5E] group-hover:border-transparent mix-blend-difference shadow-[0px_2.2926828861236572px_2.2926828861236572px_0px_rgba(0,0,0,0.25)_inset] backdrop-opacity-70`}></div>
             <div className={`absolute top-0 w-24 h-24 flex justify-center items-center group-hover:text-white text-base font-gothic font-light`}>
               <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
                 <g filter="url(#filter0_bi_331_1650)">
