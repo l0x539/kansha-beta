@@ -8,11 +8,6 @@ import { useAppDispatch } from "@/store/hooks";
 import { useEffect } from "react";
 
 const ServicesPage = () => {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(updateView(1));
-  }, [dispatch]);
-
   return (<>
       <div className="">
         <Link href={'/services/discovery'}>
