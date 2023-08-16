@@ -6,7 +6,7 @@ const ContactFormPage = () => {
   return (<>
   <div className="pt-40">
     <h1 className="mx-32 mb-28 text-8xl text-white">
-      Let's start a<br />
+      Let{"'"}s start a<br />
       project together
     </h1>
     <div className="mx-32 grid grid-cols-2">

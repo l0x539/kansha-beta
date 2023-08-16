@@ -34,7 +34,7 @@ const PartnersPage = () => {
       </Partner>
     </div>
     <h1 className="mx-32 text-8xl text-[#5E5E5E] mt-20">
-    Let's start a<br />
+    Let{"'"}s start a<br />
     project together
     </h1>
     <div className="mx-32 mt-16 inline-flex gap-1.5">
