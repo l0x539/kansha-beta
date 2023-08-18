@@ -13,6 +13,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useSpring } from "@react-spring/three";
 import { throttle } from "lodash";
 import NoisyBackground from "./NoisyBackground";
+import { getGPUTier } from "detect-gpu";
 
 const Background = () => {
   const {pages} = useMemo(() => {
@@ -648,6 +649,12 @@ const Bubble: FC<{
   const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
+  const [gpuTier, setGpuTier] = useState(3);
+  useEffect(() => {
+    getGPUTier().then((gpuTier) => {
+      setGpuTier(gpuTier.tier);
+    })
+  }, []);
 
   const [excite, setExcite] = useState(false);
 
@@ -827,7 +834,7 @@ const Bubble: FC<{
         trailing: false
       })
     }} name={"bubble"+index} ref={mesh}>
-      <sphereGeometry args={[2.5, 128, 128]} />
+      <sphereGeometry args={[2.5, gpuTier * 32, gpuTier * 32]} />
       <shaderMaterial
         key={uuidv4()}
         vertexShader={sphereVertexShader}

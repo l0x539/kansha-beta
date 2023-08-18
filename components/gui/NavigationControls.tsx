@@ -53,6 +53,9 @@ const NavigationControls: FC<{
       case '/services/design':
         router.push('/services/services');
         break;
+      case '/services/services':
+        router.push('/partners');
+        break;
       case '/contact':
         router.push('/contact/form');
         break;
