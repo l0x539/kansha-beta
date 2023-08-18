@@ -69,11 +69,11 @@ const Background = () => {
             new Vector3( 0, 0, 3 )
           ]),
           panLookAt: new CatmullRomCurve3( [
-            new Vector3(-10),
+            new Vector3(0),
             new Vector3(0, 0, -10),
             new Vector3(10, 0, -10),
-            new Vector3(10, 0, 0),
-            new Vector3(10, 0, 10),
+            new Vector3(10, 0, 100),
+            new Vector3(10, 0, 20),
             new Vector3(0, 0, 10)
           ]),
           uniforms: {
