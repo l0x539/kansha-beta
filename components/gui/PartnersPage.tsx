@@ -53,7 +53,7 @@ const PartnersPage = () => {
       <Link href={"/contact/form"}>
         <Button icon type="primary" notFixedWidth size="xl" onClick={() => {}}>
         <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45" fill="none">
-          <path d="M29.641 21.7177L15.9908 21.7177M23.3751 15.3593L29.6454 21.7177L23.3751 28.1288" stroke="currentColor" stroke-miterlimit="8" stroke-linecap="square"/>
+          <path d="M29.641 21.7177L15.9908 21.7177M23.3751 15.3593L29.6454 21.7177L23.3751 28.1288" stroke="currentColor" strokeMiterlimit="8" strokeLinecap="square"/>
         </svg>
         </Button>
       </Link>
@@ -95,7 +95,7 @@ const Partner: FC<{
             <Link href={more}>
               <Button icon type="secondary" notFixedWidth size="xl" onClick={() => {}}>
               <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45" fill="none">
-                <path d="M29.641 21.7177L15.9908 21.7177M23.3751 15.3593L29.6454 21.7177L23.3751 28.1288" stroke="currentColor" stroke-miterlimit="8" stroke-linecap="square"/>
+                <path d="M29.641 21.7177L15.9908 21.7177M23.3751 15.3593L29.6454 21.7177L23.3751 28.1288" stroke="currentColor" strokeMiterlimit="8" strokeLinecap="square"/>
               </svg>
               </Button>
             </Link>

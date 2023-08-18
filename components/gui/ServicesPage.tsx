@@ -15,18 +15,26 @@ const ServicesPage = () => {
             Discovery
           </ScopeButton>
         </Link>
-        <ScopeButton number={2} className='-ml-[15vw] -mt-[13vh]' >
-          MVP Development
-        </ScopeButton>
-        <ScopeButton number={3} className='ml-[18vw] -mt-[33vh]' >
-          Product Team
-        </ScopeButton>
-        <ScopeButton number={4} className='-ml-[33vw] mt-[2vh]' >
-          Product Design
-        </ScopeButton>
-        <ScopeButton number={5} className='-ml-[5vw] mt-[12vh]' >
-          All services
-        </ScopeButton>
+        <Link href={'/services/development'}>
+          <ScopeButton number={2} className='-ml-[15vw] -mt-[13vh]' >
+            MVP Development
+          </ScopeButton>
+        </Link>
+        <Link href={'/services/team'}>
+          <ScopeButton number={3} className='ml-[18vw] -mt-[33vh]' >
+            Product Team
+          </ScopeButton>
+        </Link>
+        <Link href={'/services/design'}>
+          <ScopeButton number={4} className='-ml-[33vw] mt-[2vh]' >
+            Product Design
+          </ScopeButton>
+        </Link>
+        <Link href={'/services/services'}>
+          <ScopeButton number={5} className='-ml-[5vw] mt-[12vh]' >
+            All services
+          </ScopeButton>
+        </Link>
         <Link href={'/services/our-method'}>
           <ScopeButton number={6} className='ml-[15vw] mt-[5vh]' >
             Our method

@@ -24,7 +24,7 @@ const HomeEffects = () => {
   const transRef = useRef<Effect>(null);
 
   const { progressSpring } = useSpring({
-    progressSpring: '/services/discovery' === pathname ? 0 : 1,
+    progressSpring: pathname.startsWith('/services/') ? 0 : 1,
     config: { mass: 1, tension: 280, friction: 100 }
   });
 

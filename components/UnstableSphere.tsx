@@ -6,11 +6,64 @@ import { useMemo, useRef, useEffect, useLayoutEffect, useState, Suspense } from 
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
 import { makeNoise4D } from "open-simplex-noise";
-import sphereVertexShader from "@/utils/shaders/vertexShaders";
-import sphereFragmentShader from "@/utils/shaders/fragmentShaders";
+import {sphereVertexShader} from "@/utils/shaders/vertexShaders";
+import {sphereFragmentShader} from "@/utils/shaders/fragmentShaders";
 import { usePathname } from 'next/navigation';
 import { useSpring } from "@react-spring/three";
 import { lerp } from "three/src/math/MathUtils";
+
+const POSITIONS = {
+  '/': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0
+  },
+  '/services': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.1
+  },
+  '/services/discovery': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.2
+  },
+  '/services/development': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.3
+  },
+  '/services/team': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.4
+  },
+  '/services/design': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.5
+  },
+  '/services/services': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.6
+  },
+  '/partners': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.7
+  },
+  '/contact': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.8
+  },
+  '/contact/form': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0
+  },
+}
 
 const UnstableSphere = () => {
   const noise = useMemo(() => makeNoise4D(Date.now()), []);
@@ -142,14 +195,12 @@ const UnstableSphere = () => {
   useLayoutEffect(() => {
     if (sphereGeometry.current) {
       for (let i = 0; i < sphereGeometry.current.attributes.position.count; i++){
-        instanceDummy.position.set(0, 0, 0);
         instanceDummy.updateMatrix();
         mesh.current?.setMatrixAt(0, instanceDummy.matrix);
         v3.fromBufferAttribute(sphereGeometry.current.attributes.position, i);
         positionData.push(v3.clone());
       }
       for (let i = 0; i < sphereGeometry.current.attributes.position.count; i++){
-        instanceDummy.position.set(-10, -10, 0);
         instanceDummy.updateMatrix();
         mesh.current?.setMatrixAt(1, instanceDummy.matrix);
         v3.fromBufferAttribute(sphereGeometry.current.attributes.position, i);
@@ -312,7 +363,7 @@ const UnstableSphere = () => {
     <>
       <color attach="background" args={["black"]} />
       <instancedMesh ref={mesh} args={[undefined, undefined, 2]}>
-        <sphereGeometry ref={sphereGeometry} args={[2.5, 256, 256]} />
+        <sphereGeometry ref={sphereGeometry} args={[2.5, 64, 64]} />
         <shaderMaterial
           key={uuidv4()}
           vertexShader={sphereVertexShader}

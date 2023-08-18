@@ -1,0 +1,778 @@
+import { FC, ForwardedRef, forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { BackSide, Color, FrontSide, InstancedMesh, Mesh, Object3D, RawShaderMaterial, SphereGeometry, Sprite, Vector2, Vector3 } from "three";
+import {sphereVertexShader} from "@/utils/shaders/vertexShaders";
+import {sphereFragmentShader} from "@/utils/shaders/fragmentShaders";
+import { Html, Text, useFBO, useFont, useTexture } from "@react-three/drei";
+import { useFrame } from "@react-three/fiber";
+import { makeNoise4D } from "open-simplex-noise";
+import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { disableIntro, selectGl } from "@/store/features/gl/glSlice";
+import { lerp } from "three/src/math/MathUtils";
+import { usePathname } from "next/navigation";
+import { useSpring } from "@react-spring/three";
+import { throttle } from "lodash";
+import NoisyBackground from "./NoisyBackground";
+
+const Background = () => {
+  const {pages} = useMemo(() => {
+    return {
+      pages: {
+        'default': {
+          bubble1Pos: new Vector3,
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.03,
+          color: new Color(),
+          opacity: 0,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.04,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 1.05,
+            noiseStrenth: 0.17
+          }
+        },
+        '/': {
+          bubble1Pos: new Vector3(0, 0, 4),
+          bubble1Rot: new Vector3(0, Math.PI),
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.03,
+          color: new Color(),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.04,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 1.05,
+            noiseStrenth: 0.05
+          }
+        },
+        '/services': {
+          bubble1Pos: new Vector3(0, 0, 4.2),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color(),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: -0.1,
+            shininess: 80.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1,
+            chromaticAberration: 0.5,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 1.05,
+            noiseStrenth: 0.02
+          }
+        },
+        '/services/discovery': {
+          bubble1Pos: new Vector3(-4.5, 0.5, -2),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-8.5, -2.6, -6),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color("#6f6f6f"),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.01,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 2,
+            noiseStrenth: 0.05
+          }
+        },
+        '/services/development': {
+          bubble1Pos: new Vector3(-2.5, 4, 0),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-10, -3.5, -6),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color("#6f6f6f"),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.01,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 2,
+            noiseStrenth: 0.05
+          }
+        },
+        '/services/team': {
+          bubble1Pos: new Vector3(4, 3, 2),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-4., -3.5, 0),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color("#6f6f6f"),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.01,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 2,
+            noiseStrenth: 0.05
+          }
+        },
+        '/services/design': {
+          bubble1Pos: new Vector3(5.5, 1.5, 0.3),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(7, -4, -8),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color("#6f6f6f"),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.01,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 2,
+            noiseStrenth: 0.05
+          }
+        },
+        '/services/services': {
+          bubble1Pos: new Vector3(4.5, -0.5, 2),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(8.5, 2.6, -4),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color("#6f6f6f"),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.01,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 2,
+            noiseStrenth: 0.05
+          }
+        },
+        '/services/our-method': {
+          bubble1Pos: new Vector3(4, 3, 2),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-4., -3.5, 0),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color("#6f6f6f"),
+          opacity: 1,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.01,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 2,
+            noiseStrenth: 0.05
+          }
+        },
+        '/partners': {
+          bubble1Pos: new Vector3(0, -6),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color,
+          opacity: 0.3,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.04,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 1.05,
+            noiseStrenth: 0.17
+          }
+        },
+        '/contact': {
+          bubble1Pos: new Vector3(0, 0, 2.5),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color(),
+          opacity: 0,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 80.0,
+            fresnelPower: 15.0,
+            iorR: 10,
+            iorY: 10,
+            iorG: 10,
+            iorC: 10,
+            iorB: 10,
+            iorP: 3,
+            saturation: 1.03,
+            chromaticAberration: 0.15,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 1.05,
+            noiseStrenth: 0.05
+          }
+        },
+        '/contact/form': {
+          bubble1Pos: new Vector3,
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color(),
+          opacity: 0.2,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.04,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 1.05,
+            noiseStrenth: 0.17
+          }
+        }
+      }
+    }
+  }, []);
+  const pathname = usePathname() as keyof typeof pages;
+
+  const [{
+    color,
+    prevPosition,
+    prevRotation,
+    opacity,
+    speed
+  }, setOptions] = useState({
+    color: new Color('#FFF'),
+    opacity: 0,
+    prevPosition: new Vector3,
+    prevRotation: new Vector3,
+    speed: 0.1
+  });
+
+  const {
+    progress,
+  } = useSpring({
+    progress: prevPosition.x === (pages[pathname]?.bubble1Pos.x ?? 0) && prevPosition.y === (pages[pathname]?.bubble1Pos.y?? 0) &&
+    prevPosition.z === (pages[pathname]?.bubble1Pos.z ?? 0) ? 0 : 1,
+    config: { mass: 1, tension: 280, friction: 100 }
+  });
+
+  useEffect(() => {
+    setOptions({
+      color: pages[pathname]?.color ?? pages['default'].color,
+      opacity: pages[pathname]?.opacity ?? pages['default'].opacity,
+      prevPosition: pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos,
+      prevRotation: pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos,
+      speed: pages[pathname]?.speed ?? pages['default'].speed
+    })
+  }, [pathname, progress]);
+  
+  return (
+    <>
+      <color attach="background" args={["black"]} />
+      <IntroText />
+      <LogoBg opacity={opacity} color={color} speed={speed} />
+      <group>
+        <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos} rotation={pages[pathname]?.bubble1Rot ?? pages['default'].bubble1Rot} speed={speed} />
+      </group>
+      <group>
+        <Bubble index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} />
+      </group>
+      <NoisyBackground getProgress={() => progress.get()} />
+    </>
+  );
+};
+
+const LogoBg: FC<{
+  color: Color;
+  opacity: number;
+  speed: number;
+}> = ({color, speed, opacity}) => {
+  const [logo] = useTexture(['/assets/images/Logo.png']);
+  const meshSprite = useRef<Sprite>(null);
+  const [ready, setReady] = useState(false);
+  useFrame(() => {
+    if (!meshSprite.current) return;
+    meshSprite.current?.material.color.lerp(color, speed);
+    if (ready) {
+      meshSprite.current.material.opacity = lerp(meshSprite.current.material.opacity, opacity, speed);
+    }
+  });
+
+  useEffect(() => {
+    const timout = setTimeout(() => {
+      setReady(true);
+    }, 5000);
+
+    return () => {clearTimeout(timout)}
+  }, []);
+
+  return (
+    <sprite
+        position={[0, 0, -5]} /* position */
+        scale={new Vector3(64.5/3, 9.125/3, 1)}
+        ref={meshSprite}
+      >
+      <spriteMaterial map={logo} color={"#FFF"} alphaTest={0} opacity={0} />
+    </sprite>
+  );
+}
+
+const IntroText = () => {
+  const text = useRef<any>(null);
+  const pathname = usePathname();
+
+  const TEXTS = useMemo(() => [
+    "Lorem\nContent Lab\n& Ipsum dolor\n/Sit amet\n2022—2023",
+    "We help \nfounders \nmake profits \nthat match \ntheir passions.",
+    "We help \nfounders \nmake profits \nthat match \ntheir passions.",
+    "We empowering \ncompanies to \nembrace \ndisruptive ideas",
+    "We reduce the gap \nfor innovation and \nguide our clients \ntowards sustainable \nsuccess",
+    ""
+  ], [])
+
+  const [content, setContent] = useState(TEXTS[0]);
+
+  useEffect(() => {
+    let interval = setInterval(() => {},99999);
+    interval = setInterval(() => {
+      const index = TEXTS.findIndex((t) => t === content);
+      const char = TEXTS.find((t) => t === content);
+      if (char === "") return clearInterval(interval);
+      setContent(TEXTS[index+1]);
+    }, 5000);
+  }, [
+
+  ])
+
+  useFrame(({clock}) => {
+    if (!text.current) return;
+
+    const progress = (clock.elapsedTime-3)*0.06;
+    
+    text.current.fillOpacity = lerp(text.current.fillOpacity, 0, progress > 1 ? 1 : progress < 0 ? 0 : progress);
+    
+  });
+
+  return(
+    <>
+      <Text visible={pathname === '/'} ref={text} fontSize={1.25} position={[-2, 0, -2]} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
+        {content}
+      </Text>
+    </>
+    
+  );
+}
+
+const Bubble: FC<{
+  position: Vector3;
+  speed: number;
+  rotation: Vector3;
+  index: string;
+  uniforms: {
+    light: {
+      x: number;
+      y: number;
+      z: number;
+    };
+    diffuseness: number;
+    shininess: number;
+    fresnelPower: number;
+    iorR: number;
+    iorY: number;
+    iorG: number;
+    iorC: number;
+    iorB: number;
+    iorP: number;
+    saturation: number;
+    chromaticAberration: number;
+    refraction: number;
+    noiseX: number;
+    noiseY: number;
+    noiseZ: number;
+    noiseSpeed: number;
+    noiseStrenth: number;
+  }
+}> = ({index, position, rotation, speed, uniforms}) => {
+  const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
+  const mainRenderTarget = useFBO();
+  const backRenderTarget = useFBO();
+
+  const [excite, setExcite] = useState(false);
+
+  const {
+    light,
+    shininess,
+    diffuseness,
+    fresnelPower,
+    iorR,
+    iorY,
+    iorG,
+    iorC,
+    iorB,
+    iorP,
+    saturation,
+    chromaticAberration,
+    refraction,
+    noiseX,
+    noiseY,
+    noiseZ,
+    noiseSpeed,
+    noiseStrenth
+  } = uniforms;
+
+  const {
+    defaultUniforms,
+    v3,
+    positionData,
+    noise
+  } = useMemo(
+    () => ({
+      defaultUniforms: {
+        uTexture: {
+          value: null
+        },
+        uIorR: { value: 1.0 },
+        uIorY: { value: 1.0 },
+        uIorG: { value: 1.0 },
+        uIorC: { value: 1.0 },
+        uIorB: { value: 1.0 },
+        uIorP: { value: 1.0 },
+        uRefractPower: {
+          value: 0.0
+        },
+        uChromaticAberration: {
+          value: 0.0
+        },
+        uSaturation: { value: 0.0 },
+        uShininess: { value: 40.0 },
+        uDiffuseness: { value: 0.2 },
+        uFresnelPower: { value: 8.0 },
+        uLight: {
+          value: new Vector3(-1.0, 1.0, 1.0)
+        },
+        winResolution: {
+          value: new Vector2(
+            window.innerWidth,
+            window.innerHeight
+          ).multiplyScalar(Math.min(window.devicePixelRatio, 2))
+        }
+      },
+      v3: new Vector3,
+      positionData: [] as Vector3[],
+      noise: makeNoise4D(Date.now())
+    }),
+    []
+  );
+
+  useLayoutEffect(() => {
+    if (mesh.current) {
+      for (let i = 0; i < mesh.current.geometry.attributes.position.count; i++){
+        v3.fromBufferAttribute(mesh.current.geometry.attributes.position, i);
+        positionData.push(v3.clone());
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  const {
+    light: prevLight,
+    shininess: prevShininess,
+    diffuseness: prevDiffuseness,
+    fresnelPower: prevFresnelPower,
+    iorR: prevIorR,
+    iorY: prevIorY,
+    iorG: prevIorG,
+    iorC: prevIorC,
+    iorB: prevIorB,
+    iorP: prevIorP,
+    saturation: prevSaturation,
+    chromaticAberration: prevChromaticAberration,
+    refraction: prevRefraction,
+    noiseX: prevNoiseX,
+    noiseY: prevNoiseY,
+    noiseZ: prevNoiseZ,
+    noiseSpeed: prevNoiseSpeed,
+    noiseStrenth: prevNoiseStrenth
+  } = uniforms;
+
+  useFrame(({gl, scene, camera, clock}) => {
+    if (!mesh.current) return;
+
+    const t = clock.getElapsedTime() / 1.;
+    positionData.forEach((p, idx) => {
+      
+      const simpNoise = noise(p.x * lerp(noiseX, 2, speed), p.y * lerp(noiseY, 2, speed), p.y * lerp(noiseZ, 2, speed), t * noiseSpeed);
+      v3.copy(p).addScaledVector(p, simpNoise*lerp(prevNoiseStrenth, noiseStrenth, speed));
+      mesh.current?.geometry.attributes.position.setXYZ(idx, v3.x, v3.y, v3.z);
+    });
+    mesh.current?.geometry.computeVertexNormals();
+    mesh.current.geometry.attributes.position.needsUpdate = true;
+    const obj0 = scene.getObjectByName('bubble0');
+    const obj1 = scene.getObjectByName('bubble1');
+    obj0 && (obj0.visible = false);
+    obj1 && (obj1.visible = false);
+    mesh.current.visible = false;
+
+    mesh.current.material.uniforms.uLight.value = new Vector3(
+      light.x,
+      light.y,
+      light.z
+    );
+
+    mesh.current.material.uniforms.uIorR.value = iorR;
+    mesh.current.material.uniforms.uIorY.value = iorY;
+    mesh.current.material.uniforms.uIorG.value = iorG;
+    mesh.current.material.uniforms.uIorC.value = iorC;
+    mesh.current.material.uniforms.uIorB.value = iorB;
+    mesh.current.material.uniforms.uIorP.value = iorP;
+    
+    mesh.current.material.uniforms.uRefractPower.value = refraction;
+
+    mesh.current.position.lerp(position, speed);
+
+    const newRot = v3.set(mesh.current.rotation.x, mesh.current.rotation.y,mesh.current.rotation.z);
+    newRot.lerp(rotation, speed);
+    mesh.current.rotation.set(newRot.x, newRot.y, newRot.z);
+    
+    mesh.current.material.uniforms.uChromaticAberration.value = lerp(mesh.current.material.uniforms.uChromaticAberration.value, chromaticAberration, speed);
+    mesh.current.material.uniforms.uSaturation.value = lerp(mesh.current.material.uniforms.uSaturation.value, saturation, speed);
+    mesh.current.material.uniforms.uDiffuseness.value = lerp(mesh.current.material.uniforms.uDiffuseness.value, diffuseness, speed);
+    mesh.current.material.uniforms.uShininess.value = lerp(mesh.current.material.uniforms.uShininess.value, shininess, speed);
+    mesh.current.material.uniforms.uFresnelPower.value = lerp(mesh.current.material.uniforms.uFresnelPower.value, fresnelPower, speed);
+
+    gl.setRenderTarget(backRenderTarget);
+    gl.render(scene, camera);
+
+    mesh.current.material.uniforms.uTexture.value = backRenderTarget.texture;
+    mesh.current.material.side = BackSide;
+
+    obj0 && (obj0.visible = true);
+    obj1 && (obj1.visible = true);
+
+
+    gl.setRenderTarget(mainRenderTarget);
+    gl.render(scene, camera);
+
+    if (index === '0')
+      obj1 && (obj1.visible = true);
+    else
+      obj0 && (obj0.visible = true);
+
+    mesh.current.material.uniforms.uTexture.value = mainRenderTarget.texture;
+    mesh.current.material.side = FrontSide;
+
+    gl.setRenderTarget(null);
+
+  });
+
+  return (
+    <mesh onPointerMove={() => {
+      setExcite(true);
+
+      throttle(() => {
+        setExcite(false)
+      }, 400, {
+        leading: true,
+        trailing: false
+      })
+    }} name={"bubble"+index} ref={mesh}>
+      <sphereGeometry args={[2.5, 128, 128]} />
+      <shaderMaterial
+        key={uuidv4()}
+        vertexShader={sphereVertexShader}
+        fragmentShader={sphereFragmentShader}
+        uniforms={{
+          ...defaultUniforms
+        }}
+      />
+    </mesh>
+  );
+};
+
+export default Background;
+
+useTexture.preload('/assets/images/Logo.png');

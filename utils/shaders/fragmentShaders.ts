@@ -1,4 +1,4 @@
-const sphereFragmentShader = `
+export const sphereFragmentShader = `
 // #include <normal_pars_fragment>
 
 
@@ -231,4 +231,13 @@ void mainImage(const in vec4 inputColor, const in vec2 vUv, out vec4 outputColor
     outputColor = mix(vec4(baseColor, origCol.a), vec4(revealColor, 1.), noiseReveal);
 }`;
 
-export default sphereFragmentShader;
+
+export const bgFragmentShader = `
+#define GLSLIFY 1
+varying vec2 vUv;
+
+void main() {
+    vUv = uv;
+    gl_Position = vec4(position, 1.0);
+}
+`;

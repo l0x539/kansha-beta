@@ -47,7 +47,7 @@ const NavigationControls: FC<{
       router.push('/services')
     }
   }, [currentView, router])
-  return (<main {...bind()} className='top-0 left-0 h-screen w-screen bg-transparent font-main'>
+  return (<main {...bind()} className='absolute top-0 left-0 h-screen w-screen bg-transparent font-main'>
       {children}
     </main>);
 };

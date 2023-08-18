@@ -2,15 +2,69 @@
 import { useFBO, Text, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { folder, useControls } from "leva";
-import { useMemo, useRef, useEffect, useLayoutEffect, useState, Suspense } from "react";
+import { useMemo, useRef, useEffect, useLayoutEffect, useState, Suspense, useCallback } from "react";
 import * as THREE from "three";
 import { v4 as uuidv4 } from "uuid";
 import { makeNoise4D } from "open-simplex-noise";
-import sphereVertexShader from "@/utils/shaders/vertexShaders";
-import sphereFragmentShader from "@/utils/shaders/fragmentShaders";
+import {sphereVertexShader} from "@/utils/shaders/vertexShaders";
+import {sphereFragmentShader} from "@/utils/shaders/fragmentShaders";
 import { usePathname } from 'next/navigation';
 import { useSpring } from "@react-spring/three";
 import { lerp } from "three/src/math/MathUtils";
+import { throttle } from "lodash";
+
+const POSITIONS = {
+  '/': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0
+  },
+  '/services': {
+    bubble1: new THREE.Vector3(0, 0, 4.2),
+    bubble2: new THREE.Vector3(-8.5, -2.6, -6),
+    progress: 0.1
+  },
+  '/services/discovery': {
+    bubble1: new THREE.Vector3(-4.5, 0.5, -2),
+    bubble2: new THREE.Vector3,
+    progress: 0.2
+  },
+  '/services/development': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.3
+  },
+  '/services/team': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.4
+  },
+  '/services/design': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.5
+  },
+  '/services/services': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.6
+  },
+  '/partners': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.7
+  },
+  '/contact': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0.8
+  },
+  '/contact/form': {
+    bubble1: new THREE.Vector3,
+    bubble2: new THREE.Vector3,
+    progress: 0
+  }
+}
 
 const UnstableSphere = () => {
   const noise = useMemo(() => makeNoise4D(Date.now()), []);
@@ -26,6 +80,7 @@ const UnstableSphere = () => {
   const backRenderTarget = useFBO();
 
   const pathname = usePathname();
+  const [path, setPath] = useState<keyof typeof POSITIONS>(pathname as keyof typeof POSITIONS);
   
   const {
     methods: {
@@ -75,75 +130,30 @@ const UnstableSphere = () => {
     noiseZ,
     noiseSpeed,
     noiseStrenth
-  } = useControls({
+  } = useMemo(() => ({
     light: {
-      value: {
-        x: -1,
-        y: 1,
-        z: 1
-      }
+      x: -1,
+      y: 1,
+      z: 1
     },
-    diffuseness: {
-      value: 0.2
-    },
-    shininess: {
-      value: 15.0
-    },
-    fresnelPower: {
-      value: 8.0
-    },
-    ior: folder({
-      iorR: { min: 1.0, max: 2.333, step: 0.001, value: 1.15 },
-      iorY: { min: 1.0, max: 2.333, step: 0.001, value: 1.16 },
-      iorG: { min: 1.0, max: 2.333, step: 0.001, value: 1.18 },
-      iorC: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
-      iorB: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 },
-      iorP: { min: 1.0, max: 2.333, step: 0.001, value: 1.22 }
-    }),
-    saturation: { value: 1.03, min: 1, max: 1.25, step: 0.01 },
-    chromaticAberration: {
-      value: 0.04,
-      min: 0,
-      max: 1.5,
-      step: 0.01
-    },
-    refraction: {
-      value: 0.22,
-      min: 0,
-      max: 1,
-      step: 0.01
-    },
-    noiseX: {
-      value: 1,
-      min: -2,
-      max: 2,
-      step: 0.01
-    },
-    noiseY: {
-      value: 1,
-      min: -2,
-      max: 2,
-      step: 0.01
-    },
-    noiseZ: {
-      value: 1,
-      min: -2,
-      max: 2,
-      step: 0.01
-    },
-    noiseSpeed: {
-      value: 1.05,
-      min: -2,
-      max: 2,
-      step: 0.01
-    },
-    noiseStrenth: {
-      value: 0.17,
-      min: -2,
-      max: 2,
-      step: 0.01
-    }
-  });
+    diffuseness: 0.2,
+    shininess: 15.0,
+    fresnelPower: 8.0,
+    iorR: 1.15,
+    iorY: 1.16,
+    iorG: 1.18,
+    iorC: 1.22,
+    iorB: 1.22,
+    iorP: 1.22,
+    saturation: 1.03,
+    chromaticAberration: 0.04,
+    refraction: 0.22,
+    noiseX: 1,
+    noiseY: 1,
+    noiseZ: 1,
+    noiseSpeed: 1.05,
+    noiseStrenth: 0.17
+  }), []);
 
   const uniforms = useMemo(
     () => ({
@@ -214,6 +224,17 @@ const UnstableSphere = () => {
     config: { mass: 1, tension: 280, friction: 100 }
   });
 
+  const throttlePath = useCallback(throttle((pathname) => {
+    setPath(pathname)
+  }, 1500, {
+    leading: true,
+    trailing: false
+  }), []);
+
+  useEffect(() => {
+    throttlePath(pathname)
+  }, [pathname])
+
   useFrame((state) => {
     const { gl, scene, camera } = state;
     if (!mesh.current || !sphereGeometry.current) return;
@@ -260,15 +281,17 @@ const UnstableSphere = () => {
     
     const newPos = methodsCurve.getPointAt(progressSpring.get());
 
+    const prevPos = POSITIONS[path]
+
     switch (pathname) {
       case '/services':
-        // const pos = mesh.current.position.clone().lerp(newPos, progressSpring.get());
-        instanceDummy.position.set(newPos.x, newPos.y, newPos.z);
+        const pos = prevPos.bubble1.clone().lerp(newPos, progressSpring.get());
+        instanceDummy.position.set(pos.x, pos.y, pos.z);
         instanceDummy.rotateY(progressSpring.get()*((1 - progressSpring.get())*Math.PI/2));
         instanceDummy.updateMatrix();
         mesh.current.setMatrixAt(0, instanceDummy.matrix);
 
-        const pos1 = mesh.current.position.clone().lerp(new THREE.Vector3, progressSpring.get())
+        const pos1 = prevPos.bubble2.clone().lerp(new THREE.Vector3, progressSpring.get())
         instanceDummy.position.set(pos1.x, pos1.y, pos1.z);
         instanceDummy.rotation.set((1-progressSpring.get()) * instanceDummy.rotation.x, (1-progressSpring.get()) * instanceDummy.rotation.y, (1-progressSpring.get()) * instanceDummy.rotation.z);
         instanceDummy.updateMatrix();
@@ -283,14 +306,14 @@ const UnstableSphere = () => {
         mesh.current.material.uniforms.uFresnelPower.value = lerp(fresnelPower, 6.7, progressSpring.get());
         break;
       case '/services/discovery':
-        const newVecPos = mesh.current.position.clone()
+        const newVecPos = prevPos.bubble1.clone()
         newVecPos.lerp(discoveryPosition1, progressDiscoverySpring.get())
         instanceDummy.position.set(newVecPos.x, newVecPos.y, newVecPos.z);
         instanceDummy.rotation.set(progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0);
         instanceDummy.updateMatrix();
         mesh.current.setMatrixAt(0, instanceDummy.matrix);
 
-        const newVecPos1 = mesh.current.position.clone();
+        const newVecPos1 = prevPos.bubble2.clone();
         newVecPos1.lerp(discoveryPosition2, progressDiscoverySpring.get());
         instanceDummy.position.set(newVecPos1.x, newVecPos1.y, newVecPos1.z);
         instanceDummy.rotation.set((1-progressDiscoverySpring.get()) * instanceDummy.rotation.x, (1-progressDiscoverySpring.get()) * instanceDummy.rotation.y, (1-progressDiscoverySpring.get()) * instanceDummy.rotation.z);
@@ -308,13 +331,13 @@ const UnstableSphere = () => {
         mesh.current.material.uniforms.uChromaticAberration.value = lerp(chromaticAberration, 0.01, progressDiscoverySpring.get());
         break;
       default:
-        const newDefPos = mesh.current.position.clone();
+        const newDefPos = prevPos.bubble1.clone();
         newDefPos.lerp(defaultPosition, progressHomeSpring.get())
         instanceDummy.position.set(newDefPos.x, newDefPos.y, newDefPos.z);
         instanceDummy.rotation.set((1-progressHomeSpring.get()) * instanceDummy.rotation.x, (1-progressHomeSpring.get()) * instanceDummy.rotation.y, (1-progressHomeSpring.get()) * instanceDummy.rotation.z);
         instanceDummy.updateMatrix();
 
-        const newDefPos1 = mesh.current.position.clone();
+        const newDefPos1 = prevPos.bubble2.clone();
         newDefPos1.lerp(new THREE.Vector3, progressDiscoverySpring.get())
         instanceDummy.position.set(newDefPos1.x, newDefPos1.y, newDefPos1.z);
         instanceDummy.rotation.set(progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0, progressDiscoverySpring.get() * 0);
@@ -348,7 +371,7 @@ const UnstableSphere = () => {
     mesh.current.material.side = THREE.FrontSide;
 
     gl.setRenderTarget(null);
-      
+
     mesh.current.instanceMatrix.needsUpdate = true;
     mesh.current.material.needsUpdate = true
   });
