@@ -560,7 +560,7 @@ const IntroText = () => {
     
   });
 
-  return (<group ref={ref}>
+  return (<group ref={ref} position={[20, 0, 0]}>
     {TEXTS.map((text, index) => {
       return <Text key={index} visible={pathname === '/'} fontSize={1.4} position={[(index*20) -2, 0, -3]} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
         {text}
