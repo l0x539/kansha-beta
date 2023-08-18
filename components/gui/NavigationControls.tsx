@@ -60,7 +60,7 @@ const NavigationControls: FC<{
         router.push('/contact/form');
         break;
     }
-  }, 300, {
+  }, 500, {
     leading: false,
     trailing: true
   }), [pathname, searchParams.get('pan')]);
