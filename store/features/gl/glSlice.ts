@@ -31,7 +31,7 @@ export interface GlState {
   noiseY: number;
   noiseZ: number;
   noiseSpeed: number;
-  noiseStrenth: number;
+  noiseStrength: number;
   intro: boolean;
 };
 
@@ -58,7 +58,7 @@ const initialState: GlState = {
   noiseY: 1,
   noiseZ: 1,
   noiseSpeed: 1.05,
-  noiseStrenth: 0.17,
+  noiseStrength: 0.17,
   intro: true
 };
 

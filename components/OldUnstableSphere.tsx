@@ -129,7 +129,7 @@ const UnstableSphere = () => {
     noiseY,
     noiseZ,
     noiseSpeed,
-    noiseStrenth
+    noiseStrength
   } = useMemo(() => ({
     light: {
       x: -1,
@@ -152,7 +152,7 @@ const UnstableSphere = () => {
     noiseY: 1,
     noiseZ: 1,
     noiseSpeed: 1.05,
-    noiseStrenth: 0.17
+    noiseStrength: 0.17
   }), []);
 
   const uniforms = useMemo(
@@ -244,13 +244,13 @@ const UnstableSphere = () => {
       let setNoise = noise(p.x * lerp(noiseX, 2, progressDiscoverySpring.get()), p.y * lerp(noiseY, 2, progressDiscoverySpring.get()), p.z * lerp(noiseZ, 2, progressDiscoverySpring.get()), t * noiseSpeed);
       switch (pathname) {
         case '/services':
-          v3.copy(p).addScaledVector(p, setNoise*lerp(noiseStrenth, 0.02, progressSpring.get()));
+          v3.copy(p).addScaledVector(p, setNoise*lerp(noiseStrength, 0.02, progressSpring.get()));
           break;
         case '/services/discovery':
-          v3.copy(p).addScaledVector(p, setNoise*lerp(noiseStrenth, 0.05, progressDiscoverySpring.get()));
+          v3.copy(p).addScaledVector(p, setNoise*lerp(noiseStrength, 0.05, progressDiscoverySpring.get()));
           break;
         default:
-          v3.copy(p).addScaledVector(p, setNoise*noiseStrenth);
+          v3.copy(p).addScaledVector(p, setNoise*noiseStrength);
 
       }
 

@@ -27,6 +27,8 @@ const Background = () => {
           speed: 0.03,
           color: new Color(),
           opacity: 1,
+          noiseSpeed: 1.05,
+          noiseStrength: 0.17,
           uniforms: {
             light: {
               x: -1,
@@ -47,9 +49,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 1.05,
-            noiseStrenth: 0.17
+            noiseZ: 1
           }
         },
         '/': {
@@ -76,6 +76,8 @@ const Background = () => {
             new Vector3(10, 0, 20),
             new Vector3(0, 0, 10)
           ]),
+          noiseSpeed: 0.6,
+          noiseStrength: 0.1,
           uniforms: {
             light: {
               x: -1,
@@ -96,9 +98,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 0.6,
-            noiseStrenth: 0.1
+            noiseZ: 1
           }
         },
         '/services': {
@@ -109,6 +109,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color(),
           opacity: 1,
+          noiseSpeed: 1.05,
+          noiseStrength: 0.02,
           uniforms: {
             light: {
               x: -1,
@@ -129,9 +131,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 1.05,
-            noiseStrenth: 0.02
+            noiseZ: 1
           }
         },
         '/services/discovery': {
@@ -142,6 +142,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color("#6f6f6f"),
           opacity: 1,
+          noiseSpeed: 2,
+          noiseStrength: 0.05,
           uniforms: {
             light: {
               x: -1,
@@ -162,9 +164,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 2,
-            noiseStrenth: 0.05
+            noiseZ: 1
           }
         },
         '/services/development': {
@@ -175,6 +175,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color("#6f6f6f"),
           opacity: 1,
+          noiseSpeed: 2,
+          noiseStrength: 0.05,
           uniforms: {
             light: {
               x: -1,
@@ -195,9 +197,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 2,
-            noiseStrenth: 0.05
+            noiseZ: 1
           }
         },
         '/services/team': {
@@ -208,6 +208,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color("#6f6f6f"),
           opacity: 1,
+          noiseSpeed: 2,
+          noiseStrength: 0.05,
           uniforms: {
             light: {
               x: -1,
@@ -228,9 +230,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 2,
-            noiseStrenth: 0.05
+            noiseZ: 1
           }
         },
         '/services/design': {
@@ -241,6 +241,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color("#6f6f6f"),
           opacity: 1,
+          noiseSpeed: 2,
+          noiseStrength: 0.05,
           uniforms: {
             light: {
               x: -1,
@@ -261,9 +263,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 2,
-            noiseStrenth: 0.05
+            noiseZ: 1
           }
         },
         '/services/services': {
@@ -274,6 +274,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color("#6f6f6f"),
           opacity: 1,
+          noiseSpeed: 2,
+          noiseStrength: 0.05,
           uniforms: {
             light: {
               x: -1,
@@ -294,9 +296,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 2,
-            noiseStrenth: 0.05
+            noiseZ: 1
           }
         },
         '/services/our-method': {
@@ -307,6 +307,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color("#6f6f6f"),
           opacity: 1,
+          noiseSpeed: 2,
+          noiseStrength: 0.05,
           uniforms: {
             light: {
               x: -1,
@@ -327,9 +329,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 2,
-            noiseStrenth: 0.05
+            noiseZ: 1
           }
         },
         '/partners': {
@@ -340,6 +340,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color,
           opacity: 0.3,
+          noiseSpeed: 1.05,
+          noiseStrength: 0.17,
           uniforms: {
             light: {
               x: -1,
@@ -360,9 +362,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 1.05,
-            noiseStrenth: 0.17
+            noiseZ: 1
           }
         },
         '/contact': {
@@ -373,6 +373,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color(),
           opacity: 0,
+          noiseSpeed: 1.05,
+          noiseStrength: 0.05,
           uniforms: {
             light: {
               x: -1,
@@ -393,9 +395,7 @@ const Background = () => {
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 1.05,
-            noiseStrenth: 0.05
+            noiseZ: 1
           }
         },
         '/contact/form': {
@@ -406,6 +406,8 @@ const Background = () => {
           speed: 0.1,
           color: new Color(),
           opacity: 0.2,
+          noiseSpeed: 1.05,
+          noiseStrength: 0.17,
           uniforms: {
             light: {
               x: -1,
@@ -427,8 +429,6 @@ const Background = () => {
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1,
-            noiseSpeed: 1.05,
-            noiseStrenth: 0.17
           }
         }
       }
@@ -442,13 +442,17 @@ const Background = () => {
     prevPosition,
     prevRotation,
     opacity,
-    speed
+    speed,
+    noiseStrength,
+    noiseSpeed
   }, setOptions] = useState({
     color: new Color('#FFF'),
     opacity: 0,
     prevPosition: new Vector3,
     prevRotation: new Vector3,
-    speed: 0.1
+    speed: 0.1,
+    noiseStrength: 0,
+    noiseSpeed: 0
   });
 
   const {
@@ -460,13 +464,16 @@ const Background = () => {
   });
 
   useEffect(() => {
-    setOptions({
+    const speed = pages[pathname]?.speed ?? pages['default'].speed;
+    setOptions((prevState) => ({
       color: pages[pathname]?.color ?? pages['default'].color,
       opacity: pages[pathname]?.opacity ?? pages['default'].opacity,
       prevPosition: pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos,
       prevRotation: pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos,
-      speed: pages[pathname]?.speed ?? pages['default'].speed
-    })
+      speed,
+      noiseSpeed: lerp(prevState.noiseSpeed, pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed, speed),
+      noiseStrength: lerp(prevState.noiseStrength, pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength, speed)
+    }))
   }, [pathname, progress]);
 
   const mainBubblePos = pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos;
@@ -494,10 +501,10 @@ const Background = () => {
       <IntroText />
       <LogoBg opacity={opacity} color={color} speed={speed} />
       <group>
-        <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} />
+        <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <group>
-        <Bubble index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} />
+        <Bubble index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <NoisyBackground getProgress={() => progress.get()} />
     </>
@@ -621,6 +628,8 @@ const Bubble: FC<{
   speed: number;
   rotation: Vector3;
   index: string;
+  noiseSpeed: number;
+  noiseStrength: number;
   uniforms: {
     light: {
       x: number;
@@ -642,10 +651,8 @@ const Bubble: FC<{
     noiseX: number;
     noiseY: number;
     noiseZ: number;
-    noiseSpeed: number;
-    noiseStrenth: number;
   }
-}> = ({index, position, rotation, speed, uniforms}) => {
+}> = ({index, position, rotation, speed, uniforms, noiseSpeed, noiseStrength}) => {
   const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
@@ -674,9 +681,7 @@ const Bubble: FC<{
     refraction,
     noiseX,
     noiseY,
-    noiseZ,
-    noiseSpeed,
-    noiseStrenth
+    noiseZ
   } = uniforms;
 
   const {
@@ -714,7 +719,12 @@ const Bubble: FC<{
             window.innerWidth,
             window.innerHeight
           ).multiplyScalar(Math.min(window.devicePixelRatio, 2))
-        }
+        },
+        noiseStrength: {value: 0},
+        noiseSpeed: {value: 0},
+        noiseX: {value: 0},
+        noiseY: {value: 0},
+        noiseZ: {value: 0},
       },
       v3: new Vector3,
       positionData: [] as Vector3[],
@@ -732,35 +742,27 @@ const Bubble: FC<{
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const {
-    light: prevLight,
-    shininess: prevShininess,
-    diffuseness: prevDiffuseness,
-    fresnelPower: prevFresnelPower,
-    iorR: prevIorR,
-    iorY: prevIorY,
-    iorG: prevIorG,
-    iorC: prevIorC,
-    iorB: prevIorB,
-    iorP: prevIorP,
-    saturation: prevSaturation,
-    chromaticAberration: prevChromaticAberration,
-    refraction: prevRefraction,
-    noiseX: prevNoiseX,
-    noiseY: prevNoiseY,
-    noiseZ: prevNoiseZ,
-    noiseSpeed: prevNoiseSpeed,
-    noiseStrenth: prevNoiseStrenth
-  } = uniforms;
 
   useFrame(({gl, scene, camera, clock}) => {
     if (!mesh.current) return;
 
     const t = clock.getElapsedTime() / 1.;
+
+    const lerpNoiseX = lerp(mesh.current?.material.uniforms.noiseX.value, noiseX, speed);
+    mesh.current.material.uniforms.noiseX.value = lerpNoiseX;
+    const lerpNoiseY = lerp(mesh.current?.material.uniforms.noiseY.value, noiseY, speed);
+    mesh.current.material.uniforms.noiseY.value = lerpNoiseY;
+    const lerpNoiseZ = lerp(mesh.current?.material.uniforms.noiseZ.value, noiseZ, speed);
+    mesh.current.material.uniforms.noiseZ.value = lerpNoiseZ
+    const lerpNoiseStrength = lerp(mesh.current?.material.uniforms.noiseStrength.value, noiseStrength, speed);
+    mesh.current.material.uniforms.noiseStrength.value = lerpNoiseStrength;
+    const lerpNoiseSpeed = lerp(mesh.current?.material.uniforms.noiseSpeed.value, noiseSpeed, speed);
+    mesh.current.material.uniforms.noiseSpeed.value = noiseSpeed;
+
     positionData.forEach((p, idx) => {
       
-      const simpNoise = noise(p.x * lerp(noiseX, 2, speed), p.y * lerp(noiseY, 2, speed), p.y * lerp(noiseZ, 2, speed), t * noiseSpeed);
-      v3.copy(p).addScaledVector(p, simpNoise*lerp(prevNoiseStrenth, noiseStrenth, speed));
+      const simpNoise = noise(p.x * lerpNoiseX, p.y * lerpNoiseY, p.z * lerpNoiseZ, t * lerpNoiseSpeed);
+      v3.copy(p).addScaledVector(p, simpNoise*lerpNoiseStrength);
       mesh.current?.geometry.attributes.position.setXYZ(idx, v3.x, v3.y, v3.z);
     });
     mesh.current?.geometry.computeVertexNormals();
