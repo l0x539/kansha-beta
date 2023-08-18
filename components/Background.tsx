@@ -1,6 +1,6 @@
 import { FC, ForwardedRef, forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { BackSide, Color, FrontSide, InstancedMesh, Mesh, Object3D, RawShaderMaterial, SphereGeometry, Sprite, Vector2, Vector3 } from "three";
+import { BackSide, CatmullRomCurve3, Color, FrontSide, Group, InstancedMesh, Mesh, Object3D, RawShaderMaterial, SphereGeometry, Sprite, Vector2, Vector3 } from "three";
 import {sphereVertexShader} from "@/utils/shaders/vertexShaders";
 import {sphereFragmentShader} from "@/utils/shaders/fragmentShaders";
 import { Html, Text, useFBO, useFont, useTexture } from "@react-three/drei";
@@ -9,7 +9,7 @@ import { makeNoise4D } from "open-simplex-noise";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { disableIntro, selectGl } from "@/store/features/gl/glSlice";
 import { lerp } from "three/src/math/MathUtils";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useSpring } from "@react-spring/three";
 import { throttle } from "lodash";
 import NoisyBackground from "./NoisyBackground";
@@ -20,39 +20,6 @@ const Background = () => {
       pages: {
         'default': {
           bubble1Pos: new Vector3,
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.03,
-          color: new Color(),
-          opacity: 0,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.04,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1,
-            noiseSpeed: 1.05,
-            noiseStrenth: 0.17
-          }
-        },
-        '/': {
-          bubble1Pos: new Vector3(0, 0, 4),
           bubble1Rot: new Vector3(0, Math.PI),
           bubble2Pos: new Vector3(-20, -20, 20),
           bubble2Rot: new Vector3,
@@ -81,7 +48,56 @@ const Background = () => {
             noiseY: 1,
             noiseZ: 1,
             noiseSpeed: 1.05,
-            noiseStrenth: 0.05
+            noiseStrenth: 0.17
+          }
+        },
+        '/': {
+          bubble1Pos: new Vector3(0, 0, 4),
+          bubble1Rot: new Vector3(),
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.03,
+          color: new Color(),
+          opacity: 0,
+          panPath: new CatmullRomCurve3( [
+            new Vector3(),
+            new Vector3( 0.2 ),
+            new Vector3(0.4),
+            new Vector3(0.6),
+            new Vector3( 1, 0, 2.1 ),
+            new Vector3( 0, 0, 3 )
+          ]),
+          panLookAt: new CatmullRomCurve3( [
+            new Vector3(-10),
+            new Vector3(0, 0, -10),
+            new Vector3(10, 0, -10),
+            new Vector3(10, 0, 0),
+            new Vector3(10, 0, 10),
+            new Vector3(0, 0, 10)
+          ]),
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.04,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1,
+            noiseSpeed: 0.6,
+            noiseStrenth: 0.1
           }
         },
         '/services': {
@@ -418,6 +434,7 @@ const Background = () => {
     }
   }, []);
   const pathname = usePathname() as keyof typeof pages;
+  const searchParams  = useSearchParams();  
 
   const [{
     color,
@@ -450,6 +467,25 @@ const Background = () => {
       speed: pages[pathname]?.speed ?? pages['default'].speed
     })
   }, [pathname, progress]);
+
+  const mainBubblePos = pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos;
+  const mainBubbleRot = pages[pathname]?.bubble1Rot ?? pages['default'].bubble1Rot
+
+  const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
+
+  const currentPos = pathname === '/' ? 
+  pages['/']?.panPath.getPoint(currentPan/4) : mainBubblePos;
+  
+  const currentLookAt = pathname === '/' ? 
+  pages['/']?.panLookAt.getPoint(currentPan/4) : mainBubblePos;
+
+  const newObj = new Object3D();
+  
+  newObj.position.set(currentPos.x, currentPos.y, currentPos.z);
+  newObj.lookAt(currentLookAt);
+
+  const currentRot = new Vector3();
+  currentRot.set(mainBubbleRot.x, newObj.rotation.y, mainBubbleRot.z);
   
   return (
     <>
@@ -457,7 +493,7 @@ const Background = () => {
       <IntroText />
       <LogoBg opacity={opacity} color={color} speed={speed} />
       <group>
-        <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos} rotation={pages[pathname]?.bubble1Rot ?? pages['default'].bubble1Rot} speed={speed} />
+        <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} />
       </group>
       <group>
         <Bubble index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} />
@@ -503,6 +539,37 @@ const LogoBg: FC<{
 }
 
 const IntroText = () => {
+  const pathname = usePathname();
+  const params = useSearchParams();  
+  const ref = useRef<Group>(null);
+
+  const TEXTS = useMemo(() => [
+    "Lorem\nContent Lab\n& Ipsum dolor\n/Sit amet\n2022—2023",
+    "We help \nfounders \nmake profits \nthat match \ntheir passions.",
+    "We help \nfounders \nmake profits \nthat match \ntheir passions.",
+    "We empowering \ncompanies to \nembrace \ndisruptive ideas",
+    "We reduce the gap \nfor innovation and \nguide our clients \ntowards sustainable \nsuccess",
+  ], []);
+
+  const text = useRef<any>(null);
+
+  useFrame(({clock}) => {
+    if (!ref.current) return;
+
+    ref.current.position.lerp(ref.current.position.clone().setX(- ((parseInt(`${params.get('pan')}`)||0)*20)), 0.1)
+    
+  });
+
+  return (<group ref={ref}>
+    {TEXTS.map((text, index) => {
+      return <Text key={index} visible={pathname === '/'} fontSize={1.4} position={[(index*20) -2, 0, -3]} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
+        {text}
+      </Text>
+    })}
+  </group>);
+};
+
+const IntroTextOld = () => {
   const text = useRef<any>(null);
   const pathname = usePathname();
 
@@ -546,7 +613,7 @@ const IntroText = () => {
     </>
     
   );
-}
+};
 
 const Bubble: FC<{
   position: Vector3;

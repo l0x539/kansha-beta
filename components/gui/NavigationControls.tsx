@@ -4,9 +4,10 @@ import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { useWheel } from "@use-gesture/react";
 import { FC, ReactNode, useCallback, useEffect } from "react";
 import {
+  debounce,
   throttle
 } from 'lodash';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 const NavigationControls: FC<{
   children: ReactNode;
@@ -14,18 +15,54 @@ const NavigationControls: FC<{
   children
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const searchParams  = useSearchParams();  
 
-  const dispatch = useAppDispatch();
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const throttleIncScroll = useCallback(throttle(() => {
-    dispatch(updateView(1));
-  }, 1500, {
-    leading: true,
-    trailing: false
-  }), []);
+    switch (pathname) {
+      case '/':
+        const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
+        if (currentPan === 4)
+          router.push('/services');
+        else
+          router.push('/?' + createQueryString('pan', `${currentPan+1}`));
+        break;
+      case '/services':
+        router.push('/services/discovery');
+        break;
+      case '/services/discovery':
+        router.push('/services/development');
+        break;
+      case '/services/development':
+        router.push('/services/team');
+        break;
+      case '/services/team':
+        router.push('/services/design');
+        break;
+      case '/services/design':
+        router.push('/services/services');
+        break;
+      case '/contact':
+        router.push('/contact/form');
+        break;
+    }
+  }, 300, {
+    leading: false,
+    trailing: true
+  }), [pathname, searchParams.get('pan')]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const throttleDecScroll = useCallback(throttle(() => {
-    dispatch(updateView(0));
   }, 1500, {
     leading: true,
     trailing: false
@@ -34,19 +71,18 @@ const NavigationControls: FC<{
     currentView
   } = useAppSelector(selectGl);
   const bind = useWheel(({
-    direction: [_, y]
+    direction: [_, y],
+    intentional,
+    xy
   }) => {
-    if (currentView < 1 && y === 1)
+    if (y === 1 && intentional)
       throttleIncScroll();
+    else (y === -1 && intentional)
+      throttleDecScroll();
     // else (currentView > 0 && y === -1)
     //   throttleDecScroll()
   });
 
-  useEffect(() => {
-    if (currentView === 1) {
-      router.push('/services')
-    }
-  }, [currentView, router])
   return (<main {...bind()} className='absolute top-0 left-0 h-screen w-screen bg-transparent font-main'>
       {children}
     </main>);
