@@ -1,5 +1,5 @@
 'use client'
-import { useGesture } from "@use-gesture/react";
+import { useGesture, useWheel } from "@use-gesture/react";
 import { Children, FC, ReactNode, cloneElement, isValidElement, useCallback, useState } from "react";
 import { TABS } from "../gui/OurMethodPage";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -37,29 +37,25 @@ const Tabs: FC<{
     router.push('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`));
   }
   
-  const bind = useGesture({
-    onWheelEnd: ({
-      direction: [_, y],
-      intentional,
-      xy
-    }) => {
+  const bind = useWheel(({
+    direction: [_, y],
+    intentional,
+    last
+  }) => {
+    if (last) {
       const tabIndex = tabs.findIndex(tab => tab === activeTab);
       if (y === 1 && intentional) {
-        console.log(tabIndex, tabs.length);
-        
         if (tabIndex + 1 === tabs.length)
           router.push('/partners');
         else {
           setActiveTab(tabs[tabIndex+1]);
         }
-
+  
       } else if (y === -1 && intentional) {
         if (tabIndex > 0) {
           setActiveTab(tabs[tabIndex-1])
         }
       }
-      // else (currentView > 0 && y === -1)
-      //   throttleDecScroll()
     }
   });
 

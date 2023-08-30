@@ -224,16 +224,16 @@ const UnstableSphere = () => {
     config: { mass: 1, tension: 280, friction: 100 }
   });
 
-  const throttlePath = useCallback(throttle((pathname) => {
+  const throttlePath = throttle((pathname) => {
     setPath(pathname)
   }, 1500, {
     leading: true,
     trailing: false
-  }), []);
+  });
 
   useEffect(() => {
     throttlePath(pathname)
-  }, [pathname])
+  }, [pathname, throttlePath])
 
   useFrame((state) => {
     const { gl, scene, camera } = state;

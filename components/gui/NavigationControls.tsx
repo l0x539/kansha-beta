@@ -67,32 +67,55 @@ const NavigationControls: FC<{
     leading: true,
     trailing: false
   }), []);
-  const {
-    currentView
-  } = useAppSelector(selectGl);
-  const bind = useGesture({
-    onWheelEnd: ({
-      direction: [_, y],
-      intentional
-    }) => {
-      if (y === 1 && intentional) {
-        if (pathname !== '/partners') 
-          throttleIncScroll();
-      } else if (y === -1 && intentional)
-        throttleDecScroll();
-    },
-    onWheelStart: (({
-      direction: [_, y],
-      intentional
-    }) => {
+
+  // const bind = useGesture({
+  //   onWheelEnd: ({
+  //     direction: [_, y],
+  //     intentional
+  //   }) => {
+  //     if (y === 1 && intentional) {
+  //       if (pathname !== '/partners') 
+  //         throttleIncScroll();
+  //     } else if (y === -1 && intentional)
+  //       throttleDecScroll();
+  //   },
+  //   onWheelStart: (({
+  //     direction: [_, y],
+  //     intentional
+  //   }) => {
+  //     if (y === 1 && intentional)
+  //       if (pathname == '/partners') {
+  //         if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
+  //           router.push('/contact');
+  //       } else if (pathname === '/contact')
+  //         router.push('/contact/form');
+  //   })
+  // });
+
+  const bind = useWheel(({
+    direction: [_, y],
+    intentional,
+    first,
+    last
+  }) => {
+    if (first) {
       if (y === 1 && intentional)
         if (pathname == '/partners') {
           if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
             router.push('/contact');
         } else if (pathname === '/contact')
           router.push('/contact/form');
-    })
-  });
+    } else if (last) {
+      if (y === 1 && intentional) {
+        if (pathname !== '/partners') 
+          throttleIncScroll();
+      } else if (y === -1 && intentional)
+        throttleDecScroll();
+    }
+    
+  }, {
+  
+  })
 
   return (<main {...bind()} className='top-0 left-0 w-screen bg-transparent font-main'>
       {children}

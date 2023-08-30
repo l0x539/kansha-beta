@@ -523,6 +523,7 @@ const Background = () => {
       noiseSpeed: lerp(prevState.noiseSpeed, pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed, speed),
       noiseStrength: lerp(prevState.noiseStrength, pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength, speed)
     }))
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, progress]);
 
   const currentTab = (parseInt(`${searchParams.get('tab')}`) || 1) -1;
@@ -653,6 +654,7 @@ const IntroTextOld = () => {
       if (char === "") return clearInterval(interval);
       setContent(TEXTS[index+1]);
     }, 5000);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
 
   ])
