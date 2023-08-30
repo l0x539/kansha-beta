@@ -119,8 +119,8 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0.1}}
           >
-            <NavLink href={'/aboutus'}>
-              About Us
+            <NavLink href={'/culture'}>
+              Culture
             </NavLink>
           </motion.li>
           <motion.li
@@ -137,8 +137,8 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0.3}}
           >
-            <NavLink href={'/experience'}>
-              Experience
+            <NavLink href={'/partners'}>
+              Partners
             </NavLink>
           </motion.li>
           <motion.li

@@ -309,6 +309,22 @@ const Background = () => {
           opacity: 1,
           noiseSpeed: 2,
           noiseStrength: 0.05,
+          tabs: {
+            bubble1Pos: new CatmullRomCurve3( [
+              new Vector3(4, 3, 2),
+              new Vector3( 4, -3, 2 ),
+              new Vector3(5.5, 3, 1),
+              new Vector3(-2.5, 4, 0),
+              new Vector3(-4, 3, 2),
+            ]),
+            bubble2Pos: new CatmullRomCurve3( [
+              new Vector3(-4., -3.5, 0),
+              new Vector3(-4., 3.5, 0),
+              new Vector3(5.5, -2.6, -3),
+              new Vector3(-10, -3.5, -6),
+              new Vector3(4., -3.5, 0),
+            ])
+          },
           uniforms: {
             light: {
               x: -1,
@@ -430,7 +446,40 @@ const Background = () => {
             noiseY: 1,
             noiseZ: 1,
           }
-        }
+        },
+        '/contact/info': {
+          bubble1Pos: new Vector3(0, 0, 4.2),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color(),
+          opacity: 0,
+          noiseSpeed: 1.05,
+          noiseStrength: 0.02,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: -0.1,
+            shininess: 150.0,
+            fresnelPower: 15.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1,
+            chromaticAberration: 0.9,
+            refraction: 0,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1
+          }
+        },
       }
     }
   }, []);
@@ -476,8 +525,12 @@ const Background = () => {
     }))
   }, [pathname, progress]);
 
-  const mainBubblePos = pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos;
+  const currentTab = (parseInt(`${searchParams.get('tab')}`) || 1) -1;
+
+  const mainBubblePos = pathname === '/services/our-method' ? pages['/services/our-method'].tabs.bubble1Pos.getPoint(currentTab/4) : pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos;
   const mainBubbleRot = pages[pathname]?.bubble1Rot ?? pages['default'].bubble1Rot
+
+  const mainBubble2Pos =  pathname === '/services/our-method' ? pages['/services/our-method'].tabs.bubble2Pos.getPoint(currentTab/4) : pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos
 
   const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
 
@@ -504,7 +557,7 @@ const Background = () => {
         <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <group>
-        <Bubble index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
+        <Bubble index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <NoisyBackground getProgress={() => progress.get()} />
     </>

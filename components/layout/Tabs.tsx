@@ -1,5 +1,8 @@
 'use client'
-import { Children, FC, ReactNode, cloneElement, isValidElement, useState } from "react";
+import { useGesture } from "@use-gesture/react";
+import { Children, FC, ReactNode, cloneElement, isValidElement, useCallback, useState } from "react";
+import { TABS } from "../gui/OurMethodPage";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface ITab {
   children: ReactNode;
@@ -14,8 +17,53 @@ const Tabs: FC<{
   children,
   defaultTabLabel
 }) => {
-  const [activeTab, setActiveTab] = useState(defaultTabLabel);
-  return (<>
+  const [activeTab, setActiveLabel] = useState(defaultTabLabel);
+  const router = useRouter();
+  const searchParams  = useSearchParams();  
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  );
+  const tabs = TABS.map(tab => tab.label);
+
+  const setActiveTab = (tab: string) => {
+    const tabIndex = tabs.findIndex(t => t === tab);
+    setActiveLabel(tabs[tabIndex]);
+    router.push('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`));
+  }
+  
+  const bind = useGesture({
+    onWheelEnd: ({
+      direction: [_, y],
+      intentional,
+      xy
+    }) => {
+      const tabIndex = tabs.findIndex(tab => tab === activeTab);
+      if (y === 1 && intentional) {
+        console.log(tabIndex, tabs.length);
+        
+        if (tabIndex + 1 === tabs.length)
+          router.push('/partners');
+        else {
+          setActiveTab(tabs[tabIndex+1]);
+        }
+
+      } else if (y === -1 && intentional) {
+        if (tabIndex > 0) {
+          setActiveTab(tabs[tabIndex-1])
+        }
+      }
+      // else (currentView > 0 && y === -1)
+      //   throttleDecScroll()
+    }
+  });
+
+  return (<div {...bind()}>
     {Children.map(children, (child, index) => {
       if (!isValidElement<ITab>(child)) {
         return child
@@ -35,7 +83,7 @@ const Tabs: FC<{
         </TabButton>
       })}
     </div>
-  </>);
+  </div>);
 };
 
 const TabButton: FC<{

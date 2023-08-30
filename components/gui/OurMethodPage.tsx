@@ -9,7 +9,7 @@ import Tabs, { Tab } from "../layout/Tabs";
 import { useAppDispatch } from "@/store/hooks";
 import { updateView } from "@/store/features/gl/glSlice";
 
-const TABS = [
+export const TABS = [
   {
     label: 'research',
     title: 'RESEARCH & DISCOVERY',

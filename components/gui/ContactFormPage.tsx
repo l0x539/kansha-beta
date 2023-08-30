@@ -82,7 +82,7 @@ const ContactFormPage = () => {
       </div>
     </div>
     <div className="flex w-full justify-center py-14">
-      <Link href={'/contact/form'} className="relative group hover:cursor-pointer select-none">
+      <Link href={'/contact/info'} className="relative group hover:cursor-pointer select-none">
         <div  className={`h-full w-full absolute top-0 flex justify-center items-center rounded-full border mix-blend-difference shadow-[0px_2.2926828861236572px_2.2926828861236572px_0px_rgba(0,0,0,0.25)_inset] backdrop-opacity-70 group-hover:animate-ping`}></div>
         <div className={`flex justify-center items-center text-white font-gothic font-semibold text-5xl px-16 py-8`}>
           Send it!

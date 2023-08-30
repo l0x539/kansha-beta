@@ -1,8 +1,8 @@
 'use client'
 import { decrementView, incrementView, selectGl, updateView } from "@/store/features/gl/glSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useWheel } from "@use-gesture/react";
-import { FC, ReactNode, useCallback, useEffect } from "react";
+import { useGesture, useWheel } from "@use-gesture/react";
+import { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import {
   debounce,
   throttle
@@ -54,13 +54,10 @@ const NavigationControls: FC<{
         router.push('/services/services');
         break;
       case '/services/services':
-        router.push('/partners');
-        break;
-      case '/contact':
-        router.push('/contact/form');
+        router.push('/services/our-method');
         break;
     }
-  }, 500, {
+  }, 50, {
     leading: false,
     trailing: true
   }), [pathname, searchParams.get('pan')]);
@@ -73,20 +70,31 @@ const NavigationControls: FC<{
   const {
     currentView
   } = useAppSelector(selectGl);
-  const bind = useWheel(({
-    direction: [_, y],
-    intentional,
-    xy
-  }) => {
-    if (y === 1 && intentional)
-      throttleIncScroll();
-    else (y === -1 && intentional)
-      throttleDecScroll();
-    // else (currentView > 0 && y === -1)
-    //   throttleDecScroll()
+  const bind = useGesture({
+    onWheelEnd: ({
+      direction: [_, y],
+      intentional
+    }) => {
+      if (y === 1 && intentional) {
+        if (pathname !== '/partners') 
+          throttleIncScroll();
+      } else if (y === -1 && intentional)
+        throttleDecScroll();
+    },
+    onWheelStart: (({
+      direction: [_, y],
+      intentional
+    }) => {
+      if (y === 1 && intentional)
+        if (pathname == '/partners') {
+          if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
+            router.push('/contact');
+        } else if (pathname === '/contact')
+          router.push('/contact/form');
+    })
   });
 
-  return (<main {...bind()} className='absolute top-0 left-0 h-screen w-screen bg-transparent font-main'>
+  return (<main {...bind()} className='top-0 left-0 w-screen bg-transparent font-main'>
       {children}
     </main>);
 };
