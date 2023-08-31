@@ -63,10 +63,38 @@ const NavigationControls: FC<{
   }), [pathname, searchParams.get('pan')]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const throttleDecScroll = useCallback(throttle(() => {
-  }, 1500, {
-    leading: true,
-    trailing: false
-  }), []);
+    switch (pathname) {
+      case '/':
+        const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
+        if (currentPan !== 0)
+          router.push('/?' + createQueryString('pan', `${currentPan-1}`));
+        break;
+      case '/services':
+        router.push('/?' + createQueryString('pan', `${4}`));
+        break;
+      case '/services/discovery':
+        router.push('/services');
+        break;
+      case '/services/development':
+        router.push('/services/discovery');
+        break;
+      case '/services/team':
+        router.push('/services/development');
+        break;
+      case '/services/design':
+        router.push('/services/team');
+        break;
+      case '/services/services':
+        router.push('/services/design');
+        break;
+      case '/contact':
+        router.push('/partners');
+        break;
+    }
+  }, 50, {
+    leading: false,
+    trailing: true
+  }), [pathname, searchParams.get('pan')]);
 
   // const bind = useGesture({
   //   onWheelEnd: ({
@@ -99,18 +127,20 @@ const NavigationControls: FC<{
     last
   }) => {
     if (first) {
-      if (y === 1 && intentional)
+      if (y === 1 && intentional) {
         if (pathname == '/partners') {
           if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
             router.push('/contact');
         } else if (pathname === '/contact')
           router.push('/contact/form');
+      } else if (y === -1 && intentional) {
+        throttleDecScroll();
+      }
     } else if (last) {
       if (y === 1 && intentional) {
         if (pathname !== '/partners') 
           throttleIncScroll();
-      } else if (y === -1 && intentional)
-        throttleDecScroll();
+      }
     }
     
   }, {
