@@ -9,7 +9,6 @@ import { ACESFilmicToneMapping, LinearSRGBColorSpace } from "three";
 const MainCanvas = () => {
   return (
     <>
-      <Leva collapsed={false} hidden />
       <div className="absolute top-0 left-0 w-screen h-screen z-[-1]">
         <Canvas
         gl={{
