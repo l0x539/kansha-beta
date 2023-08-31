@@ -23,19 +23,19 @@ const PartnersPage = () => {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="Titular - Descripción de sección" className="hover:bg-crypto-mate" more="/partners">
+      <Partner title="CryptoMate" className="hover:bg-crypto-mate" more="/portfolio/lazo">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="Titular - Descripción de sección" className="hover:bg-lazo" more="/partners">
+      <Partner title="Lazo" className="hover:bg-lazo" more="/portfolio/lazo">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="Titular - Descripción de sección" className="hover:bg-la-palma" more="/partners">
+      <Partner title="La Palma" className="hover:bg-la-palma" more="/portfolio/lazo">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="Titular - Descripción de sección" className="hover:bg-soy-rada" more="/partners">
+      <Partner title="Soy Rada" className="hover:bg-soy-rada" more="/portfolio/lazo">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
@@ -107,7 +107,7 @@ const Partner: FC<{
   );
 };
 
-const Footer = () => {
+export const Footer = () => {
   return (
     <div className="mt-48 pb-48">
       <div className="grid px-32 w-screen grid-cols-footer">

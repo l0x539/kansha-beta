@@ -82,6 +82,9 @@ const NoisyBackground: FC<{
     aboutColor1,
     aboutColor2,
     aboutColor3,
+    lazoColor1,
+    lazoColor2,
+    lazoColor3,
     downAboutColor1,
     downAboutColor2,
     downAboutColor3
@@ -93,6 +96,9 @@ const NoisyBackground: FC<{
       // (new Color("#48a9b9")).lerp(new Color("#D14CA6"), 0.9),
       // (new Color("#781671")).lerp(new Color("#1e274e"), 0.2),
       // (new Color("#89B378")).lerp(new Color("#1c2e2a"), 0.1),
+      new Color("#48a9b9"),
+      new Color("#1e274e"),
+      new Color("#1c2e2a"),
       new Color("#48a9b9"),
       new Color("#1e274e"),
       new Color("#1c2e2a"),
@@ -205,10 +211,10 @@ const NoisyBackground: FC<{
   useEffect(() => {
     if (pathname === '/partners') {
       setTimeout(() => {
-        aboutColor1.lerp(downAboutColor1, 0.05);
-        aboutColor2.lerp(downAboutColor2, 0.1);
-        aboutColor3.lerp(downAboutColor3, 0.1);
-      }, 3000)
+        aboutColor1.lerp(downAboutColor1, 1);
+        aboutColor2.lerp(downAboutColor2, 1);
+        aboutColor3.lerp(downAboutColor3, 1);
+      }, 6000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);
@@ -241,10 +247,13 @@ const NoisyBackground: FC<{
       }
     } else {
       if (pathname === '/partners') {
-        
         shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(aboutColor1, .01)
         shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(aboutColor2, .02)
         shaderMaterialRef.current.uniforms.uColor3.value = shaderMaterialRef.current.uniforms.uColor3.value.lerp(aboutColor3, .03)
+      }else if (pathname.startsWith('/portfolio/')) {
+        shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(lazoColor1, .01)
+        shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(lazoColor2, .02)
+        shaderMaterialRef.current.uniforms.uColor3.value = shaderMaterialRef.current.uniforms.uColor3.value.lerp(lazoColor3, .03)
       } else {
         shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(homeColor1, .01)
         shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(homeColor2, .02)
