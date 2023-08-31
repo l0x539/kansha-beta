@@ -20,6 +20,8 @@ module.exports = {
         main: ['Helvetica', 'Raleway'],
         flink: ['Inter', 'Helvetica', 'Raleway'],
         gothic: ['Gothic A1', 'Helvetica', 'Raleway'],
+        cryptomate: ['Space Grotesk', 'Helvetica', 'Raleway'],
+        jost: ['Jost', 'Helvetica', 'Raleway'],
       },
       keyframes: {
         float: {

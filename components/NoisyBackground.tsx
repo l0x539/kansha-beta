@@ -214,7 +214,7 @@ const NoisyBackground: FC<{
         aboutColor1.lerp(downAboutColor1, 1);
         aboutColor2.lerp(downAboutColor2, 1);
         aboutColor3.lerp(downAboutColor3, 1);
-      }, 6000)
+      }, 15000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);

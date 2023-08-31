@@ -512,6 +512,39 @@ const Background = () => {
             noiseY: 1,
             noiseZ: 1
           }
+        },
+        '/portfolio/cryptomate': {
+          bubble1Pos: new Vector3(0, -6),
+          bubble1Rot: new Vector3,
+          bubble2Pos: new Vector3(-20, -20, 20),
+          bubble2Rot: new Vector3,
+          speed: 0.1,
+          color: new Color,
+          opacity: 0,
+          noiseSpeed: 1.05,
+          noiseStrength: 0.17,
+          uniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 8.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 1.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.04,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1
+          }
         }
       }
     }

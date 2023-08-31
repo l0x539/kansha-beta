@@ -23,7 +23,7 @@ const PartnersPage = () => {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="CryptoMate" className="hover:bg-crypto-mate" more="/portfolio/lazo">
+      <Partner title="CryptoMate" className="hover:bg-crypto-mate" more="/portfolio/cryptomate">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
@@ -75,7 +75,7 @@ const Partner: FC<{
   more
 }) => {
   return (
-    <div className={`relative px-32 hover:bg-cover grid grid-cols-2 py-24 border-b last:border-b-0 cursor-pointer first:cursor-auto bg-transparent h-full ${className}`}>
+    <div className={`relative px-32 hover:bg-cover grid grid-cols-2 py-24 border-b last:border-b-0 first:cursor-auto bg-transparent h-full ${className}`}>
       <div className="">
         <h4 className="text-[#999] font-semibold">
           {title}
@@ -107,9 +107,13 @@ const Partner: FC<{
   );
 };
 
-export const Footer = () => {
+export const Footer: FC<{
+  className?: string;
+}> = ({
+  className = "mt-48"
+}) => {
   return (
-    <div className="mt-48 pb-48">
+    <div className={`pb-48 ${className}`}>
       <div className="grid px-32 w-screen grid-cols-footer">
         <FooterSection>
           <Logo width={90} height={13} />
