@@ -16,7 +16,11 @@ import NoisyBackground from "./NoisyBackground";
 import { getGPUTier } from "detect-gpu";
 import { COMMING_SOON } from "@/utils/constants";
 
-const Background = () => {
+const Background: FC<{
+  gpuTier: number;
+}> = ({
+  gpuTier
+}) => {
   const {pages} = useMemo(() => {
     return {
       pages: {
@@ -622,10 +626,10 @@ const Background = () => {
       {COMMING_SOON && !searchParams.get('demo') ? <CommingSoonText /> : <IntroText />}
       <LogoBg opacity={opacity} color={color} speed={speed} />
       <group>
-        <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
+        <Bubble gpuTier={gpuTier} index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <group>
-        <Bubble index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
+        <Bubble gpuTier={gpuTier} index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <NoisyBackground getProgress={() => progress.get()} />
     </>
@@ -791,17 +795,12 @@ const Bubble: FC<{
     noiseX: number;
     noiseY: number;
     noiseZ: number;
-  }
-}> = ({index, position, rotation, speed, uniforms, noiseSpeed, noiseStrength}) => {
+  };
+  gpuTier: number;
+}> = ({index, position, rotation, speed, uniforms, noiseSpeed, noiseStrength, gpuTier}) => {
   const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
-  const [gpuTier, setGpuTier] = useState(0);
-  useLayoutEffect(() => {
-    getGPUTier().then((gpuTier) => {
-      setGpuTier(navigator.userAgent.indexOf('Mac OS X') == -1 ? gpuTier.tier : Math.min(gpuTier.tier, 2));
-    })
-  }, []);
 
   const [excite, setExcite] = useState(false);
 
@@ -966,28 +965,26 @@ const Bubble: FC<{
   });
 
   return (
-    <>
-      {!!gpuTier ? <mesh visible={!!gpuTier} onPointerMove={() => {
-        setExcite(true);
+    <mesh onPointerMove={() => {
+      setExcite(true);
 
-        throttle(() => {
-          setExcite(false)
-        }, 400, {
-          leading: true,
-          trailing: false
-        })
-      }} name={"bubble"+index} ref={mesh}>
-        <sphereGeometry args={[2.5, gpuTier * 32, gpuTier * 32]} />
-        <shaderMaterial
-          key={uuidv4()}
-          vertexShader={sphereVertexShader}
-          fragmentShader={sphereFragmentShader}
-          uniforms={{
-            ...defaultUniforms
-          }}
-        />
-      </mesh>:<></>}
-    </>
+      throttle(() => {
+        setExcite(false)
+      }, 400, {
+        leading: true,
+        trailing: false
+      })
+    }} name={"bubble"+index} ref={mesh}>
+      <sphereGeometry args={[2.5, gpuTier * 32, gpuTier * 32]} />
+      <shaderMaterial
+        key={uuidv4()}
+        vertexShader={sphereVertexShader}
+        fragmentShader={sphereFragmentShader}
+        uniforms={{
+          ...defaultUniforms
+        }}
+      />
+    </mesh>
   );
 };
 
