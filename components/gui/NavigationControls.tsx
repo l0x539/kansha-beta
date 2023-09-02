@@ -1,14 +1,11 @@
 'use client'
-import { decrementView, incrementView, selectGl, updateView } from "@/store/features/gl/glSlice";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { useGesture, useWheel } from "@use-gesture/react";
-import { FC, ReactNode, useCallback, useEffect, useState } from "react";
-import {
-  debounce,
-  throttle
-} from 'lodash';
+import {  useWheel } from "@use-gesture/react";
+import { FC, ReactNode, useCallback } from "react";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { COMMING_SOON } from "@/utils/constants";
+import { Lethargy } from 'lethargy-ts';
+
+const lethargy = new Lethargy();
 
 const NavigationControls: FC<{
   children: ReactNode;
@@ -30,7 +27,7 @@ const NavigationControls: FC<{
   )
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const throttleIncScroll = useCallback(throttle(() => {
+  const throttleIncScroll = () => {
     switch (pathname) {
       case '/':
         const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
@@ -79,12 +76,10 @@ const NavigationControls: FC<{
           router.push('/services/our-method');
         break;
     }
-  }, 50, {
-    leading: false,
-    trailing: true
-  }), [pathname, searchParams.get('pan')]);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const throttleDecScroll = useCallback(throttle(() => {
+  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const throttleDecScroll = () => {
     switch (pathname) {
       case '/':
         const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
@@ -131,10 +126,8 @@ const NavigationControls: FC<{
           router.push('/partners');
         break;
     }
-  }, 50, {
-    leading: false,
-    trailing: true
-  }), [pathname, searchParams.get('pan')]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  };
 
   // const bind = useGesture({
   //   onWheelEnd: ({
@@ -164,36 +157,44 @@ const NavigationControls: FC<{
     direction: [_, y],
     intentional,
     first,
-    last
+    last,
+    event
   }) => {
-    if (first) {
-      if (y === 1 && intentional) {
-        if (pathname == '/partners') {
-          if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
+    event.preventDefault();
+    event.stopPropagation();
+    
+    if (intentional) {
+      if (first) {
+        if (y === 1) {
+          if (pathname == '/partners') {
+            if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
+              if (searchParams.get('demo'))
+                router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
+              else
+                router.push('/contact');
+          } else if (pathname === '/contact')
             if (searchParams.get('demo'))
-              router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
+              router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
             else
-              router.push('/contact');
-        } else if (pathname === '/contact')
-          if (searchParams.get('demo'))
-            router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
-          else
-            router.push('/contact/form');
-      } else if (y === -1 && intentional) {
-        throttleDecScroll();
-      }
-    } else if (last) {
-      if (y === 1 && intentional) {
-        if (pathname !== '/partners') 
-          throttleIncScroll();
+              router.push('/contact/form');
+        } else if (y === -1) {
+          throttleDecScroll();
+        }
+      } else if (last) {
+        if (y === 1) {
+          if (pathname !== '/partners') 
+            throttleIncScroll();
+        }
       }
     }
     
   }, {
-  
+    eventOptions: {
+      passive: false
+    }
   });
 
-  return (<main {...(COMMING_SOON && !searchParams.get('demo') ? {} : bind())} className='top-0 left-0 w-screen bg-transparent font-main'>
+  return (<main {...(COMMING_SOON && !searchParams.get('demo') ? {} : bind())} className='absolute top-0 left-0 w-screen min-h-screen bg-transparent font-main'>
       {children}
     </main>);
 };
