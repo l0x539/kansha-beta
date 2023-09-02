@@ -796,7 +796,7 @@ const Bubble: FC<{
   const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
-  const [gpuTier, setGpuTier] = useState(3);
+  const [gpuTier, setGpuTier] = useState(0);
   useLayoutEffect(() => {
     getGPUTier().then((gpuTier) => {
       setGpuTier(navigator.userAgent.indexOf('Mac OS X') == -1 ? gpuTier.tier : Math.min(gpuTier.tier, 2));
@@ -966,26 +966,28 @@ const Bubble: FC<{
   });
 
   return (
-    <mesh onPointerMove={() => {
-      setExcite(true);
+    <>
+      {!!gpuTier ? <mesh visible={!!gpuTier} onPointerMove={() => {
+        setExcite(true);
 
-      throttle(() => {
-        setExcite(false)
-      }, 400, {
-        leading: true,
-        trailing: false
-      })
-    }} name={"bubble"+index} ref={mesh}>
-      <sphereGeometry args={[2.5, gpuTier * 32, gpuTier * 32]} />
-      <shaderMaterial
-        key={uuidv4()}
-        vertexShader={sphereVertexShader}
-        fragmentShader={sphereFragmentShader}
-        uniforms={{
-          ...defaultUniforms
-        }}
-      />
-    </mesh>
+        throttle(() => {
+          setExcite(false)
+        }, 400, {
+          leading: true,
+          trailing: false
+        })
+      }} name={"bubble"+index} ref={mesh}>
+        <sphereGeometry args={[2.5, gpuTier * 32, gpuTier * 32]} />
+        <shaderMaterial
+          key={uuidv4()}
+          vertexShader={sphereVertexShader}
+          fragmentShader={sphereFragmentShader}
+          uniforms={{
+            ...defaultUniforms
+          }}
+        />
+      </mesh>:<></>}
+    </>
   );
 };
 
