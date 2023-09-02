@@ -1,6 +1,6 @@
 'use client'
 import {  useWheel } from "@use-gesture/react";
-import { FC, ReactNode, useCallback, useRef } from "react";
+import { FC, ReactNode, useCallback, useEffect, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { COMMING_SOON } from "@/utils/constants";
 import { Lethargy } from 'lethargy-ts';
@@ -15,6 +15,8 @@ const NavigationControls: FC<{
   const router = useRouter();
   const pathname = usePathname();
   const searchParams  = useSearchParams();
+  const [scrollHint, setScrollHint] = useState(false);
+  const [initScroll, setInitScroll] = useState(false);
   
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -25,6 +27,16 @@ const NavigationControls: FC<{
     },
     [searchParams]
   )
+
+  useEffect(() => {
+    setTimeout(() => {
+      setScrollHint(() => {
+        if (!initScroll)
+          return true;
+        else return false;
+      });
+    }, 3000)
+  }, [])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const throttleIncScroll = () => {
@@ -161,7 +173,9 @@ const NavigationControls: FC<{
     first,
     last,
     event
-  }) => {    
+  }) => {
+    setInitScroll(true);
+    setScrollHint(false);
     if (intentional) {
       event.stopPropagation();
       if (first) {
@@ -197,6 +211,7 @@ const NavigationControls: FC<{
 
   return (<main ref={mainRef} {...(COMMING_SOON && !searchParams.get('demo') ? {} : bind())} className='absolute top-0 left-0 w-screen min-h-screen bg-transparent font-main'>
       {children}
+      <div className={`transition-all duration-800 scroll-hint absolute bottom-12 left-1/2 transition-all ${scrollHint ? 'opacity-100' : 'opacity-0'}`}><span></span></div>
     </main>);
 };
 
