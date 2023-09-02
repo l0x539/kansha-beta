@@ -36,6 +36,7 @@ const NavigationControls: FC<{
         else return false;
       });
     }, 3000)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -211,7 +212,7 @@ const NavigationControls: FC<{
 
   return (<main ref={mainRef} {...(COMING_SOON && !searchParams.get('demo') ? {} : bind())} className='absolute top-0 left-0 w-screen min-h-screen bg-transparent font-main'>
       {children}
-      <div className={`transition-all duration-800 scroll-hint absolute bottom-12 left-1/2 transition-all ${scrollHint ? 'opacity-100' : 'opacity-0'}`}><span></span></div>
+      <div className={`transition-all duration-800 scroll-hint absolute bottom-12 left-1/2 transition-all ${scrollHint && searchParams.get('demo') ? 'opacity-100' : 'opacity-0'}`}><span></span></div>
     </main>);
 };
 
