@@ -14,6 +14,7 @@ import { useSpring } from "@react-spring/three";
 import { throttle } from "lodash";
 import NoisyBackground from "./NoisyBackground";
 import { getGPUTier } from "detect-gpu";
+import { COMMING_SOON } from "@/utils/constants";
 
 const Background = () => {
   const {pages} = useMemo(() => {
@@ -69,12 +70,12 @@ const Background = () => {
             new Vector3( 0, 0, 3 )
           ]),
           panLookAt: new CatmullRomCurve3( [
-            new Vector3(0),
-            new Vector3(0, 0, -10),
-            new Vector3(10, 0, -10),
-            new Vector3(10, 0, 100),
-            new Vector3(10, 0, 20),
-            new Vector3(0, 0, 10)
+            new Vector3(0, 0, 100),
+            new Vector3(100, 0, -90),
+            new Vector3(100, 0, -100),
+            new Vector3(100, 0, 100),
+            new Vector3(100, 0, 200),
+            new Vector3(0, 0, 100)
           ]),
           noiseSpeed: 0.6,
           noiseStrength: 0.1,
@@ -84,9 +85,9 @@ const Background = () => {
               y: 1,
               z: 1
             },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 8.0,
+            diffuseness: 0.15,
+            shininess: 2000.0,
+            fresnelPower: 7,
             iorR: 1.15,
             iorY: 1.16,
             iorG: 1.18,
@@ -141,17 +142,17 @@ const Background = () => {
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color("#6f6f6f"),
-          opacity: 1,
+          opacity: 0,
           noiseSpeed: 2,
           noiseStrength: 0.05,
           uniforms: {
             light: {
-              x: -1,
-              y: 1,
+              x: -3,
+              y: -4,
               z: 1
             },
             diffuseness: 0.2,
-            shininess: 15.0,
+            shininess: 30.0,
             fresnelPower: 8.0,
             iorR: 1.15,
             iorY: 1.16,
@@ -159,7 +160,7 @@ const Background = () => {
             iorC: 1.22,
             iorB: 1.22,
             iorP: 1.22,
-            saturation: 1.03,
+            saturation: 0.3,
             chromaticAberration: 0.01,
             refraction: 0.22,
             noiseX: 1,
@@ -174,17 +175,17 @@ const Background = () => {
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color("#6f6f6f"),
-          opacity: 1,
+          opacity: 0,
           noiseSpeed: 2,
           noiseStrength: 0.05,
           uniforms: {
             light: {
-              x: -1,
-              y: 1,
+              x: -3,
+              y: -4,
               z: 1
             },
             diffuseness: 0.2,
-            shininess: 15.0,
+            shininess: 30.0,
             fresnelPower: 8.0,
             iorR: 1.15,
             iorY: 1.16,
@@ -192,7 +193,7 @@ const Background = () => {
             iorC: 1.22,
             iorB: 1.22,
             iorP: 1.22,
-            saturation: 1.03,
+            saturation: 0.3,
             chromaticAberration: 0.01,
             refraction: 0.22,
             noiseX: 1,
@@ -207,17 +208,17 @@ const Background = () => {
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color("#6f6f6f"),
-          opacity: 1,
+          opacity: 0,
           noiseSpeed: 2,
           noiseStrength: 0.05,
           uniforms: {
             light: {
-              x: -1,
-              y: 1,
+              x: -3,
+              y: -4,
               z: 1
             },
             diffuseness: 0.2,
-            shininess: 15.0,
+            shininess: 30.0,
             fresnelPower: 8.0,
             iorR: 1.15,
             iorY: 1.16,
@@ -225,7 +226,7 @@ const Background = () => {
             iorC: 1.22,
             iorB: 1.22,
             iorP: 1.22,
-            saturation: 1.03,
+            saturation: 0.3,
             chromaticAberration: 0.01,
             refraction: 0.22,
             noiseX: 1,
@@ -240,17 +241,17 @@ const Background = () => {
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color("#6f6f6f"),
-          opacity: 1,
+          opacity: 0,
           noiseSpeed: 2,
           noiseStrength: 0.05,
           uniforms: {
             light: {
-              x: -1,
-              y: 1,
+              x: -3,
+              y: -4,
               z: 1
             },
             diffuseness: 0.2,
-            shininess: 15.0,
+            shininess: 30.0,
             fresnelPower: 8.0,
             iorR: 1.15,
             iorY: 1.16,
@@ -258,7 +259,7 @@ const Background = () => {
             iorC: 1.22,
             iorB: 1.22,
             iorP: 1.22,
-            saturation: 1.03,
+            saturation: 0.3,
             chromaticAberration: 0.01,
             refraction: 0.22,
             noiseX: 1,
@@ -273,17 +274,17 @@ const Background = () => {
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color("#6f6f6f"),
-          opacity: 1,
+          opacity: 0,
           noiseSpeed: 2,
           noiseStrength: 0.05,
           uniforms: {
             light: {
-              x: -1,
-              y: 1,
+              x: -3,
+              y: -4,
               z: 1
             },
             diffuseness: 0.2,
-            shininess: 15.0,
+            shininess: 30.0,
             fresnelPower: 8.0,
             iorR: 1.15,
             iorY: 1.16,
@@ -291,7 +292,7 @@ const Background = () => {
             iorC: 1.22,
             iorB: 1.22,
             iorP: 1.22,
-            saturation: 1.03,
+            saturation: 0.3,
             chromaticAberration: 0.01,
             refraction: 0.22,
             noiseX: 1,
@@ -306,7 +307,7 @@ const Background = () => {
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color("#6f6f6f"),
-          opacity: 1,
+          opacity: 0,
           noiseSpeed: 2,
           noiseStrength: 0.05,
           tabs: {
@@ -355,7 +356,7 @@ const Background = () => {
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color,
-          opacity: 0.3,
+          opacity: 0.1,
           noiseSpeed: 1.05,
           noiseStrength: 0.17,
           uniforms: {
@@ -618,7 +619,7 @@ const Background = () => {
   return (
     <>
       <color attach="background" args={["black"]} />
-      <IntroText />
+      {COMMING_SOON && !searchParams.get('demo') ? <CommingSoonText /> : <IntroText />}
       <LogoBg opacity={opacity} color={color} speed={speed} />
       <group>
         <Bubble index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
@@ -665,6 +666,24 @@ const LogoBg: FC<{
     </sprite>
   );
 }
+
+const CommingSoonText = () => {
+  const pathname = usePathname();
+  const [logo] = useTexture(['/assets/images/Logo.png']);
+
+  return (<group position={[0, 0, -3]}>
+    <sprite
+        position={[0, 0.9, -5]} /* position */
+        scale={new Vector3(64.5/4, 9.125/4, 1)}
+      >
+      <spriteMaterial map={logo} color={"#FFF"} alphaTest={0} opacity={1} />
+    </sprite>
+
+    <Text position={[0, -1., 0]} anchorX="center" anchorY="middle" visible={pathname === '/'} fontSize={1} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
+      Comming Soon!
+    </Text>
+  </group>);
+};
 
 const IntroText = () => {
   const pathname = usePathname();

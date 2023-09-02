@@ -1,12 +1,26 @@
 'use client'
 
-import { FC, ReactNode, useEffect } from "react";
+import { FC, ReactNode, useCallback, useEffect } from "react";
 import { FooterLink } from "../layout/Footer";
 import Link from "next/link";
 import { useAppDispatch } from "@/store/hooks";
 import { updateView } from "@/store/features/gl/glSlice";
+import { COMMING_SOON } from "@/utils/constants";
+import { useSearchParams } from "next/navigation";
 
 const ContactFormPage = () => {
+  const searchParams  = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
+
   const dispatch = useAppDispatch();
   useEffect(() => {
     dispatch(updateView(5));
@@ -82,7 +96,7 @@ const ContactFormPage = () => {
       </div>
     </div>
     <div className="flex w-full justify-center py-14">
-      <Link href={'/contact/info'} className="relative group hover:cursor-pointer select-none">
+      <Link href={'/contact/info' + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')} className="relative group hover:cursor-pointer select-none">
         <div  className={`h-full w-full absolute top-0 flex justify-center items-center rounded-full border mix-blend-difference shadow-[0px_2.2926828861236572px_2.2926828861236572px_0px_rgba(0,0,0,0.25)_inset] backdrop-opacity-70 group-hover:animate-ping`}></div>
         <div className={`flex justify-center items-center text-white font-gothic font-semibold text-5xl px-16 py-8`}>
           Send it!

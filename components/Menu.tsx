@@ -3,8 +3,10 @@
 import { closeMenu, openMenu, selectApp } from "@/store/features/app/appSlice";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import Link from "next/link";
-import { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useCallback, useState } from "react";
 import { motion } from "framer-motion";
+import { COMMING_SOON } from "@/utils/constants";
+import { useSearchParams } from "next/navigation";
 
 const Menu = () => {
   return (<>
@@ -14,24 +16,36 @@ const Menu = () => {
 };
 
 const MenuDesktop = () => {
+  const searchParams  = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
+  
   return (<ul className="flex text-white">
     <li>
-      <HeaderLink href="/services">
+      <HeaderLink href={searchParams.get('demo') && COMMING_SOON ? ('/services?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/services"}>
         Services
       </HeaderLink>
     </li>
     <li className="ml-14">
-      <HeaderLink href="/culture">
+      <HeaderLink href={searchParams.get('demo') && COMMING_SOON ? ('/culture?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/culture"}>
         Culture
       </HeaderLink>
     </li>
     <li className="ml-14">
-      <HeaderLink href="/partners">
+      <HeaderLink href={searchParams.get('demo') && COMMING_SOON ? ('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/partners"}>
         Partners
       </HeaderLink>
     </li>
     <li className="ml-14">
-      <HeaderLink href="/contact">
+      <HeaderLink href={searchParams.get('demo') && COMMING_SOON ? ('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/contact"}>
         Contact
       </HeaderLink>
     </li>
@@ -74,6 +88,17 @@ const MenuMobile = () => {
       opacity: 0,
     },
   }
+  const searchParams  = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
 
   const handleOpenMenu = () => {
     // dispatch(openMenu)
@@ -110,7 +135,7 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0}}
           >
-            <NavLink href={'/'}>
+            <NavLink href={searchParams.get('demo') && COMMING_SOON ? ('/?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '/'}>
               Home
             </NavLink>
           </motion.li>
@@ -119,7 +144,7 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0.1}}
           >
-            <NavLink href={'/culture'}>
+            <NavLink href={searchParams.get('demo') && COMMING_SOON ? ('/culture?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '/culture'}>
               Culture
             </NavLink>
           </motion.li>
@@ -128,7 +153,7 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0.2}}
           >
-            <NavLink href={'/services'}>
+            <NavLink href={searchParams.get('demo') && COMMING_SOON ? ('/services?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '/services'}>
               Services
             </NavLink>
           </motion.li>
@@ -137,7 +162,7 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0.3}}
           >
-            <NavLink href={'/partners'}>
+            <NavLink href={searchParams.get('demo') && COMMING_SOON ? ('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '/partners'}>
               Partners
             </NavLink>
           </motion.li>
@@ -146,7 +171,7 @@ const MenuMobile = () => {
             animate={isMenuOpen ? 'open' : 'closed'}
             transition={{delay: 0.4}}
           >
-            <NavLink href={'/contact'}>
+            <NavLink href={searchParams.get('demo') && COMMING_SOON ? ('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '/contact'}>
               Contact Us
             </NavLink>
           </motion.li>

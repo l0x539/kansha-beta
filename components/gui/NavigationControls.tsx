@@ -8,6 +8,7 @@ import {
   throttle
 } from 'lodash';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { COMMING_SOON } from "@/utils/constants";
 
 const NavigationControls: FC<{
   children: ReactNode;
@@ -16,8 +17,8 @@ const NavigationControls: FC<{
 }) => {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams  = useSearchParams();  
-
+  const searchParams  = useSearchParams();
+  
   const createQueryString = useCallback(
     (name: string, value: string) => {
       const params = new URLSearchParams(searchParams.toString());
@@ -34,27 +35,48 @@ const NavigationControls: FC<{
       case '/':
         const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
         if (currentPan === 4)
-          router.push('/services');
+          if (searchParams.get('demo'))
+            router.push('/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          else
+            router.push('/services');
         else
           router.push('/?' + createQueryString('pan', `${currentPan+1}`));
         break;
       case '/services':
-        router.push('/services/discovery');
+        if (searchParams.get('demo'))
+            router.push('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/discovery');
         break;
       case '/services/discovery':
-        router.push('/services/development');
+        if (searchParams.get('demo'))
+            router.push('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/development');
         break;
       case '/services/development':
-        router.push('/services/team');
+        if (searchParams.get('demo'))
+          router.push('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/team');
         break;
       case '/services/team':
-        router.push('/services/design');
+        if (searchParams.get('demo'))
+          router.push('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/design');
         break;
       case '/services/design':
-        router.push('/services/services');
+        if (searchParams.get('demo'))
+          router.push('/services/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/services');
         break;
       case '/services/services':
-        router.push('/services/our-method');
+        if (searchParams.get('demo'))
+          router.push('/services/our-method?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/our-method');
         break;
     }
   }, 50, {
@@ -73,22 +95,40 @@ const NavigationControls: FC<{
         router.push('/?' + createQueryString('pan', `${4}`));
         break;
       case '/services/discovery':
-        router.push('/services');
+        if (searchParams.get('demo'))
+          router.push('/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services');
         break;
       case '/services/development':
-        router.push('/services/discovery');
+        if (searchParams.get('demo'))
+          router.push('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/discovery');
         break;
       case '/services/team':
-        router.push('/services/development');
+        if (searchParams.get('demo'))
+          router.push('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/development');
         break;
       case '/services/design':
-        router.push('/services/team');
+        if (searchParams.get('demo'))
+          router.push('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/team');
         break;
       case '/services/services':
-        router.push('/services/design');
+        if (searchParams.get('demo'))
+          router.push('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/services/design');
         break;
       case '/contact':
-        router.push('/partners');
+        if (searchParams.get('demo'))
+          router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/partners');
         break;
     }
   }, 50, {
@@ -130,9 +170,15 @@ const NavigationControls: FC<{
       if (y === 1 && intentional) {
         if (pathname == '/partners') {
           if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
-            router.push('/contact');
+            if (searchParams.get('demo'))
+              router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
+            else
+              router.push('/contact');
         } else if (pathname === '/contact')
-          router.push('/contact/form');
+          if (searchParams.get('demo'))
+            router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          else
+            router.push('/contact/form');
       } else if (y === -1 && intentional) {
         throttleDecScroll();
       }
@@ -145,9 +191,9 @@ const NavigationControls: FC<{
     
   }, {
   
-  })
+  });
 
-  return (<main {...bind()} className='top-0 left-0 w-screen bg-transparent font-main'>
+  return (<main {...(COMMING_SOON && !searchParams.get('demo') ? {} : bind())} className='top-0 left-0 w-screen bg-transparent font-main'>
       {children}
     </main>);
 };

@@ -4,7 +4,8 @@ import { Color, Vector2 } from "three";
 import { useControls, Leva } from "leva";
 import { bgVertexShader } from "@/utils/shaders/vertexShaders";
 import { bgFragmentShader } from "@/utils/shaders/fragmentShaders";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
+import { COMMING_SOON } from "@/utils/constants";
 
 const NoisyBackground: FC<{
   getProgress: () => number;
@@ -207,6 +208,7 @@ const NoisyBackground: FC<{
       },
     },
   });
+  const searchParams  = useSearchParams();
 
   useEffect(() => {
     if (pathname === '/partners') {
@@ -215,6 +217,13 @@ const NoisyBackground: FC<{
         aboutColor2.lerp(downAboutColor2, 1);
         aboutColor3.lerp(downAboutColor3, 1);
       }, 15000)
+    }
+    if (COMMING_SOON && !searchParams.get('demo') && pathname === '/') {
+      setTimeout(() => {
+        homeColor1.lerp(aboutColor1, 1);
+        homeColor2.lerp(aboutColor2, 1);
+        homeColor3.lerp(aboutColor3, 1);
+      }, 3000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]);

@@ -5,13 +5,13 @@ const ScopeButton: FC<{
   className?: string;
   number: number;
 }> = ({children, number, className = ''}) => {
-  return (<button className={`group fixed left-1/2 top-1/2 bg-transparent cursor-pointer h-[calc(100/16*1rem)] w-[calc(100/16*1rem)] ${['animate-[float_6s_ease-in-out_infinite_100ms]', 'animate-[float_6s_ease-in-out_infinite_200ms]',
-  'animate-[float_6s_ease-in-out_infinite_400ms]', 
-  'animate-[float_6s_ease-in-out_infinite_600ms]', 
-  'animate-[float_6s_ease-in-out_infinite_800ms]'][Math.floor(Math.random() * 5)]} ${className}`}>
+  return (<button className={`group fixed left-1/2 top-1/2 bg-transparent cursor-pointer h-[calc(100/16*1rem)] w-[calc(100/16*1rem)] ${['animate-[float_6s_ease-in-out_infinite_0ms]', 'animate-[float_6s_ease-in-out_infinite_400ms]',
+  'animate-[float_6s_ease-in-out_infinite_800ms]', 
+  'animate-[float_6s_ease-in-out_infinite_1200ms]', 
+  'animate-[float_6s_ease-in-out_infinite_1600ms]'][Math.floor(Math.random() * 5)]} ${className}`}>
     <div>
       <span className='absolute flex justify-center top-1/2 left-1/2 backdrop-blur-sm rounded-full w-[calc(95/16*1rem)] h-[calc(95/16*1rem)] -translate-1/2 opacity-100'>
-        <span className="absolute text-white -bottom-16">
+        <span className="absolute text-white -bottom-16 w-28">
           {children}
         </span>
       </span>

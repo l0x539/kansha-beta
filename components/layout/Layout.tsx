@@ -5,10 +5,13 @@ import { Provider } from "react-redux";
 import store from "@/store/store";
 import MainCanvas from "../MainCanvas";
 import NavigationControls from "../gui/NavigationControls";
+import { useSearchParams } from "next/navigation";
+import { Leva } from "leva";
 
 const Layout: FC<{
   children: ReactNode;
 }> = ({children}) => {
+  const searchParams  = useSearchParams(); 
   return (
     <Provider store={store}>
       <NavigationControls>
@@ -18,6 +21,8 @@ const Layout: FC<{
           <MainCanvas/>
         </div>
       </NavigationControls>
+
+      <Leva collapsed={false} hidden={!searchParams.get('controls')} />
     </Provider>
     );
 };

@@ -3,8 +3,10 @@ import { updateView } from "@/store/features/gl/glSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { useSpring } from "@react-spring/web";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { FC, ReactNode, useEffect, useState } from "react";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { FC, ReactNode, useCallback, useEffect, useState } from "react";
+import { Next } from "./Icons";
+import { COMMING_SOON } from "@/utils/constants";
 
 const SERVICES = {
   discovery: 0,
@@ -36,7 +38,23 @@ const Carousel= () => {
     slug: 'discovery' | 'development' | 'team' | 'design' | 'services';
   };
 
-  const defaultSelected = SERVICES[slug]
+  const defaultSelected = SERVICES[slug];
+
+  const searchParams  = useSearchParams();
+
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  )
+
+  const onNextButton = () => {
+    router.push(`/services/${Object.keys(SERVICES)[(defaultSelected + 1) % 5] + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
+  }
 
   return (<>
     <div className="flex relative">
@@ -75,10 +93,12 @@ const Carousel= () => {
       <ul className="relative -bottom-72 inline-flex gap-3.5">
         {[0, 1, 2, 3, 4].map((number) => (
           <SelectButton onClick={() => {
-            router.push(`/services/${Object.keys(SERVICES)[number]}`)
+            router.push(`/services/${Object.keys(SERVICES)[number] + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
           }} key={number} active={number === defaultSelected}>{number+1}</SelectButton>
         ))}
-        
+        <li onClick={onNextButton} className="flex cursor-pointer items-center rounded-full">
+          <Next />
+        </li>
       </ul>
     </div>
   </>);

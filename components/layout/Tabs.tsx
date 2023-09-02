@@ -46,7 +46,10 @@ const Tabs: FC<{
       const tabIndex = tabs.findIndex(tab => tab === activeTab);
       if (y === 1 && intentional) {
         if (tabIndex + 1 === tabs.length)
-          router.push('/partners');
+          if (searchParams.get('demo'))
+            router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          else
+            router.push('/partners');
         else {
           setActiveTab(tabs[tabIndex+1]);
         }

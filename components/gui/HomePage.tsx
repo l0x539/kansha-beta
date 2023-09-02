@@ -1,20 +1,15 @@
 'use client'
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { COMMING_SOON } from "@/utils/constants";
 import CookiesConsent from "../CookiesConsent";
 import Footer from "../layout/Footer";
-import { selectGl, updateView } from "@/store/features/gl/glSlice";
-import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 const HomePage = () => {
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(updateView(0));
-  }, [dispatch]);
+  const searchParams  = useSearchParams();
 
   return (<>
     <Footer />
-    <CookiesConsent />
+    {COMMING_SOON && !searchParams.get('demo') ? <></>: <CookiesConsent />}
   </>);
 };
 
