@@ -1,5 +1,5 @@
 'use client'
-import { COMMING_SOON } from "@/utils/constants";
+import { COMING_SOON } from "@/utils/constants";
 import CookiesConsent from "../CookiesConsent";
 import Footer from "../layout/Footer";
 import { useSearchParams } from "next/navigation";
@@ -9,7 +9,7 @@ const HomePage = () => {
 
   return (<>
     <Footer />
-    {COMMING_SOON && !searchParams.get('demo') ? <></>: <CookiesConsent />}
+    {COMING_SOON && !searchParams.get('demo') ? <></>: <CookiesConsent />}
   </>);
 };
 

@@ -5,7 +5,7 @@ import { useControls, Leva } from "leva";
 import { bgVertexShader } from "@/utils/shaders/vertexShaders";
 import { bgFragmentShader } from "@/utils/shaders/fragmentShaders";
 import { usePathname, useSearchParams } from "next/navigation";
-import { COMMING_SOON } from "@/utils/constants";
+import { COMING_SOON } from "@/utils/constants";
 
 const NoisyBackground: FC<{
   getProgress: () => number;
@@ -218,7 +218,7 @@ const NoisyBackground: FC<{
         aboutColor3.lerp(downAboutColor3, 1);
       }, 15000)
     }
-    if (COMMING_SOON && !searchParams.get('demo') && pathname === '/') {
+    if (COMING_SOON && !searchParams.get('demo') && pathname === '/') {
       setTimeout(() => {
         homeColor1.lerp(aboutColor1, 1);
         homeColor2.lerp(aboutColor2, 1);

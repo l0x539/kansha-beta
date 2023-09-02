@@ -7,7 +7,7 @@ import FooterContent from "../FooterContent";
 import Logo from "../Logo";
 import { updateView } from "@/store/features/gl/glSlice";
 import { useAppDispatch } from "@/store/hooks";
-import { COMMING_SOON } from "@/utils/constants";
+import { COMING_SOON } from "@/utils/constants";
 import { useSearchParams } from "next/navigation";
 
 const PartnersPage = () => {
@@ -37,19 +37,19 @@ const PartnersPage = () => {
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="CryptoMate" className="hover:bg-crypto-mate" more={"/portfolio/cryptomate" + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
+      <Partner title="CryptoMate" className="hover:bg-crypto-mate" more={"/portfolio/cryptomate" + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="Lazo" className="hover:bg-lazo" more={"/portfolio/lazo" + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
+      <Partner title="Lazo" className="hover:bg-lazo" more={"/portfolio/lazo" + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="La Palma" className="hover:bg-la-palma" more={"/portfolio/lazo" + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
+      <Partner title="La Palma" className="hover:bg-la-palma" more={"/portfolio/lazo" + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>
-      <Partner title="Soy Rada" className="hover:bg-soy-rada" more={"/portfolio/lazo" + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
+      <Partner title="Soy Rada" className="hover:bg-soy-rada" more={"/portfolio/lazo" + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.
       </Partner>

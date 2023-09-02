@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { FC, ReactNode, useCallback, useEffect, useState } from "react";
 import { Next } from "./Icons";
-import { COMMING_SOON } from "@/utils/constants";
+import { COMING_SOON } from "@/utils/constants";
 
 const SERVICES = {
   discovery: 0,
@@ -53,7 +53,7 @@ const Carousel= () => {
   )
 
   const onNextButton = () => {
-    router.push(`/services/${Object.keys(SERVICES)[(defaultSelected + 1) % 5] + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
+    router.push(`/services/${Object.keys(SERVICES)[(defaultSelected + 1) % 5] + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
   }
 
   return (<>
@@ -93,7 +93,7 @@ const Carousel= () => {
       <ul className="relative -bottom-72 inline-flex gap-3.5">
         {[0, 1, 2, 3, 4].map((number) => (
           <SelectButton onClick={() => {
-            router.push(`/services/${Object.keys(SERVICES)[number] + (searchParams.get('demo') && COMMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
+            router.push(`/services/${Object.keys(SERVICES)[number] + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
           }} key={number} active={number === defaultSelected}>{number+1}</SelectButton>
         ))}
         <li onClick={onNextButton} className="flex cursor-pointer items-center rounded-full">

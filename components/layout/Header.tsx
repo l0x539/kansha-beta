@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Logo from "../Logo";
 import Menu from "../Menu";
-import { COMMING_SOON } from "@/utils/constants";
+import { COMING_SOON } from "@/utils/constants";
 import { useSearchParams } from 'next/navigation';
 import { useCallback } from "react";
 
@@ -19,10 +19,10 @@ const Header = () => {
   )
 
   return (<header className="fixed top-0 z-80 w-screen px-28 flex justify-between z-[100]">
-    <Link href={searchParams.get('demo') && COMMING_SOON ? ('/?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '/'} className="py-12">
+    <Link href={searchParams.get('demo') && COMING_SOON ? ('/?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '/'} className="py-12">
       <Logo width={90} height={13} />
     </Link>
-    {COMMING_SOON && !searchParams.get('demo') ? <></>: <div className="py-12">
+    {COMING_SOON && !searchParams.get('demo') ? <></>: <div className="py-12">
       <Menu />
     </div>}
   </header>);

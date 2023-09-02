@@ -14,7 +14,7 @@ import { useSpring } from "@react-spring/three";
 import { throttle } from "lodash";
 import NoisyBackground from "./NoisyBackground";
 import { getGPUTier } from "detect-gpu";
-import { COMMING_SOON } from "@/utils/constants";
+import { COMING_SOON } from "@/utils/constants";
 
 const Background: FC<{
   gpuTier: number;
@@ -623,7 +623,7 @@ const Background: FC<{
   return (
     <>
       <color attach="background" args={["black"]} />
-      {COMMING_SOON && !searchParams.get('demo') ? <CommingSoonText /> : <IntroText />}
+      {COMING_SOON && !searchParams.get('demo') ? <ComingSoonText /> : <IntroText />}
       <LogoBg opacity={opacity} color={color} speed={speed} />
       <group>
         <Bubble gpuTier={gpuTier} index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
@@ -671,7 +671,7 @@ const LogoBg: FC<{
   );
 }
 
-const CommingSoonText = () => {
+const ComingSoonText = () => {
   const pathname = usePathname();
   const [logo] = useTexture(['/assets/images/Logo.png']);
 
@@ -684,7 +684,7 @@ const CommingSoonText = () => {
     </sprite>
 
     <Text position={[0, -1., 0]} anchorX="center" anchorY="middle" visible={pathname === '/'} fontSize={1} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
-      Comming Soon!
+      Coming Soon!
     </Text>
   </group>);
 };
