@@ -799,7 +799,7 @@ const Bubble: FC<{
   const [gpuTier, setGpuTier] = useState(3);
   useEffect(() => {
     getGPUTier().then((gpuTier) => {
-      setGpuTier(gpuTier.tier);
+      setGpuTier(navigator.userAgent.indexOf('Mac OS X') == -1 ? gpuTier.tier : Math.min(gpuTier.tier, 2));
     })
   }, []);
 
