@@ -1,6 +1,6 @@
 'use client'
 import {  useWheel } from "@use-gesture/react";
-import { FC, ReactNode, useCallback } from "react";
+import { FC, ReactNode, useCallback, useRef } from "react";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { COMMING_SOON } from "@/utils/constants";
 import { Lethargy } from 'lethargy-ts';
@@ -153,21 +153,21 @@ const NavigationControls: FC<{
   //   })
   // });
 
+  const mainRef = useRef<HTMLElement>(null);
+
   const bind = useWheel(({
     direction: [_, y],
     intentional,
     first,
     last,
     event
-  }) => {
-    event.preventDefault();
-    event.stopPropagation();
-    
+  }) => {    
     if (intentional) {
+      event.stopPropagation();
       if (first) {
         if (y === 1) {
           if (pathname == '/partners') {
-            if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
+            if ((window.innerHeight + Math.round(window.scrollY)) >= (mainRef.current?.offsetHeight??0))
               if (searchParams.get('demo'))
                 router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
               else
@@ -191,10 +191,11 @@ const NavigationControls: FC<{
   }, {
     eventOptions: {
       passive: false
-    }
+    },
+    preventDefault: true,
   });
 
-  return (<main {...(COMMING_SOON && !searchParams.get('demo') ? {} : bind())} className='absolute top-0 left-0 w-screen min-h-screen bg-transparent font-main'>
+  return (<main ref={mainRef} {...(COMMING_SOON && !searchParams.get('demo') ? {} : bind())} className='absolute top-0 left-0 w-screen min-h-screen bg-transparent font-main'>
       {children}
     </main>);
 };
