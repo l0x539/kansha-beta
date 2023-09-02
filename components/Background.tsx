@@ -797,7 +797,7 @@ const Bubble: FC<{
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
   const [gpuTier, setGpuTier] = useState(3);
-  useEffect(() => {
+  useLayoutEffect(() => {
     getGPUTier().then((gpuTier) => {
       setGpuTier(navigator.userAgent.indexOf('Mac OS X') == -1 ? gpuTier.tier : Math.min(gpuTier.tier, 2));
     })
