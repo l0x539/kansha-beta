@@ -28,11 +28,11 @@ const ContactFormPage = () => {
 
   return (<>
   <div className="pt-40">
-    <h1 className="mx-32 mb-28 text-8xl text-white">
+    <h1 className="animate-fade-in mx-32 mb-28 text-8xl text-white">
       Let{"'"}s start a<br />
       project together
     </h1>
-    <div className="mx-32 grid grid-cols-2">
+    <div className="animate-fade-in delay-400 mx-32 grid grid-cols-2">
       <div>
         <FormInput name="name" index="01" label="What's your name?" placeholder="Name, last name *" />
         <FormInput name="organization" index="02" label="What's the name of your organization?" placeholder="Name of the organization *" />
@@ -95,7 +95,7 @@ const ContactFormPage = () => {
         </div>        
       </div>
     </div>
-    <div className="flex w-full justify-center py-14">
+    <div className="animate-fade-in flex w-full justify-center py-14">
       <Link href={'/contact/info' + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')} className="relative group hover:cursor-pointer select-none">
         <div  className={`h-full w-full absolute top-0 flex justify-center items-center rounded-full border mix-blend-difference shadow-[0px_2.2926828861236572px_2.2926828861236572px_0px_rgba(0,0,0,0.25)_inset] backdrop-opacity-70 group-hover:animate-ping`}></div>
         <div className={`flex justify-center items-center text-white font-gothic font-semibold text-5xl px-16 py-8`}>

@@ -34,10 +34,23 @@ module.exports = {
           '100%': {
             transform: 'translatey(0px)'
           }
+        },
+        fadeIn: {
+          '0%': {
+            opacity: 0,
+            transform: 'translatey(20px)'
+          },
+          '100%': {
+            opacity: 1,
+            transform: 'translatey(0px)'
+          }
         }
       },
       gridTemplateColumns: {
         'footer': '1.3fr 0.6fr  1fr 1fr',
+      },
+      animation: {
+        'fade-in': 'fadeIn 1s cubic-bezier(0, 0, 0.2, 1) 1 forwards'
       }
     },
   },

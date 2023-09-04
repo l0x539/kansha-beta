@@ -29,10 +29,10 @@ const PartnersPage = () => {
   }, [dispatch]);
 
   return (<div className="relative">
-    <h1 className="mx-32 text-8xl text-white pt-40">
+    <h1 className="animate-fade-in mx-32 text-8xl text-white pt-40">
       Partners
     </h1>
-    <div>
+    <div className="animate-fade-in delay-400">
       <Partner title="Titular - Descripción de sección">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo posuere malesuada. Curabitur at cursus justo.
         <br/><br/>Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae diam vitae felis tincidunt tristique.

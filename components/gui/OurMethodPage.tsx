@@ -8,32 +8,33 @@ import SupportManagement from "../SupportManagement";
 import Tabs, { Tab } from "../layout/Tabs";
 import { useAppDispatch } from "@/store/hooks";
 import { updateView } from "@/store/features/gl/glSlice";
+import OurMethodTab from "../OurMethodTab";
 
 export const TABS = [
   {
     label: 'research',
     title: 'RESEARCH & DISCOVERY',
-    content: <ResearchDiscovery />
+    content: <OurMethodTab tab={0} />
   },
   {
     label: 'strategy',
     title: 'STRATEGY & DIRECTION',
-    content: <StrategyDirection />
+    content: <OurMethodTab tab={1} />
   },
   {
     label: 'design',
     title: 'DESIGN & DEVELOPMENT',
-    content: <DesignDevelopment />
+    content: <OurMethodTab tab={2} />
   },
   {
     label: 'finesse',
     title: 'FINESSE & LAUNCH',
-    content: <FinesseLaunch />
+    content: <OurMethodTab tab={3} />
   },
   {
     label: 'support',
     title: 'SUPPORT & MANAGEMENT',
-    content: <SupportManagement />
+    content: <OurMethodTab tab={4} />
   },
 ];
 
@@ -45,7 +46,7 @@ const OurMethodPage = () => {
 
   return (
     <Tabs defaultTabLabel="research">
-      {TABS.map(({content, label, title}, index) => <Tab key={index} label={label} title={title}>
+      {TABS.map(({content, label, title}, index) => <Tab key={0} label={label} title={title}>
         {content}
       </Tab>)}
     </Tabs>);

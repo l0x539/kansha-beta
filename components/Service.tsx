@@ -18,7 +18,7 @@ const SERVICES = {
 
 const Service = () => {
   
-  return (<div className="w-screen h-[50vh] flex justify-center mt-80 overflow-x-hidden">
+  return (<div className="animate-fade-in w-screen h-[50vh] flex justify-center mt-80 overflow-x-hidden">
     <div className="ml-72 w-96">
       <Carousel />
     </div>

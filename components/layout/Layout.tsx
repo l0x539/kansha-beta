@@ -13,7 +13,7 @@ const Layout: FC<{
   children: ReactNode;
 }> = ({children}) => {
   const searchParams  = useSearchParams();
-  const [gpuTier, setGpuTier] = useState(3);
+  const [gpuTier, setGpuTier] = useState(navigator.userAgent.indexOf('Mac OS X') == -1 ? 3 : 2);
   useLayoutEffect(() => {
     getGPUTier().then((gpuTier) => {
       setGpuTier(navigator.userAgent.indexOf('Mac OS X') == -1 ? gpuTier.tier : Math.min(gpuTier.tier, 2));

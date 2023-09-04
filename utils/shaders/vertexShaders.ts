@@ -29,6 +29,22 @@ void main() {
 }
 `;
 
+export const dropVertexShader = `
+varying vec3 worldNormal;
+varying vec3 eyeVector;
+
+void main() {
+  vec4 worldPos = modelMatrix * vec4(position, 1.0);
+  vec4 mvPosition = viewMatrix * worldPos;
+
+  gl_Position = projectionMatrix * mvPosition;
+
+  // vec3 transformedNormal = modelMatrix * normal;
+  worldNormal = normalize(modelMatrix * vec4(normal, 0.0)).yxz;
+  eyeVector =  normalize(worldPos.yxz - cameraPosition);
+}
+`;
+
 
 export const bgVertexShader = `
 #define GLSLIFY 1

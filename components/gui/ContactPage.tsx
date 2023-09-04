@@ -29,7 +29,7 @@ const ContactPage = () => {
 
   return (
     <div className="absolute top-0 left-0 w-screen h-screen">
-      <div className="pt-96 flex flex-col w-full h-full items-center">
+      <div className="animate-fade-in pt-96 flex flex-col w-full h-full items-center">
         <h1 className="text-9xl text-white mb-28">
           Let{'’'}s talk
         </h1>

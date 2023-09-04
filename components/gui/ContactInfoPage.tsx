@@ -6,10 +6,10 @@ const ContactInfoPage = () => {
   return (
     <>
       <div className="pt-56">
-        <h1 className="mx-32 mb-28 text-8xl text-white">
+        <h1 className="animate-fade-in mx-32 mb-28 text-8xl text-white">
           What{"'"}s next?
         </h1>
-        <div className="mx-32 grid grid-cols-3">
+        <div className="animate-fade-in delay-400 mx-32 grid grid-cols-3">
           <Section title="Promt response" icon={<Mail />}>
             We are notoriusly quick at 
             <br />getting back to emails. You{"'"}ll 

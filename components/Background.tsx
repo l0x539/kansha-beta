@@ -1,8 +1,8 @@
 import { FC, ForwardedRef, forwardRef, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { BackSide, CatmullRomCurve3, Color, FrontSide, Group, InstancedMesh, Mesh, Object3D, RawShaderMaterial, SphereGeometry, Sprite, Vector2, Vector3 } from "three";
-import {sphereVertexShader} from "@/utils/shaders/vertexShaders";
-import {sphereFragmentShader} from "@/utils/shaders/fragmentShaders";
+import { BackSide, CatmullRomCurve3, Color, FrontSide, Group, InstancedMesh, Mesh, Object3D, PlaneGeometry, RawShaderMaterial, ShaderMaterial, SphereGeometry, Sprite, Vector2, Vector3 } from "three";
+import {dropVertexShader, sphereVertexShader} from "@/utils/shaders/vertexShaders";
+import {dropFragmentShader, sphereFragmentShader} from "@/utils/shaders/fragmentShaders";
 import { Html, Text, useFBO, useFont, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { makeNoise4D } from "open-simplex-noise";
@@ -31,7 +31,7 @@ const Background: FC<{
           bubble2Rot: new Vector3,
           speed: 0.03,
           color: new Color(),
-          opacity: 1,
+          opacity: 0,
           noiseSpeed: 1.05,
           noiseStrength: 0.17,
           uniforms: {
@@ -55,6 +55,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/': {
@@ -104,6 +126,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/services': {
@@ -137,6 +181,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/services/discovery': {
@@ -170,6 +236,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/services/development': {
@@ -203,6 +291,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/services/team': {
@@ -236,6 +346,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/services/design': {
@@ -269,6 +401,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/services/services': {
@@ -302,6 +456,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/services/our-method': {
@@ -337,7 +513,7 @@ const Background: FC<{
               z: 1
             },
             diffuseness: 0.2,
-            shininess: 15.0,
+            shininess: 50.0,
             fresnelPower: 8.0,
             iorR: 1.15,
             iorY: 1.16,
@@ -351,6 +527,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 0.2,
+            shininess: 15.0,
+            fresnelPower: 20.0,
+            iorR: 1.15,
+            iorY: 1.16,
+            iorG: 1.18,
+            iorC: 2.22,
+            iorB: 1.22,
+            iorP: 1.22,
+            saturation: 1.03,
+            chromaticAberration: 0.6,
+            refraction: 0.22,
+            noiseX: 1,
+            noiseY: 1,
+            noiseZ: 1
           }
         },
         '/partners': {
@@ -360,7 +558,7 @@ const Background: FC<{
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color,
-          opacity: 0.1,
+          opacity: 0,
           noiseSpeed: 1.05,
           noiseStrength: 0.17,
           uniforms: {
@@ -384,6 +582,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/contact': {
@@ -417,6 +637,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/contact/form': {
@@ -426,7 +668,7 @@ const Background: FC<{
           bubble2Rot: new Vector3,
           speed: 0.1,
           color: new Color(),
-          opacity: 0.2,
+          opacity: 0,
           noiseSpeed: 1.05,
           noiseStrength: 0.17,
           uniforms: {
@@ -450,6 +692,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1,
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/contact/info': {
@@ -483,6 +747,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/portfolio/lazo': {
@@ -516,6 +802,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         },
         '/portfolio/cryptomate': {
@@ -549,6 +857,28 @@ const Background: FC<{
             noiseX: 1,
             noiseY: 1,
             noiseZ: 1
+          },
+          dropUniforms: {
+            light: {
+              x: -1,
+              y: 1,
+              z: 1
+            },
+            diffuseness: 1,
+            shininess: 0,
+            fresnelPower: 8,
+            iorR: 0,
+            iorY: 0,
+            iorG: 0,
+            iorC: 0,
+            iorB: 0,
+            iorP: 0,
+            saturation: 0,
+            chromaticAberration: 0,
+            refraction: 0,
+            noiseX: 0,
+            noiseY: 0,
+            noiseZ: 0
           }
         }
       }
@@ -631,8 +961,154 @@ const Background: FC<{
       <group>
         <Bubble gpuTier={gpuTier} index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
+      <DropEffect speed={speed} uniforms={pages[pathname]?.dropUniforms} />
       <NoisyBackground getProgress={() => progress.get()} />
     </>
+  );
+};
+
+const DropEffect: FC<{
+  uniforms: {
+    diffuseness: number;
+    fresnelPower: number;
+    iorR: number;
+    iorY: number;
+    iorG: number;
+    iorC: number;
+    iorB: number;
+    iorP: number;
+    chromaticAberration: number;
+    refraction: number;
+  };
+  speed: number;
+}> = ({uniforms, speed}) => {
+  const mesh = useRef<Mesh<PlaneGeometry, ShaderMaterial>>(null);
+  const dotRef = useRef<Group>(null);
+  const mainRenderTarget = useFBO();
+  const backRenderTarget = useFBO();
+
+  const {
+    defaultUniforms,
+    v3,
+  } = useMemo(
+    () => ({
+      defaultUniforms: {
+        uTexture: {
+          value: null
+        },
+        uIorR: { value: 1.0 },
+        uIorY: { value: 1.0 },
+        uIorG: { value: 1.0 },
+        uIorC: { value: 1.0 },
+        uIorB: { value: 1.0 },
+        uIorP: { value: 1.0 },
+        uRefractPower: {
+          value: 0.0
+        },
+        uChromaticAberration: {
+          value: 0.0
+        },
+        uSaturation: { value: 0.0 },
+        uShininess: { value: 40.0 },
+        uDiffuseness: { value: 0.2 },
+        uFresnelPower: { value: 8.0 },
+        uLight: {
+          value: new Vector3(-1.0, 1.0, 1.0)
+        },
+        winResolution: {
+          value: new Vector2(
+            window.innerWidth,
+            window.innerHeight
+          ).multiplyScalar(Math.min(window.devicePixelRatio, 2))
+        },
+        noiseStrength: {value: 0},
+        noiseSpeed: {value: 0},
+        noiseX: {value: 0},
+        noiseY: {value: 0},
+        noiseZ: {value: 0},
+      },
+      v3: new Vector3,
+    }),
+    []
+  );
+
+  const {
+    diffuseness,
+    fresnelPower,
+    iorR,
+    iorY,
+    iorG,
+    iorC,
+    iorB,
+    iorP,
+    chromaticAberration,
+    refraction,
+  } = uniforms;
+
+  
+  useFrame(({gl, scene, camera, clock}) => {
+    if (!mesh.current) return;
+
+    mesh.current.material.uniforms.uIorR.value = iorR;
+    mesh.current.material.uniforms.uIorY.value = iorY;
+    mesh.current.material.uniforms.uIorG.value = iorG;
+    mesh.current.material.uniforms.uIorC.value = iorC;
+    mesh.current.material.uniforms.uIorB.value = iorB;
+    mesh.current.material.uniforms.uIorP.value = iorP;
+    
+    mesh.current.material.uniforms.uRefractPower.value = refraction;
+
+    mesh.current.material.uniforms.uDiffuseness.value = diffuseness;
+    mesh.current.material.uniforms.uFresnelPower.value = fresnelPower;
+
+    mesh.current.visible = false;
+    gl.setRenderTarget(backRenderTarget);
+    gl.render(scene, camera);
+
+    mesh.current.material.uniforms.uTexture.value = backRenderTarget.texture;
+    mesh.current.material.side = BackSide;
+
+
+
+    gl.setRenderTarget(mainRenderTarget);
+    gl.render(scene, camera);
+
+    mesh.current.visible = true;
+
+    mesh.current.material.uniforms.uTexture.value = mainRenderTarget.texture;
+    mesh.current.material.side = FrontSide;
+
+    gl.setRenderTarget(null);
+
+    if (!dotRef.current) return;
+    dotRef.current.position.setY(dotRef.current.position.y+(Math.cos(clock.getElapsedTime()))*.01)
+    dotRef.current.scale.setScalar(1+(Math.cos(clock.getElapsedTime()))*.1)
+    mesh.current.material.uniforms.uChromaticAberration.value = (chromaticAberration + (Math.cos(clock.getElapsedTime()))*.1);
+
+  });
+
+  return (
+    <group position={[-7.5, 2, 0]} visible={chromaticAberration > 0}>
+      <group ref={dotRef} visible={chromaticAberration > 0}>
+        <Text position={[-0, 1, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 1:0}>
+          .
+        </Text>
+      </group>
+      <group ref={dotRef}>
+        <Text position={[-0, -1.5, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 1:0}>
+          .
+        </Text>
+      </group>
+      <mesh ref={mesh} visible={chromaticAberration > 0}>
+        <planeGeometry args={[2.3, 10]} />
+        <shaderMaterial fragmentShader={dropFragmentShader} vertexShader={dropVertexShader} 
+        key={uuidv4()}
+        uniforms={{
+          ...defaultUniforms
+        }}
+        />
+      </mesh>
+    </group>
   );
 };
 
@@ -683,8 +1159,8 @@ const ComingSoonText = () => {
       <spriteMaterial map={logo} color={"#FFF"} alphaTest={0} opacity={1} />
     </sprite>
 
-    <Text position={[0, -1., 0]} anchorX="center" anchorY="middle" visible={pathname === '/'} fontSize={1} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
-      Coming Soon!
+    <Text position={[0, -1., 0]} anchorX="center" anchorY="middle" visible={pathname === '/'} fontSize={0.75} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
+      COMING SOON!
     </Text>
   </group>);
 };
@@ -963,6 +1439,16 @@ const Bubble: FC<{
     gl.setRenderTarget(null);
 
   });
+
+  useEffect(() => {
+    if (!mesh.current) return;
+
+    mesh.current.matrixWorldNeedsUpdate = true;
+    mesh.current.geometry.attributes.position.needsUpdate = true;
+    mesh.current.material.needsUpdate = true;
+    mesh.current.updateMatrix();
+    mesh.current.updateMatrixWorld();
+  }, [gpuTier])
 
   return (
     <mesh onPointerMove={() => {
