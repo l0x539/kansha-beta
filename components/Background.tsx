@@ -496,13 +496,13 @@ const Background: FC<{
               new Vector3( 4, -3, 2 ),
               new Vector3(5.5, 3, 1),
               new Vector3(-2.5, 4, 0),
-              new Vector3(-4, 3, 2),
+              new Vector3(-2, 3, 1.2),
             ]),
             bubble2Pos: new CatmullRomCurve3( [
-              new Vector3(-4., -3.5, 0),
-              new Vector3(-4., 3.5, 0),
+              new Vector3(-3., -3.5, 0),
+              new Vector3(-3., 3.5, 0),
               new Vector3(5.5, -2.6, -3),
-              new Vector3(-10, -3.5, -6),
+              new Vector3(-8, -3.5, -6),
               new Vector3(4., -3.5, 0),
             ])
           },
@@ -1099,8 +1099,8 @@ const DropEffect: FC<{
           .
         </Text>
       </group>
-      <mesh ref={mesh} visible={chromaticAberration > 0}>
-        <planeGeometry args={[2.3, 10]} />
+      <mesh ref={mesh} position={[0, -3, 0]} visible={chromaticAberration > 0}>
+        <planeGeometry args={[2.3, 8]} />
         <shaderMaterial fragmentShader={dropFragmentShader} vertexShader={dropVertexShader} 
         key={uuidv4()}
         uniforms={{

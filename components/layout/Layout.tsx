@@ -1,5 +1,5 @@
 'use client'
-import { FC, ReactNode, useLayoutEffect, useState } from "react";
+import { FC, ReactNode, useEffect, useLayoutEffect, useState } from "react";
 import Header from "./Header";
 import { Provider } from "react-redux";
 import store from "@/store/store";
@@ -13,12 +13,18 @@ const Layout: FC<{
   children: ReactNode;
 }> = ({children}) => {
   const searchParams  = useSearchParams();
-  const [gpuTier, setGpuTier] = useState(navigator.userAgent.indexOf('Mac OS X') == -1 ? 3 : 2);
+  const [gpuTier, setGpuTier] = useState(typeof navigator !== 'undefined' ? navigator.userAgent.indexOf('Mac OS X') == -1 ? 3 : 2 : 0);
+  const [isClient, setIsClient] = useState(false);
+
   useLayoutEffect(() => {
     getGPUTier().then((gpuTier) => {
       setGpuTier(navigator.userAgent.indexOf('Mac OS X') == -1 ? gpuTier.tier : Math.min(gpuTier.tier, 2));
     })
   }, []);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, [])
 
   return (
     <Provider store={store}>
@@ -26,7 +32,7 @@ const Layout: FC<{
         <Header />
         {children}
         <div className="fixed top-0 left-0 w-screen h-screen z-[-1]">
-          <MainCanvas gpuTier={gpuTier} />
+          {isClient ? <MainCanvas gpuTier={gpuTier} /> : <></>}
         </div>
       </NavigationControls>
 
