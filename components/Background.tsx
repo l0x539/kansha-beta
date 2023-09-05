@@ -544,7 +544,7 @@ const Background: FC<{
             iorB: 1.22,
             iorP: 1.22,
             saturation: 1.03,
-            chromaticAberration: 0.6,
+            chromaticAberration: 1.4,
             refraction: 0.22,
             noiseX: 1,
             noiseY: 1,
@@ -1090,16 +1090,16 @@ const DropEffect: FC<{
   return (
     <group position={[-7.5, 2, 0]} visible={chromaticAberration > 0}>
       <group ref={dotRef} visible={chromaticAberration > 0}>
-        <Text position={[-0, 1, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 1:0}>
+        <Text position={[.5, 1, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 0.8:0}>
           .
         </Text>
       </group>
       <group ref={dotRef}>
-        <Text position={[-0, -1.5, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 1:0}>
+        <Text position={[-0.5, -2.5, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 0.8:0}>
           .
         </Text>
       </group>
-      <mesh ref={mesh} position={[0, -3, 0]} visible={chromaticAberration > 0}>
+      <mesh ref={mesh} position={[0, -2.9, 0]} visible={chromaticAberration > 0}>
         <planeGeometry args={[2.3, 8]} />
         <shaderMaterial fragmentShader={dropFragmentShader} vertexShader={dropVertexShader} 
         key={uuidv4()}
