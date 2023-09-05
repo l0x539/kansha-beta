@@ -961,7 +961,7 @@ const Background: FC<{
       <group>
         <Bubble gpuTier={gpuTier} index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
-      <DropEffect speed={speed} uniforms={pages[pathname]?.dropUniforms} />
+      <DropEffect speed={speed} uniforms={pages[pathname]?.dropUniforms ?? pages['default'].dropUniforms} />
       <NoisyBackground getProgress={() => progress.get()} />
     </>
   );
