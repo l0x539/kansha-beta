@@ -148,14 +148,14 @@ const NavigationControls: FC<{
         if (searchParams.get('demo'))
           router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/form');
+          router.push('/contact/form');
         break;
-      // case '/contact/form':
-      //   if (searchParams.get('demo'))
-      //     router.push('/contact/info?' + createQueryString('demo', `${searchParams.get('demo')}`))
-      //   else
-      //     router.push('/services/info');
-      //   break;
+      case '/contact/form':
+        if (searchParams.get('demo'))
+          router.push('/contact/info?' + createQueryString('demo', `${searchParams.get('demo')}`))
+        else
+          router.push('/contact/info');
+        break;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   };
