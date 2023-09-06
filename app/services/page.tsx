@@ -9,4 +9,3 @@ export default function Services() {
 };
 
 export const dynamic = 'force-static';
-export const revalidate = false;

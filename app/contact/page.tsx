@@ -7,4 +7,3 @@ export default function Contact() {
 }
 
 export const dynamic = 'force-static';
-export const revalidate = false;
