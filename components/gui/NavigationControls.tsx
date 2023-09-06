@@ -247,34 +247,34 @@ const NavigationControls: FC<{
     setInitScroll(true);
     setScrollHint(false);
     handleWheelProgress(pathname, (parseInt(`${searchParams.get('pan')}`) || 0) as 0 | 1 | 2 | 3, deltaY, false, preProgress, setPreProgress);
-    if (intentional) {
-      event.stopPropagation();
-      if (first) {
-        if (y === 1) {
-          if (pathname !== '/partners') 
-            throttleIncScroll();
-          else if (pathname == '/partners') {
-            if ((window.innerHeight + Math.round(window.scrollY)) >= (mainRef.current?.offsetHeight??0))
-              if (searchParams.get('demo'))
-                router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
-              else
-                router.push('/contact');
-          } else if (pathname === '/contact')
+    // if (intentional) {
+    event.stopPropagation();
+    if (first) {
+      if (y === 1) {
+        if (pathname !== '/partners') 
+          throttleIncScroll();
+        else if (pathname == '/partners') {
+          if ((window.innerHeight + Math.round(window.scrollY)) >= (mainRef.current?.offsetHeight??0))
             if (searchParams.get('demo'))
-              router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
+              router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
             else
-              router.push('/contact/form');
-        } else if (y === -1) {
-          throttleDecScroll();
-        }
+              router.push('/contact');
+        } else if (pathname === '/contact')
+          if (searchParams.get('demo'))
+            router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          else
+            router.push('/contact/form');
+      } else if (y === -1) {
+        throttleDecScroll();
       }
+    }
       //  else if (last) {
       //   if (y === 1) {
       //     if (pathname !== '/partners') 
       //       throttleIncScroll();
       //   }
       // }
-    }
+    // }
     
   }, {
     eventOptions: {

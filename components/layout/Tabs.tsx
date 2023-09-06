@@ -12,63 +12,24 @@ interface ITab {
 
 const Tabs: FC<{
   children: ReactNode;
-  defaultTabLabel: string;
+  tab: string;
+  setActiveTab: (value: string) => void;
 }> = ({
   children,
-  defaultTabLabel
+  tab,
+  setActiveTab
 }) => {
-  const [activeTab, setActiveLabel] = useState(defaultTabLabel);
-  const router = useRouter();
-  const searchParams  = useSearchParams();  
-  const createQueryString = useCallback(
-    (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value)
- 
-      return params.toString()
-    },
-    [searchParams]
-  );
-  const tabs = TABS.map(tab => tab.label);
 
-  const setActiveTab = (tab: string) => {
-    const tabIndex = tabs.findIndex(t => t === tab);
-    setActiveLabel(tabs[tabIndex]);
-    router.push('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`));
-  }
+  console.log(tab);
   
-  const bind = useWheel(({
-    direction: [_, y],
-    intentional,
-    last
-  }) => {
-    if (last) {
-      const tabIndex = tabs.findIndex(tab => tab === activeTab);
-      if (y === 1 && intentional) {
-        if (tabIndex + 1 === tabs.length)
-          if (searchParams.get('demo'))
-            router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`))
-          else
-            router.push('/partners');
-        else {
-          setActiveTab(tabs[tabIndex+1]);
-        }
-  
-      } else if (y === -1 && intentional) {
-        if (tabIndex > 0) {
-          setActiveTab(tabs[tabIndex-1])
-        }
-      }
-    }
-  });
 
-  return (<div {...bind()}>
+  return (<div>
     {Children.map(children, (child, index) => {
       if (!isValidElement<ITab>(child)) {
         return child
       }
       let elementChild: React.ReactElement<ITab> = child;
-      if (elementChild.props.label === activeTab)
+      if (elementChild.props.label === tab)
         return elementChild;
     })}
     <div className="fixed bottom-0 w-screen grid grid-cols-5">
@@ -77,7 +38,7 @@ const Tabs: FC<{
           return child
         }
 
-        return <TabButton key={index} onClick={setActiveTab} label={child.props.label} isActive={activeTab === child.props.label}>
+        return <TabButton key={index} onClick={setActiveTab} label={child.props.label} isActive={tab === child.props.label}>
           {child.props.title}
         </TabButton>
       })}

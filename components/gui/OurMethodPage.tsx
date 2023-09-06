@@ -1,14 +1,11 @@
 'use client'
-import { useEffect } from "react";
-import DesignDevelopment from "../DesignDevelopment";
-import FinesseLaunch from "../FinesseLaunch";
-import ResearchDiscovery from "../ResearchDiscovery";
-import StrategyDirection from "../StrategyDirection";
-import SupportManagement from "../SupportManagement";
+import { useCallback, useEffect } from "react";
 import Tabs, { Tab } from "../layout/Tabs";
 import { useAppDispatch } from "@/store/hooks";
 import { updateView } from "@/store/features/gl/glSlice";
 import OurMethodTab from "../OurMethodTab";
+import { useWheel } from "@use-gesture/react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const TABS = [
   {
@@ -44,12 +41,58 @@ const OurMethodPage = () => {
     dispatch(updateView(6));
   }, [dispatch]);
 
+  const router = useRouter();
+  const searchParams  = useSearchParams();  
+  const createQueryString = useCallback(
+    (name: string, value: string) => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set(name, value)
+ 
+      return params.toString()
+    },
+    [searchParams]
+  );
+  const tabs = TABS.map(tab => tab.label);
+
+  const setActiveTab = (tab: string) => {
+    const tabIndex = tabs.findIndex(t => t === tab);
+    router.push('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`));
+  }
+  
+  const bind = useWheel(({
+    direction: [_, y],
+    intentional,
+    last
+  }) => {
+    if (last) {
+      const tabIndex = parseInt(`${searchParams.get('tab')||1}`)-1;
+      if (y === 1 && intentional) {
+        if (tabIndex + 1 === tabs.length)
+          if (searchParams.get('demo'))
+            router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          else
+            router.push('/partners');
+        else {
+          setActiveTab(tabs[tabIndex+1]);
+        }
+  
+      } else if (y === -1 && intentional) {
+        if (tabIndex > 0) {
+          setActiveTab(tabs[tabIndex-1])
+        }
+      }
+    }
+  });
+
   return (
-    <Tabs defaultTabLabel="research">
-      {TABS.map(({content, label, title}, index) => <Tab key={0} label={label} title={title}>
-        {content}
-      </Tab>)}
-    </Tabs>);
+    <div {...bind()}>
+      <Tabs setActiveTab={setActiveTab} tab={tabs[parseInt(`${searchParams.get('tab')||1}`)-1]??'research'}>
+        {TABS.map(({content, label, title}, index) => <Tab key={0} label={label} title={title}>
+          {content}
+        </Tab>)}
+      </Tabs>
+    </div>
+    );
 };
 
 export default OurMethodPage;
