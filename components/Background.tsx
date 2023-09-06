@@ -454,23 +454,23 @@ const Bubble: FC<{
   noiseSpeed,
   noiseStrength,
   gpuTier,
-  indexedPages,
-  progress,
-  tracking,
-  preProgress,
-  setPreProgress
+  // indexedPages,
+  // progress,
+  // tracking,
+  // preProgress,
+  // setPreProgress
 }) => {
   const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
 
   const [excite, setExcite] = useState(false);
-  const {
-    pp,
-  } = useSpring({
-    pp: progress,
-    config: { mass: 1, tension: 280, friction: 100 }
-  });
+  // const {
+  //   pp,
+  // } = useSpring({
+  //   pp: progress,
+  //   config: { mass: 1, tension: 280, friction: 100 }
+  // });
 
   const {
     light,
