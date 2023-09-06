@@ -244,11 +244,12 @@ const NavigationControls: FC<{
     event,
     delta: [deltaX, deltaY]
   }) => {
+    event.stopPropagation();
+    if (!intentional) return;
     setInitScroll(true);
     setScrollHint(false);
     handleWheelProgress(pathname, (parseInt(`${searchParams.get('pan')}`) || 0) as 0 | 1 | 2 | 3, deltaY, false, preProgress, setPreProgress);
     // if (intentional) {
-    event.stopPropagation();
     if (first) {
       if (y === 1) {
         if (pathname !== '/partners') 
