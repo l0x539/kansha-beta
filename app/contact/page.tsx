@@ -5,3 +5,6 @@ export default function Contact() {
     <ContactPage />
   </>);
 }
+
+export const dynamic = 'force-static';
+export const revalidate = false;

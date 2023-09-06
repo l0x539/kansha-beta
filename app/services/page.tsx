@@ -7,3 +7,6 @@ export default function Services() {
     <ServicesPage />
   )
 };
+
+export const dynamic = 'force-static';
+export const revalidate = false;

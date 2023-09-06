@@ -10,4 +10,7 @@ const OurMethod = () => {
   );
 };
 
+export const dynamic = 'force-static';
+export const revalidate = false;
+
 export default OurMethod;
