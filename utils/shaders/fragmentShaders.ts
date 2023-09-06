@@ -50,7 +50,7 @@ float specular(vec3 light, float shininess, float diffuseness) {
   return  kSpecular + kDiffuse * diffuseness;
 }
 
-const int LOOP = 16;
+uniform int uLoop;
 
 void main() {
   // #include <normal_fragment_begin>
@@ -63,8 +63,8 @@ void main() {
   vec3 normal1 = worldNormal;
   vec3 color = vec3(0.0);
 
-  for ( int i = 0; i < LOOP; i ++ ) {
-    float slide = float(i) / float(LOOP) * 0.1;
+  for ( int i = 0; i < uLoop; i ++ ) {
+    float slide = float(i) / float(uLoop) * 0.1;
 
     vec3 refractVecR = refract(eyeVector, normal1,(1.0/uIorR));
     vec3 refractVecY = refract(eyeVector, normal1, (1.0/uIorY));
@@ -102,8 +102,8 @@ void main() {
     color = sat(color, uSaturation);
   }
 
-  // Divide by the number of layers to normalize colors (rgb values can be worth up to the value of LOOP)
-  color /= float( LOOP );
+  // Divide by the number of layers to normalize colors (rgb values can be worth up to the value of uLoop)
+  color /= float( uLoop );
 
   // Specular
   float specularLight = specular(uLight, uShininess, uDiffuseness);
@@ -165,7 +165,7 @@ float specular(vec3 light, float shininess, float diffuseness) {
   return  kSpecular + kDiffuse * diffuseness;
 }
 
-const int LOOP = 16;
+uniform int uLoop;
 
 void main() {
   // #include <normal_fragment_begin>
@@ -178,8 +178,8 @@ void main() {
   vec3 normal1 = worldNormal;
   vec3 color = vec3(0.0);
 
-  for ( int i = 0; i < LOOP; i ++ ) {
-    float slide = float(i) / float(LOOP) * 0.1;
+  for ( int i = 0; i < uLoop; i ++ ) {
+    float slide = float(i) / float(uLoop) * 0.1;
 
     vec3 refractVecR = refract(eyeVector, normal1,(1.0/uIorR));
     vec3 refractVecY = refract(eyeVector, normal1, (1.0/uIorY));
@@ -215,8 +215,8 @@ void main() {
     color.b += B;
   }
 
-  // Divide by the number of layers to normalize colors (rgb values can be worth up to the value of LOOP)
-  color /= float( LOOP );
+  // Divide by the number of layers to normalize colors (rgb values can be worth up to the value of uLoop)
+  color /= float( uLoop );
 
   // Fresnel
   float f = fresnel(eyeVector, normal1, uFresnelPower);

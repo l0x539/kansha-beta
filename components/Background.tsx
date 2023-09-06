@@ -181,6 +181,7 @@ const DropEffect: FC<{
         noiseX: {value: 0},
         noiseY: {value: 0},
         noiseZ: {value: 0},
+        uLoop: {value: navigator.userAgent.indexOf('Mac OS X') == -1 ? 12 : 8}, // TODO: Add gputier
       },
       v3: new Vector3,
     }),
@@ -532,6 +533,7 @@ const Bubble: FC<{
         noiseX: {value: 0},
         noiseY: {value: 0},
         noiseZ: {value: 0},
+        uLoop: {value: navigator.userAgent.indexOf('Mac OS X') == -1 ? 12 : 8}, // TODO: Add gputier
       },
       v3: new Vector3,
       positionData: [] as Vector3[],
