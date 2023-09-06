@@ -9,6 +9,7 @@ type Action<T> = {
 }
 
 export interface GlState {
+  progress: number;
   currentView: number;
   light: {
       x: number;
@@ -36,6 +37,7 @@ export interface GlState {
 };
 
 const initialState: GlState = {
+  progress: 0,
   currentView: 0,
   light: {
     x: -1,
@@ -77,6 +79,9 @@ const glSlice = createSlice({
     },
     disableIntro: (state) => {
       state.intro = false;
+    },
+    setProgress: (state, action: Action<number>) => {
+      state.progress = action.payload;
     }
   }
 });
@@ -85,7 +90,8 @@ export const {
   decrementView,
   incrementView,
   updateView,
-  disableIntro
+  disableIntro,
+  setProgress
 } = glSlice.actions;
 
 export const selectGl = (state: AppState) => state.gl;

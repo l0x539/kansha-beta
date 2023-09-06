@@ -41,7 +41,9 @@ void main() {
 
   // vec3 transformedNormal = modelMatrix * normal;
   worldNormal = normalize(modelMatrix * vec4(normal, 0.0)).yxz;
+//   worldNormal.x += .1;
   eyeVector =  normalize(worldPos.yxz - cameraPosition);
+//   eyeVector.x += -.15;
 }
 `;
 

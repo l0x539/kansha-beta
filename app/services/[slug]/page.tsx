@@ -1,6 +1,5 @@
 'use client'
 import Service from '@/components/Service';
-import { useRouter } from 'next/navigation';
 
 export default function Discovery({ params: {slug} }: { params: { slug: 'discovery' | 'development' | 'team' | 'design' | 'services' } }) {
   

@@ -24,6 +24,9 @@ const Layout: FC<{
 
   useEffect(() => {
     setIsClient(true);
+    document.addEventListener('touchmove', function(e) {
+      e.preventDefault();
+    }, false);
   }, [])
 
   return (

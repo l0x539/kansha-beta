@@ -7,881 +7,29 @@ import { Html, Text, useFBO, useFont, useTexture } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { makeNoise4D } from "open-simplex-noise";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { disableIntro, selectGl } from "@/store/features/gl/glSlice";
+import { disableIntro, selectGl, setProgress } from "@/store/features/gl/glSlice";
 import { lerp } from "three/src/math/MathUtils";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useSpring } from "@react-spring/three";
 import { throttle } from "lodash";
 import NoisyBackground from "./NoisyBackground";
 import { getGPUTier } from "detect-gpu";
-import { COMING_SOON } from "@/utils/constants";
+import { COMING_SOON, pages, tracking } from "@/utils/constants";
+import { useWheel } from "@use-gesture/react";
 
 const Background: FC<{
   gpuTier: number;
 }> = ({
   gpuTier
 }) => {
-  const {pages} = useMemo(() => {
+  const {
+    indexedPages
+  } = useMemo(() => {
+    
+    const indexedPages = Object.keys(pages);
+    
     return {
-      pages: {
-        'default': {
-          bubble1Pos: new Vector3,
-          bubble1Rot: new Vector3(0, Math.PI),
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.03,
-          color: new Color(),
-          opacity: 0,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.17,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.04,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/': {
-          bubble1Pos: new Vector3(0, 0, 4),
-          bubble1Rot: new Vector3(),
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.03,
-          color: new Color(),
-          opacity: 0,
-          panPath: new CatmullRomCurve3( [
-            new Vector3(),
-            new Vector3( 0.2 ),
-            new Vector3(0.4),
-            new Vector3(0.6),
-            new Vector3( 1, 0, 2.1 ),
-            new Vector3( 0, 0, 3 )
-          ]),
-          panLookAt: new CatmullRomCurve3( [
-            new Vector3(0, 0, 100),
-            new Vector3(100, 0, -90),
-            new Vector3(100, 0, -100),
-            new Vector3(100, 0, 100),
-            new Vector3(100, 0, 200),
-            new Vector3(0, 0, 100)
-          ]),
-          noiseSpeed: 0.6,
-          noiseStrength: 0.1,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.15,
-            shininess: 2000.0,
-            fresnelPower: 7,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.04,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/services': {
-          bubble1Pos: new Vector3(0, 0, 4.2),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color(),
-          opacity: 1,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.02,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: -0.1,
-            shininess: 80.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1,
-            chromaticAberration: 0.5,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/services/discovery': {
-          bubble1Pos: new Vector3(-4.5, 0.5, -2),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-8.5, -2.6, -6),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color("#6f6f6f"),
-          opacity: 0,
-          noiseSpeed: 2,
-          noiseStrength: 0.05,
-          uniforms: {
-            light: {
-              x: -3,
-              y: -4,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 30.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 0.3,
-            chromaticAberration: 0.01,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/services/development': {
-          bubble1Pos: new Vector3(-2.5, 4, 0),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-10, -3.5, -6),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color("#6f6f6f"),
-          opacity: 0,
-          noiseSpeed: 2,
-          noiseStrength: 0.05,
-          uniforms: {
-            light: {
-              x: -3,
-              y: -4,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 30.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 0.3,
-            chromaticAberration: 0.01,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/services/team': {
-          bubble1Pos: new Vector3(4, 3, 2),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-4., -3.5, 0),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color("#6f6f6f"),
-          opacity: 0,
-          noiseSpeed: 2,
-          noiseStrength: 0.05,
-          uniforms: {
-            light: {
-              x: -3,
-              y: -4,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 30.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 0.3,
-            chromaticAberration: 0.01,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/services/design': {
-          bubble1Pos: new Vector3(5.5, 1.5, 0.3),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(7, -4, -8),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color("#6f6f6f"),
-          opacity: 0,
-          noiseSpeed: 2,
-          noiseStrength: 0.05,
-          uniforms: {
-            light: {
-              x: -3,
-              y: -4,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 30.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 0.3,
-            chromaticAberration: 0.01,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/services/services': {
-          bubble1Pos: new Vector3(4.5, -0.5, 2),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(8.5, 2.6, -4),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color("#6f6f6f"),
-          opacity: 0,
-          noiseSpeed: 2,
-          noiseStrength: 0.05,
-          uniforms: {
-            light: {
-              x: -3,
-              y: -4,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 30.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 0.3,
-            chromaticAberration: 0.01,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/services/our-method': {
-          bubble1Pos: new Vector3(4, 3, 2),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-4., -3.5, 0),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color("#6f6f6f"),
-          opacity: 0,
-          noiseSpeed: 2,
-          noiseStrength: 0.05,
-          tabs: {
-            bubble1Pos: new CatmullRomCurve3( [
-              new Vector3(4, 3, 2),
-              new Vector3( 4, -3, 2 ),
-              new Vector3(5.5, 3, 1),
-              new Vector3(-2.5, 4, 0),
-              new Vector3(-2, 3, 1.2),
-            ]),
-            bubble2Pos: new CatmullRomCurve3( [
-              new Vector3(-3., -3.5, 0),
-              new Vector3(-3., 3.5, 0),
-              new Vector3(5.5, -2.6, -3),
-              new Vector3(-8, -3.5, -6),
-              new Vector3(4., -3.5, 0),
-            ])
-          },
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 50.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.01,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 20.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 2.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 1.4,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          }
-        },
-        '/partners': {
-          bubble1Pos: new Vector3(0, -6),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color,
-          opacity: 0,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.17,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.04,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/contact': {
-          bubble1Pos: new Vector3(0, 0, 2.5),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color(),
-          opacity: 0,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.05,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 80.0,
-            fresnelPower: 15.0,
-            iorR: 10,
-            iorY: 10,
-            iorG: 10,
-            iorC: 10,
-            iorB: 10,
-            iorP: 3,
-            saturation: 1.03,
-            chromaticAberration: 0.15,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/contact/form': {
-          bubble1Pos: new Vector3,
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color(),
-          opacity: 0,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.17,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.04,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1,
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/contact/info': {
-          bubble1Pos: new Vector3(0, 0, 4.2),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color(),
-          opacity: 0,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.02,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: -0.1,
-            shininess: 150.0,
-            fresnelPower: 15.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1,
-            chromaticAberration: 0.9,
-            refraction: 0,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/portfolio/lazo': {
-          bubble1Pos: new Vector3(0, -6),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color,
-          opacity: 0,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.17,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.04,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        },
-        '/portfolio/cryptomate': {
-          bubble1Pos: new Vector3(0, -6),
-          bubble1Rot: new Vector3,
-          bubble2Pos: new Vector3(-20, -20, 20),
-          bubble2Rot: new Vector3,
-          speed: 0.1,
-          color: new Color,
-          opacity: 0,
-          noiseSpeed: 1.05,
-          noiseStrength: 0.17,
-          uniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 0.2,
-            shininess: 15.0,
-            fresnelPower: 8.0,
-            iorR: 1.15,
-            iorY: 1.16,
-            iorG: 1.18,
-            iorC: 1.22,
-            iorB: 1.22,
-            iorP: 1.22,
-            saturation: 1.03,
-            chromaticAberration: 0.04,
-            refraction: 0.22,
-            noiseX: 1,
-            noiseY: 1,
-            noiseZ: 1
-          },
-          dropUniforms: {
-            light: {
-              x: -1,
-              y: 1,
-              z: 1
-            },
-            diffuseness: 1,
-            shininess: 0,
-            fresnelPower: 8,
-            iorR: 0,
-            iorY: 0,
-            iorG: 0,
-            iorC: 0,
-            iorB: 0,
-            iorP: 0,
-            saturation: 0,
-            chromaticAberration: 0,
-            refraction: 0,
-            noiseX: 0,
-            noiseY: 0,
-            noiseZ: 0
-          }
-        }
-      }
+      indexedPages
     }
   }, []);
   const pathname = usePathname() as keyof typeof pages;
@@ -905,13 +53,17 @@ const Background: FC<{
     noiseSpeed: 0
   });
 
-  const {
-    progress,
-  } = useSpring({
-    progress: prevPosition.x === (pages[pathname]?.bubble1Pos.x ?? 0) && prevPosition.y === (pages[pathname]?.bubble1Pos.y?? 0) &&
-    prevPosition.z === (pages[pathname]?.bubble1Pos.z ?? 0) ? 0 : 1,
-    config: { mass: 1, tension: 280, friction: 100 }
-  });
+  const {progress: preProgress} = useAppSelector(selectGl);
+  const dispatch = useAppDispatch();
+
+  const setPreProgress = (value: number) => {
+    dispatch(setProgress(value));
+  }
+
+  // useFrame(() => {
+  //   console.log(progress.get(), currentPan, progress.isAnimating);
+  // })
+  
 
   useEffect(() => {
     const speed = pages[pathname]?.speed ?? pages['default'].speed;
@@ -924,12 +76,15 @@ const Background: FC<{
       noiseSpeed: lerp(prevState.noiseSpeed, pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed, speed),
       noiseStrength: lerp(prevState.noiseStrength, pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength, speed)
     }))
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, progress]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   const currentTab = (parseInt(`${searchParams.get('tab')}`) || 1) -1;
 
-  const mainBubblePos = pathname === '/services/our-method' ? pages['/services/our-method'].tabs.bubble1Pos.getPoint(currentTab/4) : pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos;
+  const mainBubblePos = pathname === '/services/our-method' 
+  ? pages['/services/our-method'].tabs.bubble1Pos.getPoint(currentTab/4) 
+  : pages[pathname]?.bubble1Pos ?? pages['default'].bubble1Pos;
+
   const mainBubbleRot = pages[pathname]?.bubble1Rot ?? pages['default'].bubble1Rot
 
   const mainBubble2Pos =  pathname === '/services/our-method' ? pages['/services/our-method'].tabs.bubble2Pos.getPoint(currentTab/4) : pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos
@@ -956,13 +111,13 @@ const Background: FC<{
       {COMING_SOON && !searchParams.get('demo') ? <ComingSoonText /> : <IntroText />}
       <LogoBg opacity={opacity} color={color} speed={speed} />
       <group>
-        <Bubble gpuTier={gpuTier} index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
+        <Bubble preProgress={preProgress} setPreProgress={setPreProgress} tracking={tracking} indexedPages={indexedPages} progress={preProgress} gpuTier={gpuTier} index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <group>
-        <Bubble gpuTier={gpuTier} index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
+        <Bubble preProgress={preProgress} setPreProgress={setPreProgress} tracking={tracking} indexedPages={indexedPages} progress={preProgress} gpuTier={gpuTier} index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
       </group>
       <DropEffect speed={speed} uniforms={pages[pathname]?.dropUniforms ?? pages['default'].dropUniforms} />
-      <NoisyBackground getProgress={() => progress.get()} />
+      <NoisyBackground getProgress={() => 0} />
     </>
   );
 };
@@ -996,22 +151,22 @@ const DropEffect: FC<{
         uTexture: {
           value: null
         },
-        uIorR: { value: 1.0 },
-        uIorY: { value: 1.0 },
-        uIorG: { value: 1.0 },
-        uIorC: { value: 1.0 },
-        uIorB: { value: 1.0 },
-        uIorP: { value: 1.0 },
+        uIorR: { value: 1.15 },
+        uIorY: { value: 1.16 },
+        uIorG: { value: 1.18 },
+        uIorC: { value: 2.22 },
+        uIorB: { value: 1.22 },
+        uIorP: { value: 1.22 },
         uRefractPower: {
-          value: 0.0
+          value: 0.22
         },
         uChromaticAberration: {
-          value: 0.0
+          value: 1.4
         },
         uSaturation: { value: 0.0 },
         uShininess: { value: 40.0 },
         uDiffuseness: { value: 0.2 },
-        uFresnelPower: { value: 8.0 },
+        uFresnelPower: { value: 20.0 },
         uLight: {
           value: new Vector3(-1.0, 1.0, 1.0)
         },
@@ -1049,6 +204,11 @@ const DropEffect: FC<{
   useFrame(({gl, scene, camera, clock}) => {
     if (!mesh.current) return;
 
+    const obj0 = scene.getObjectByName('bubble0');
+    const obj1 = scene.getObjectByName('bubble1');
+    obj0 && (obj0.visible = false);
+    obj1 && (obj1.visible = false);
+
     mesh.current.material.uniforms.uIorR.value = iorR;
     mesh.current.material.uniforms.uIorY.value = iorY;
     mesh.current.material.uniforms.uIorG.value = iorG;
@@ -1073,6 +233,8 @@ const DropEffect: FC<{
     gl.setRenderTarget(mainRenderTarget);
     gl.render(scene, camera);
 
+    obj0 && (obj0.visible = true);
+    obj1 && (obj1.visible = true);
     mesh.current.visible = true;
 
     mesh.current.material.uniforms.uTexture.value = mainRenderTarget.texture;
@@ -1088,19 +250,24 @@ const DropEffect: FC<{
   });
 
   return (
-    <group position={[-7.5, 2, 0]} visible={chromaticAberration > 0}>
+    <group position={[0., 0., -10]} scale={1.6} visible={chromaticAberration > 0}>
       <group ref={dotRef} visible={chromaticAberration > 0}>
-        <Text position={[.5, 1, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 0.8:0}>
+        <Text position={[-11, 4, -.1]} anchorX="center" anchorY="middle" fontSize={13} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 0.8:0}>
+          .
+        </Text>
+      </group>
+      <group>
+        <Text position={[-11.5, -1.5, -.1]} anchorX="center" anchorY="middle" fontSize={13} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 0.8:0}>
           .
         </Text>
       </group>
       <group ref={dotRef}>
-        <Text position={[-0.5, -2.5, -.1]} anchorX="center" anchorY="middle" fontSize={10} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 0.8:0}>
+        <Text position={[8, 3, -.1]} anchorX="center" anchorY="middle" fontSize={40} letterSpacing={-0.025} color="white" fillOpacity={chromaticAberration > 0 ? 0.8:0}>
           .
         </Text>
       </group>
-      <mesh ref={mesh} position={[0, -2.9, 0]} visible={chromaticAberration > 0}>
-        <planeGeometry args={[2.3, 8]} />
+      <mesh ref={mesh} position={[0, 0, 0]} visible={chromaticAberration > 0}>
+        <planeGeometry args={[30, 30]} />
         <shaderMaterial fragmentShader={dropFragmentShader} vertexShader={dropVertexShader} 
         key={uuidv4()}
         uniforms={{
@@ -1244,6 +411,9 @@ const IntroTextOld = () => {
 };
 
 const Bubble: FC<{
+  tracking: typeof tracking;
+  indexedPages: string[];
+  progress: number;
   position: Vector3;
   speed: number;
   rotation: Vector3;
@@ -1273,12 +443,34 @@ const Bubble: FC<{
     noiseZ: number;
   };
   gpuTier: number;
-}> = ({index, position, rotation, speed, uniforms, noiseSpeed, noiseStrength, gpuTier}) => {
+  preProgress: number;
+  setPreProgress: (value: number) => void;
+}> = ({
+  index,
+  position,
+  rotation,
+  speed,
+  uniforms,
+  noiseSpeed,
+  noiseStrength,
+  gpuTier,
+  indexedPages,
+  progress,
+  tracking,
+  preProgress,
+  setPreProgress
+}) => {
   const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
   const mainRenderTarget = useFBO();
   const backRenderTarget = useFBO();
 
   const [excite, setExcite] = useState(false);
+  const {
+    pp,
+  } = useSpring({
+    pp: progress,
+    config: { mass: 1, tension: 280, friction: 100 }
+  });
 
   const {
     light,
@@ -1358,6 +550,12 @@ const Bubble: FC<{
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const pathname = usePathname() as keyof typeof tracking;
+  const searchParams = useSearchParams();0
+  const currentPan = (parseInt(`${searchParams.get('pan')}`) || 0) as 0 | 1 | 2 | 3;
+
+
+
   useFrame(({gl, scene, camera, clock}) => {
     if (!mesh.current) return;
 
@@ -1403,6 +601,17 @@ const Bubble: FC<{
     
     mesh.current.material.uniforms.uRefractPower.value = refraction;
 
+    // if (pp.isAnimating) {
+    //   if (pathname === '/') {
+    //     const currPos = index === '0' ? pages[pathname].panPath.getPoint(currentPan/4) : pages[pathname].bubble2Pos;
+    //     if (currentPan < 4) {
+    //       const nextPos = index === '0' ? pages[pathname].panPath.getPoint((currentPan+1)/4) : pages[pathname].bubble2Pos;
+          
+    //       const newPos = currPos.clone().lerp(nextPos, pp.get())
+    //       mesh.current.position.set(newPos.x, newPos.y, newPos.z)
+    //     }
+    //   }
+    // } else {
     mesh.current.position.lerp(position, speed);
 
     const newRot = v3.set(mesh.current.rotation.x, mesh.current.rotation.y,mesh.current.rotation.z);
