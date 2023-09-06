@@ -5,3 +5,12 @@ export default function Home() {
     <HomePage />
   )
 };
+
+export function generateStaticParams() {
+  return [
+    { slug: 'services' },
+    { slug: 'partners' },
+    { slug: 'culture' },
+    { slug: 'contact' },
+  ]
+}
