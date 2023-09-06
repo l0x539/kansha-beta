@@ -1,6 +1,6 @@
 import { CatmullRomCurve3, Color, Vector3 } from "three";
 
-export const COMING_SOON = true;
+export const COMING_SOON = process.env.COMING_SOON;
 
 export const pages = {
   'default': {
