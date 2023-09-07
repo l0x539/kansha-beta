@@ -2,6 +2,14 @@ import Image from "next/image";
 import { Footer } from "./PartnersPage";
 import FooterContent from "../FooterContent";
 
+import { Space_Grotesk } from 'next/font/google'
+ 
+const SpaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-space-grotesk',
+})
+ 
 const PortfolioCryptoMate = () => {
   return (
     <div className="relative">

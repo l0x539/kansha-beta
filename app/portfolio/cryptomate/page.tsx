@@ -1,6 +1,6 @@
 import PortfolioCryptoMate from "@/components/gui/PortfolioCryptoMate";
 
-export default function Lazo() {
+export default function CryptoMate() {
   return (
     <PortfolioCryptoMate />
   );

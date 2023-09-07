@@ -6,7 +6,7 @@ import Link from "next/link";
 import { FC, ReactNode, useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { COMING_SOON } from "@/utils/constants";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
 const Menu = () => {
   return (<>
@@ -17,6 +17,7 @@ const Menu = () => {
 
 const MenuDesktop = () => {
   const searchParams  = useSearchParams();
+  const pathname  = usePathname();
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
@@ -30,22 +31,22 @@ const MenuDesktop = () => {
 
   return (<ul className="flex text-white">
     <li>
-      <HeaderLink href={searchParams.get('demo') && COMING_SOON ? ('/services?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/services"}>
+      <HeaderLink boldHover={searchParams.has('boldhover')} active={pathname.startsWith('/services')} href={searchParams.get('demo') && COMING_SOON ? ('/services?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/services"}>
         Services
       </HeaderLink>
     </li>
     <li className="ml-14">
-      <HeaderLink href={searchParams.get('demo') && COMING_SOON ? ('/culture?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/culture"}>
+      <HeaderLink boldHover={searchParams.has('boldhover')} active={pathname.startsWith('/culture')} href={searchParams.get('demo') && COMING_SOON ? ('/culture?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/culture"}>
         Culture
       </HeaderLink>
     </li>
     <li className="ml-14">
-      <HeaderLink href={searchParams.get('demo') && COMING_SOON ? ('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/partners"}>
+      <HeaderLink boldHover={searchParams.has('boldhover')} active={pathname.startsWith('/partners')} href={searchParams.get('demo') && COMING_SOON ? ('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/partners"}>
         Partners
       </HeaderLink>
     </li>
     <li className="ml-14">
-      <HeaderLink href={searchParams.get('demo') && COMING_SOON ? ('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/contact"}>
+      <HeaderLink boldHover={searchParams.has('boldhover')} active={pathname.startsWith('/contact')} href={searchParams.get('demo') && COMING_SOON ? ('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/contact"}>
         Contact
       </HeaderLink>
     </li>
@@ -56,12 +57,14 @@ const HeaderLink: FC<{
   href: string;
   children: ReactNode;
   active?: boolean;
+  boldHover?: boolean;
 }> = ({
   href,
   children,
-  active = false
+  active = false,
+  boldHover = false
 }) => {
-  return (<Link className={`uppercase ${active ? 'font-bold' : ''} text-sm hover:font-bold transition-all`} href={href}>{children}</Link>);
+  return (<Link className={`uppercase ${boldHover ? 'opacity-100' : 'opacity-50'} ${boldHover? (active ? 'font-bold' : 'font-normal') : active ? 'opacity-100' : 'opacity-50'} text-sm ${boldHover ? 'hover:font-bold' : 'hover:opacity-100'} transition-all`} href={href}>{children}</Link>);
 }
 
 const MenuMobile = () => {

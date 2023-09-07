@@ -17,11 +17,13 @@ module.exports = {
         'soy-rada': "url('/assets/images/soyrada.png')"
       },
       fontFamily: {
-        main: ['Helvetica', 'Raleway'],
-        flink: ['Inter', 'Helvetica', 'Raleway'],
+        main: ['var(--font-helvetica)', 'Helvetica', 'Raleway'],
+        flink: ['var(--font-inter)', 'Inter', 'Helvetica', 'Raleway'],
+        inter: ['var(--font-inter)', 'Inter', 'Helvetica', 'Raleway'],
         gothic: ['Gothic A1', 'Helvetica', 'Raleway'],
-        cryptomate: ['Space Grotesk', 'Helvetica', 'Raleway'],
-        jost: ['Jost', 'Helvetica', 'Raleway'],
+        cryptomate: ['var(--font-space-grotesk)', 'Space Grotesk', 'Helvetica', 'Raleway'],
+        jost: ['var(--font-jost)', 'Jost', 'Helvetica', 'Raleway'],
+        soyrada: ['var(--font-montserrat)', 'Montserrat', 'Jost', 'Helvetica', 'Raleway'],
       },
       keyframes: {
         float: {
