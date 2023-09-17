@@ -47,12 +47,7 @@ input:-webkit-autofill:active{
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: black;
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
   scrollbar-width: none;
 }

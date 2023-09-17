@@ -458,7 +458,7 @@ const Bubble: FC<{
   // indexedPages,
   // progress,
   // tracking,
-  // preProgress,
+  preProgress,
   // setPreProgress
 }) => {
   const mesh = useRef<Mesh<SphereGeometry, RawShaderMaterial>>(null);
@@ -466,12 +466,12 @@ const Bubble: FC<{
   const backRenderTarget = useFBO();
 
   const [excite, setExcite] = useState(false);
-  // const {
-  //   pp,
-  // } = useSpring({
-  //   pp: progress,
-  //   config: { mass: 1, tension: 280, friction: 100 }
-  // });
+  const {
+    progress,
+  } = useSpring({
+    progress: preProgress,
+    config: { mass: 1, tension: 280, friction: 100 }
+  });
 
   const {
     light,
@@ -542,6 +542,20 @@ const Bubble: FC<{
     []
   );
 
+  useEffect(() => {
+    const handleResize = () => {
+      defaultUniforms.winResolution = {
+        value: new Vector2(
+          window.innerWidth,
+          window.innerHeight
+        ).multiplyScalar(Math.min(window.devicePixelRatio, 2))
+      }
+    
+    }
+
+    window.addEventListener('resize', handleResize)
+  }, [defaultUniforms])
+
   useLayoutEffect(() => {
     if (mesh.current) {
       for (let i = 0; i < mesh.current.geometry.attributes.position.count; i++){
@@ -559,6 +573,8 @@ const Bubble: FC<{
 
 
   useFrame(({gl, scene, camera, clock}) => {
+    console.log(progress.get());
+    
     if (!mesh.current) return;
 
     const t = clock.getElapsedTime() / 1.;
