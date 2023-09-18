@@ -110,12 +110,12 @@ const NavigationControls: FC<{
         
         if (currentPan === 4) {
           if (searchParams.get('demo')) {
-            router.replace('/services?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+            router.push('/services?' + createQueryString('demo', `${searchParams.get('demo')}`), {
               scroll: true
             })
           }
           else {
-            router.replace('/services', {
+            router.push('/services', {
               scroll: true
             });
           }
@@ -124,19 +124,19 @@ const NavigationControls: FC<{
         else {
           const nextP = currentPan+1 as 0|1|2|3|4;
           setPreProgress(tracking['/'].pans[nextP].min)
-          router.replace('/?' + createQueryString('pan', `${currentPan+1}`), {
+          router.push('/?' + createQueryString('pan', `${currentPan+1}`), {
             scroll: true
           });
         }
         break;
       case '/services':
         if (searchParams.get('demo')) {
-          router.replace('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/discovery', {
+          router.push('/services/discovery', {
             scroll: true
           });
         }
@@ -144,12 +144,12 @@ const NavigationControls: FC<{
         break;
       case '/services/discovery':
         if (searchParams.get('demo')) {
-          router.replace('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/development', {
+          router.push('/services/development', {
             scroll: true
           });
         }
@@ -157,12 +157,12 @@ const NavigationControls: FC<{
         break;
       case '/services/development':
         if (searchParams.get('demo')) {
-          router.replace('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/team', {
+          router.push('/services/team', {
             scroll: true
           });
         }
@@ -170,12 +170,12 @@ const NavigationControls: FC<{
         break;
       case '/services/team':
         if (searchParams.get('demo')) {
-          router.replace('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/design', {
+          router.push('/services/design', {
             scroll: true
           });
         }
@@ -183,12 +183,12 @@ const NavigationControls: FC<{
         break;
       case '/services/design':
         if (searchParams.get('demo')) {
-          router.replace('/services/services?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/services?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/services', {
+          router.push('/services/services', {
             scroll: true
           });
         }
@@ -196,24 +196,24 @@ const NavigationControls: FC<{
         break;
       case '/services/services':
         if (searchParams.get('demo')) {
-          router.replace('/services/our-method?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/our-method?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/our-method', {
+          router.push('/services/our-method', {
             scroll: true
           });
         }
         break;
       case '/contact':
         if (searchParams.get('demo')) {
-          router.replace('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/contact/form', {
+          router.push('/contact/form', {
             scroll: true
           });
         }
@@ -221,9 +221,9 @@ const NavigationControls: FC<{
         break;
       // case '/contact/form':
       //   if (searchParams.get('demo'))
-      //     router.replace('/contact/info?' + createQueryString('demo', `${searchParams.get('demo')}`))
+      //     router.push('/contact/info?' + createQueryString('demo', `${searchParams.get('demo')}`))
       //   else
-      //     router.replace('/contact/info');
+      //     router.push('/contact/info');
       //   break;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -238,7 +238,7 @@ const NavigationControls: FC<{
         const currentPan = parseInt(`${searchParams.get('pan') || 0}`) as 0|1|2|3|4;
         if (currentPan > 0) {
           const pan = (currentPan-1) as 0|1|2|3|4;
-          router.replace('/?' + createQueryString('pan', `${pan}`), {
+          router.push('/?' + createQueryString('pan', `${pan}`), {
             scroll: true
           });
           setPreProgress(tracking['/'].pans[pan].min)
@@ -247,18 +247,18 @@ const NavigationControls: FC<{
         }
         break;
       case '/services':
-        router.replace('/?' + createQueryString('pan', `${4}`), {
+        router.push('/?' + createQueryString('pan', `${4}`), {
           scroll: true
         });
         break;
       case '/services/discovery':
         if (searchParams.get('demo')) {
-          router.replace('/services?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services', {
+          router.push('/services', {
             scroll: true
           });
         }
@@ -266,12 +266,12 @@ const NavigationControls: FC<{
         break;
       case '/services/development':
         if (searchParams.get('demo')) {
-          router.replace('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/discovery', {
+          router.push('/services/discovery', {
             scroll: true
           });
         }
@@ -279,12 +279,12 @@ const NavigationControls: FC<{
         break;
       case '/services/team':
         if (searchParams.get('demo')) {
-          router.replace('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/development', {
+          router.push('/services/development', {
             scroll: true
           });
         }
@@ -292,12 +292,12 @@ const NavigationControls: FC<{
         break;
       case '/services/design':
         if (searchParams.get('demo')) {
-          router.replace('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/team', {
+          router.push('/services/team', {
             scroll: true
           });
         }
@@ -305,12 +305,12 @@ const NavigationControls: FC<{
         break;
       case '/services/services':
         if (searchParams.get('demo')) {
-          router.replace('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/services/design', {
+          router.push('/services/design', {
             scroll: true
           });
         }
@@ -318,12 +318,12 @@ const NavigationControls: FC<{
         break;
       case '/contact':
         if (searchParams.get('demo')) {
-          router.replace('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+          router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`), {
             scroll: true
           })
         }
         else {
-          router.replace('/partners', {
+          router.push('/partners', {
             scroll: true
           });
         }
@@ -353,9 +353,9 @@ const NavigationControls: FC<{
   //     if (y === 1 && intentional)
   //       if (pathname == '/partners') {
   //         if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
-  //           router.replace('/contact');
+  //           router.push('/contact');
   //       } else if (pathname === '/contact')
-  //         router.replace('/contact/form');
+  //         router.push('/contact/form');
   //   })
   // });
 
@@ -383,20 +383,20 @@ const NavigationControls: FC<{
         else if (pathname == '/partners') {
           if ((window.innerHeight + Math.round(window.scrollY)) >= (mainRef.current?.offsetHeight??0))
             if (searchParams.get('demo'))
-              router.replace('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+              router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`), {
                 scroll: true
               })
             else
-              router.replace('/contact', {
+              router.push('/contact', {
                 scroll: true
               });
         } else if (pathname === '/contact')
           if (searchParams.get('demo'))
-            router.replace('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+            router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`), {
               scroll: true
             })
           else
-            router.replace('/contact/form', {
+            router.push('/contact/form', {
               scroll: true
             });
       } else if (y === -1) {

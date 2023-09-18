@@ -56,7 +56,7 @@ const OurMethodPage = () => {
 
   const setActiveTab = (tab: string) => {
     const tabIndex = tabs.findIndex(t => t === tab);
-    router.replace('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`), {
+    router.push('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`), {
       scroll: true
     });
   }
@@ -71,11 +71,11 @@ const OurMethodPage = () => {
       if (y === 1 && intentional) {
         if (tabIndex + 1 === tabs.length)
           if (searchParams.get('demo'))
-            router.replace('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+            router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`), {
               scroll: true
             })
           else
-            router.replace('/partners', {
+            router.push('/partners', {
               scroll: true
             });
         else {

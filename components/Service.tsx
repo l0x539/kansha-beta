@@ -53,7 +53,9 @@ const Carousel= () => {
   )
 
   const onNextButton = () => {
-    router.replace(`/services/${Object.keys(SERVICES)[(defaultSelected + 1) % 5] + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
+    router.push(`/services/${Object.keys(SERVICES)[(defaultSelected + 1) % 5] + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`, {
+      scroll: true
+    })
   }
 
   return (<>
@@ -93,7 +95,9 @@ const Carousel= () => {
       <ul className="relative -bottom-72 inline-flex gap-3.5">
         {[0, 1, 2, 3, 4].map((number) => (
           <SelectButton onClick={() => {
-            router.replace(`/services/${Object.keys(SERVICES)[number] + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`)
+            router.push(`/services/${Object.keys(SERVICES)[number] + (searchParams.get('demo') && COMING_SOON ? ('?' + createQueryString('demo', `${searchParams.get('demo')}`)) : '')}`, {
+              scroll: true
+            })
           }} key={number} active={number === defaultSelected}>{number+1}</SelectButton>
         ))}
         <li onClick={onNextButton} className="flex cursor-pointer items-center rounded-full">
