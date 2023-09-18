@@ -65,6 +65,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+
   return (
     <html lang="en" className={`${montserrat.variable} ${spaceGrotesk.variable} ${jost.variable} ${helvetica.variable} ${inter.variable}`}>
       <body>
