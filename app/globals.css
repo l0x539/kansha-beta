@@ -47,7 +47,7 @@ input:-webkit-autofill:active{
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: black;
+  background: white;
   -ms-overflow-style: none; /* for Internet Explorer, Edge */
   scrollbar-width: none;
 }

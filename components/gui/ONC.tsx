@@ -102,59 +102,59 @@ const NavigationControls: FC<{
         const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
         if (currentPan === 4)
           if (searchParams.get('demo'))
-            router.push('/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
+            router.replace('/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
           else
-            router.push('/services');
+            router.replace('/services');
         else
-          router.push('/?' + createQueryString('pan', `${currentPan+1}`));
+          router.replace('/?' + createQueryString('pan', `${currentPan+1}`));
         break;
       case '/services':
         if (searchParams.get('demo'))
-            router.push('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`))
+            router.replace('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/discovery');
+          router.replace('/services/discovery');
         break;
       case '/services/discovery':
         if (searchParams.get('demo'))
-            router.push('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`))
+            router.replace('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/development');
+          router.replace('/services/development');
         break;
       case '/services/development':
         if (searchParams.get('demo'))
-          router.push('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/team');
+          router.replace('/services/team');
         break;
       case '/services/team':
         if (searchParams.get('demo'))
-          router.push('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/design');
+          router.replace('/services/design');
         break;
       case '/services/design':
         if (searchParams.get('demo'))
-          router.push('/services/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/services');
+          router.replace('/services/services');
         break;
       case '/services/services':
         if (searchParams.get('demo'))
-          router.push('/services/our-method?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/our-method?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/our-method');
+          router.replace('/services/our-method');
         break;
       case '/contact':
         if (searchParams.get('demo'))
-          router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/form');
+          router.replace('/services/form');
         break;
       case '/contact/form':
         if (searchParams.get('demo'))
-          router.push('/contact/info?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/contact/info?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/info');
+          router.replace('/services/info');
         break;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -165,46 +165,46 @@ const NavigationControls: FC<{
       case '/':
         const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
         if (currentPan !== 0)
-          router.push('/?' + createQueryString('pan', `${currentPan-1}`));
+          router.replace('/?' + createQueryString('pan', `${currentPan-1}`));
         break;
       case '/services':
-        router.push('/?' + createQueryString('pan', `${4}`));
+        router.replace('/?' + createQueryString('pan', `${4}`));
         break;
       case '/services/discovery':
         if (searchParams.get('demo'))
-          router.push('/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services');
+          router.replace('/services');
         break;
       case '/services/development':
         if (searchParams.get('demo'))
-          router.push('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/discovery?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/discovery');
+          router.replace('/services/discovery');
         break;
       case '/services/team':
         if (searchParams.get('demo'))
-          router.push('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/development?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/development');
+          router.replace('/services/development');
         break;
       case '/services/design':
         if (searchParams.get('demo'))
-          router.push('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/team?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/team');
+          router.replace('/services/team');
         break;
       case '/services/services':
         if (searchParams.get('demo'))
-          router.push('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/services/design?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/services/design');
+          router.replace('/services/design');
         break;
       case '/contact':
         if (searchParams.get('demo'))
-          router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`))
+          router.replace('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`))
         else
-          router.push('/partners');
+          router.replace('/partners');
         break;
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -228,9 +228,9 @@ const NavigationControls: FC<{
   //     if (y === 1 && intentional)
   //       if (pathname == '/partners') {
   //         if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight)
-  //           router.push('/contact');
+  //           router.replace('/contact');
   //       } else if (pathname === '/contact')
-  //         router.push('/contact/form');
+  //         router.replace('/contact/form');
   //   })
   // });
 
@@ -256,14 +256,14 @@ const NavigationControls: FC<{
           else if (pathname == '/partners') {
             if ((window.innerHeight + Math.round(window.scrollY)) >= (mainRef.current?.offsetHeight??0))
               if (searchParams.get('demo'))
-                router.push('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
+                router.replace('/contact?' + createQueryString('demo', `${searchParams.get('demo')}`))
               else
-                router.push('/contact');
+                router.replace('/contact');
           } else if (pathname === '/contact')
             if (searchParams.get('demo'))
-              router.push('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
+              router.replace('/contact/form?' + createQueryString('demo', `${searchParams.get('demo')}`))
             else
-              router.push('/contact/form');
+              router.replace('/contact/form');
         } else if (y === -1) {
           throttleDecScroll();
         }

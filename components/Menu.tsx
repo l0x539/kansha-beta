@@ -7,6 +7,7 @@ import { FC, ReactNode, useCallback, useState } from "react";
 import { motion } from "framer-motion";
 import { COMING_SOON } from "@/utils/constants";
 import { usePathname, useSearchParams } from "next/navigation";
+import { setProgress } from "@/store/features/gl/glSlice";
 
 const Menu = () => {
   return (<>
@@ -29,9 +30,13 @@ const MenuDesktop = () => {
     [searchParams]
   )
 
+  const dispatch = useAppDispatch();
+
   return (<ul className="flex text-white">
     <li>
-      <HeaderLink boldHover={searchParams.has('boldhover')} active={pathname.startsWith('/services')} href={searchParams.get('demo') && COMING_SOON ? ('/services?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/services"}>
+      <HeaderLink boldHover={searchParams.has('boldhover')} active={pathname.startsWith('/services')} onClick={() => {
+        dispatch(setProgress(5));
+      }} href={searchParams.get('demo') && COMING_SOON ? ('/services?' + createQueryString('demo', `${searchParams.get('demo')}`)) : "/services"}>
         Services
       </HeaderLink>
     </li>
@@ -58,13 +63,15 @@ const HeaderLink: FC<{
   children: ReactNode;
   active?: boolean;
   boldHover?: boolean;
+  onClick?: () => void;
 }> = ({
   href,
   children,
   active = false,
-  boldHover = false
+  boldHover = false,
+  onClick = () => {}
 }) => {
-  return (<Link className={`uppercase ${boldHover ? 'opacity-100' : 'opacity-50'} ${boldHover? (active ? 'font-bold' : 'font-normal') : active ? 'opacity-100' : 'opacity-50'} text-sm ${boldHover ? 'hover:font-bold' : 'hover:opacity-100'} transition-all`} href={href}>{children}</Link>);
+  return (<Link onClick={onClick} className={`uppercase ${boldHover ? 'opacity-100' : 'opacity-50'} ${boldHover? (active ? 'font-bold' : 'font-normal') : active ? 'opacity-100' : 'opacity-50'} text-sm ${boldHover ? 'hover:font-bold' : 'hover:opacity-100'} transition-all`} href={href}>{children}</Link>);
 }
 
 const MenuMobile = () => {

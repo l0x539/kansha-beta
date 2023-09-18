@@ -2,6 +2,7 @@
 import Service from '@/components/Service';
 
 export default function Discovery({ params: {slug} }: { params: { slug: 'discovery' | 'development' | 'team' | 'design' | 'services' } }) {
+  console.log(slug);
   
   return (
     <Service />

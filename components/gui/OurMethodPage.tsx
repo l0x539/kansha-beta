@@ -56,7 +56,9 @@ const OurMethodPage = () => {
 
   const setActiveTab = (tab: string) => {
     const tabIndex = tabs.findIndex(t => t === tab);
-    router.push('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`));
+    router.replace('/services/our-method?' + createQueryString('tab', `${tabIndex+1}`), {
+      scroll: true
+    });
   }
   
   const bind = useWheel(({
@@ -69,9 +71,13 @@ const OurMethodPage = () => {
       if (y === 1 && intentional) {
         if (tabIndex + 1 === tabs.length)
           if (searchParams.get('demo'))
-            router.push('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`))
+            router.replace('/partners?' + createQueryString('demo', `${searchParams.get('demo')}`), {
+              scroll: true
+            })
           else
-            router.push('/partners');
+            router.replace('/partners', {
+              scroll: true
+            });
         else {
           setActiveTab(tabs[tabIndex+1]);
         }

@@ -3,14 +3,14 @@ import { v4 as uuidv4 } from "uuid";
 import { BackSide, CatmullRomCurve3, Color, FrontSide, Group, InstancedMesh, Mesh, Object3D, PlaneGeometry, RawShaderMaterial, ShaderMaterial, SphereGeometry, Sprite, Vector2, Vector3 } from "three";
 import {dropVertexShader, sphereVertexShader} from "@/utils/shaders/vertexShaders";
 import {dropFragmentShader, sphereFragmentShader} from "@/utils/shaders/fragmentShaders";
-import { Html, Text, useFBO, useFont, useTexture } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { Html, Scroll, ScrollControls, Text, useFBO, useFont, useTexture } from "@react-three/drei";
+import { useFrame, useThree } from "@react-three/fiber";
 import { makeNoise4D } from "open-simplex-noise";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { disableIntro, selectGl, setProgress } from "@/store/features/gl/glSlice";
 import { lerp } from "three/src/math/MathUtils";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
-import { useSpring } from "@react-spring/three";
+import { useSpring, config } from "@react-spring/three";
 import { throttle } from "lodash";
 import NoisyBackground from "./NoisyBackground";
 import { getGPUTier } from "detect-gpu";
@@ -61,8 +61,17 @@ const Background: FC<{
   }
 
   // useFrame(() => {
-  //   console.log(progress.get(), currentPan, progress.isAnimating);
+  //   console.log('=>', preProgress, currentPan);
   // })
+
+  useLayoutEffect(() => {
+    if (pathname === '/') {
+      setPreProgress(tracking[pathname].pans[currentPan2 as 0|1|2|3|4].min)
+    } else {
+      const pn = (pathname) as Exclude<keyof typeof tracking, '/'>;
+      setPreProgress(tracking[pn]? tracking[pn][0].min : tracking['default'][0].min)
+    }
+  }, []);
   
 
   useEffect(() => {
@@ -89,33 +98,34 @@ const Background: FC<{
 
   const mainBubble2Pos =  pathname === '/services/our-method' ? pages['/services/our-method'].tabs.bubble2Pos.getPoint(currentTab/4) : pages[pathname]?.bubble2Pos ?? pages['default'].bubble2Pos
 
-  const currentPan = parseInt(`${searchParams.get('pan')}`) || 0;
+  const currentPan2 = parseInt(`${searchParams.get('pan')}`) || 0;
 
   const currentPos = pathname === '/' ? 
-  pages['/']?.panPath.getPoint(currentPan/4) : mainBubblePos;
+  pages['/']?.panPath.getPoint(currentPan2/4) : mainBubblePos;
   
   const currentLookAt = pathname === '/' ? 
-  pages['/']?.panLookAt.getPoint(currentPan/4) : mainBubblePos;
+  pages['/']?.panLookAt.getPoint(currentPan2/4) : mainBubblePos;
 
   const newObj = new Object3D();
   
   newObj.position.set(currentPos.x, currentPos.y, currentPos.z);
   newObj.lookAt(currentLookAt);
 
-  const currentRot = new Vector3();
-  currentRot.set(mainBubbleRot.x, newObj.rotation.y, mainBubbleRot.z);
-  
+  const currentRot = new Vector3(mainBubbleRot.x, newObj.rotation.y, mainBubbleRot.z);
+    
   return (
     <>
       <color attach="background" args={["black"]} />
-      {COMING_SOON && !searchParams.get('demo') ? <ComingSoonText /> : <IntroText />}
-      <LogoBg opacity={opacity} color={color} speed={speed} />
-      <group>
-        <Bubble preProgress={preProgress} setPreProgress={setPreProgress} tracking={tracking} indexedPages={indexedPages} progress={preProgress} gpuTier={gpuTier} index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
-      </group>
-      <group>
-        <Bubble preProgress={preProgress} setPreProgress={setPreProgress} tracking={tracking} indexedPages={indexedPages} progress={preProgress} gpuTier={gpuTier} index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
-      </group>
+      <ScrollControls infinite horizontal damping={4} pages={4} distance={1}>
+        {COMING_SOON && !searchParams.get('demo') ? <ComingSoonText /> : <IntroText />}
+        <LogoBg opacity={opacity} color={color} speed={speed} />
+        <group>
+          <Bubble preProgress={preProgress} setPreProgress={setPreProgress} tracking={tracking} indexedPages={indexedPages} progress={preProgress} gpuTier={gpuTier} index="0" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={currentPos} rotation={currentRot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
+        </group>
+        <group>
+          <Bubble preProgress={preProgress} setPreProgress={setPreProgress} tracking={tracking} indexedPages={indexedPages} progress={preProgress} gpuTier={gpuTier} index="1" uniforms={pages[pathname]?.uniforms ?? pages['default'].uniforms} position={mainBubble2Pos} rotation={pages[pathname]?.bubble2Rot ?? pages['default'].bubble2Rot} speed={speed} noiseSpeed={pages[pathname]?.noiseSpeed ?? pages['default'].noiseSpeed} noiseStrength={pages[pathname]?.noiseStrength ?? pages['default'].noiseStrength} />
+        </group>
+      </ScrollControls>
       <DropEffect speed={speed} uniforms={pages[pathname]?.dropUniforms ?? pages['default'].dropUniforms} />
       <NoisyBackground getProgress={() => 0} />
     </>
@@ -337,30 +347,47 @@ const IntroText = () => {
   const pathname = usePathname();
   const params = useSearchParams();  
   const ref = useRef<Group>(null);
+  const {progress: preProgress} = useAppSelector(selectGl);
+  const { width } = useThree(({viewport}) => viewport)
 
-  const TEXTS = useMemo(() => [
-    "Lorem\nContent Lab\n& Ipsum dolor\n/Sit amet\n2022—2023",
-    "We help \nfounders \nmake profits \nthat match \ntheir passions.",
-    "We help \nfounders \nmake profits \nthat match \ntheir passions.",
-    "We empowering \ncompanies to \nembrace \ndisruptive ideas",
-    "We reduce the gap \nfor innovation and \nguide our clients \ntowards sustainable \nsuccess",
-  ], []);
+  const {
+    TEXTS,
+    defaultPos
+  } = useMemo(() => {
+    return {
+      defaultPos: new Vector3(-width*2, 0, 0),
+      TEXTS: [
+      "Lorem\nContent Lab\n& Ipsum dolor\n/Sit amet\n2022—2023",
+      "We help \nfounders \nmake profits \nthat match \ntheir passions.",
+      "We empowering \ncompanies to \nembrace \ndisruptive ideas",
+      "We reduce the gap \nfor innovation and \nguide our clients \ntowards sustainable \nsuccess",
+    ]}
+  }, []);
 
   const text = useRef<any>(null);
+  const {
+    progress,
+  } = useSpring({
+    progress: preProgress,
+    config: config.gentle
+  });
+
+  const path = new CatmullRomCurve3(TEXTS.map((_, index) => new Vector3(-(index*(width*2)) -2, 0, 0)))
 
   useFrame(({clock}) => {
     if (!ref.current) return;
-
-    ref.current.position.lerp(ref.current.position.clone().setX(- ((parseInt(`${params.get('pan')}`)||0)*20)), 0.1)
-    
+    const p = Math.max(Math.min(progress.get()/3, 1), 0)
+    ref.current.position.lerp(path.getPoint(p), 0.1)
   });
 
-  return (<group ref={ref} position={[20, 0, 0]}>
-    {TEXTS.map((text, index) => {
-      return <Text key={index} visible={pathname === '/'} fontSize={1.4} position={[(index*20) -2, 0, -3]} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
-        {text}
-      </Text>
-    })}
+  return (<group ref={ref} position={defaultPos}>
+    <Scroll>
+      {TEXTS.map((text, index) => {
+        return <Text key={index} visible={pathname === '/'} fontSize={1.4} position={[(index*(width*2)), 0, -3]} letterSpacing={-0.025} font={'/assets/fonts/HelveticaNeueMedium.woff'} color="white">
+          {text}
+        </Text>
+      })}
+    </Scroll>
   </group>);
 };
 
@@ -448,8 +475,8 @@ const Bubble: FC<{
   setPreProgress: (value: number) => void;
 }> = ({
   index,
-  position,
   rotation,
+  position,
   speed,
   uniforms,
   noiseSpeed,
@@ -470,7 +497,7 @@ const Bubble: FC<{
     progress,
   } = useSpring({
     progress: preProgress,
-    config: { mass: 1, tension: 280, friction: 100 }
+    config: config.gentle
   });
 
   const {
@@ -570,14 +597,48 @@ const Bubble: FC<{
   const searchParams = useSearchParams();0
   const currentPan = (parseInt(`${searchParams.get('pan')}`) || 0) as 0 | 1 | 2 | 3;
 
+  const resolveProgressBubblesPos = (progress: number, tab: number, pathname: keyof typeof tracking) => {
+    if (pathname === '/') {
+      // const curPos1 = pages['/'].panPath.getPoint(tab/4)
+      // const nexPos1 = pages['/'].panPath.getPoint(tab+1/4)
+      
+      const t = tab/4 + ((progress-tab)/4);
+      const bubblePos1 = pages['/'].panPath.getPoint(t>0?t:0);
 
+      const currentPos =  
+      pages['/']?.panPath.getPoint(tab/4);
+      
+      const bubbleLookAtPos = pages['/'].panLookAt.getPoint(t>0?t:0);
+    
+      const newObj = new Object3D();
+      
+      newObj.lookAt(bubbleLookAtPos);
+
+      const bubble1Rot = new Vector3();
+      bubble1Rot.set(newObj.rotation.x, newObj.rotation.y, newObj.rotation.z);
+      // const bubblePos1 = curPos1.lerp(nexPos1, (progress - tracking[pathname].pans[(tab as 0|1|2|3|4)].min))
+      const bubblePos2 = pages['/'].bubble2Pos;
+      return [bubblePos1, bubblePos2, bubble1Rot]
+    } else {
+      const curPageIndex = Object.keys(pages).findIndex((p) => p===pathname);
+      const nextPage = (Object.keys(pages).find((p, index) => index === curPageIndex+1)??'/') as keyof typeof pages;
+      const lerpV = progress - (tracking[pathname]? tracking[pathname][0].min : tracking['default'][0].min);
+      const bubblePos1 = pages[pathname].bubble1Pos.clone().lerp(pages[nextPage].bubble1Pos, lerpV);
+      const bubblePos2 = pages[pathname].bubble2Pos.clone().lerp(pages[nextPage].bubble2Pos, lerpV);
+      const bubble1Rot = new Vector3();
+      return [bubblePos1, bubblePos2, bubble1Rot]
+    }
+  }
 
   useFrame(({gl, scene, camera, clock}) => {
-    console.log(progress.get());
-    
     if (!mesh.current) return;
+    const t = (clock.getElapsedTime() / 1.) * (excite ? 2 : 1);
 
-    const t = clock.getElapsedTime() / 1.;
+    const [
+      bubble1Pos,
+      bubble2Pos,
+      bubble1Rot
+    ] = resolveProgressBubblesPos(progress.get(), currentPan, pathname)
 
     const lerpNoiseX = lerp(mesh.current?.material.uniforms.noiseX.value, noiseX, speed);
     mesh.current.material.uniforms.noiseX.value = lerpNoiseX;
@@ -630,11 +691,37 @@ const Bubble: FC<{
     //     }
     //   }
     // } else {
-    mesh.current.position.lerp(position, speed);
 
-    const newRot = v3.set(mesh.current.rotation.x, mesh.current.rotation.y,mesh.current.rotation.z);
-    newRot.lerp(rotation, speed);
-    mesh.current.rotation.set(newRot.x, newRot.y, newRot.z);
+    if ((pathname as string) !== '/services/our-method' && 
+    (pathname as string) !== '/partners' && 
+    !(pathname as string).startsWith('/contact')) {
+      if (index === '0') {
+        if (pathname === '/') {
+          const t = (progress.get()/4);
+          
+          if (t>1)
+            mesh.current.position.lerp(new Vector3(0, 0, 4.2), speed)
+          else
+            mesh.current.position.lerp(pages['/'].panPath.getPoint(t>0?t:0), speed)
+        }
+        else 
+          mesh.current.position.lerp(bubble1Pos, speed);
+      } else {
+        mesh.current.position.lerp(bubble2Pos, speed);
+      }
+    } else {
+      mesh.current.position.lerp(position, speed);
+    }
+
+    if (pathname === '/') {
+      const newRot = v3.set(mesh.current.rotation.x, mesh.current.rotation.y,mesh.current.rotation.z);
+      newRot.lerp(bubble1Rot, speed);
+      mesh.current.rotation.set(mesh.current.rotation.x, newRot.y, mesh.current.rotation.z);
+    } else {
+      const newRot = v3.set(mesh.current.rotation.x, mesh.current.rotation.y,mesh.current.rotation.z);
+      newRot.lerp(rotation, speed);
+      mesh.current.rotation.set(newRot.x, newRot.y, newRot.z);
+    }
     
     mesh.current.material.uniforms.uChromaticAberration.value = lerp(mesh.current.material.uniforms.uChromaticAberration.value, chromaticAberration, speed);
     mesh.current.material.uniforms.uSaturation.value = lerp(mesh.current.material.uniforms.uSaturation.value, saturation, speed);
@@ -680,14 +767,11 @@ const Bubble: FC<{
   return (
     <mesh onPointerMove={() => {
       setExcite(true);
-
-      throttle(() => {
-        setExcite(false)
-      }, 400, {
-        leading: true,
-        trailing: false
-      })
-    }} name={"bubble"+index} ref={mesh}>
+    }}
+    onPointerLeave={() => {
+      setExcite(false)
+    }}
+    name={"bubble"+index} ref={mesh}>
       <sphereGeometry args={[2.5, gpuTier * 32, gpuTier * 32]} />
       <shaderMaterial
         key={uuidv4()}

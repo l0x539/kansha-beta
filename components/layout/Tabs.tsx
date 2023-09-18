@@ -20,9 +20,6 @@ const Tabs: FC<{
   setActiveTab
 }) => {
 
-  console.log(tab);
-  
-
   return (<div>
     {Children.map(children, (child, index) => {
       if (!isValidElement<ITab>(child)) {

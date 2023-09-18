@@ -59,7 +59,7 @@ export const pages = {
     }
   },
   '/': {
-    bubble1Pos: new Vector3(0, 0, 4),
+    bubble1Pos: new Vector3(0, 0, 4.2),
     bubble1Rot: new Vector3(),
     bubble2Pos: new Vector3(-20, -20, 20),
     bubble2Rot: new Vector3,
@@ -969,6 +969,61 @@ export const pages = {
       noiseY: 0,
       noiseZ: 0
     }
+  },
+  '/culture': {
+    bubble1Pos: new Vector3,
+    bubble1Rot: new Vector3(0, Math.PI),
+    bubble2Pos: new Vector3(-20, -20, 20),
+    bubble2Rot: new Vector3,
+    speed: 0.03,
+    color: new Color(),
+    opacity: 0,
+    noiseSpeed: 1.05,
+    noiseStrength: 0.17,
+    uniforms: {
+      light: {
+        x: -1,
+        y: 1,
+        z: 1
+      },
+      diffuseness: 0.2,
+      shininess: 15.0,
+      fresnelPower: 8.0,
+      iorR: 1.15,
+      iorY: 1.16,
+      iorG: 1.18,
+      iorC: 1.22,
+      iorB: 1.22,
+      iorP: 1.22,
+      saturation: 1.03,
+      chromaticAberration: 0.04,
+      refraction: 0.22,
+      noiseX: 1,
+      noiseY: 1,
+      noiseZ: 1
+    },
+    dropUniforms: {
+      light: {
+        x: -1,
+        y: 1,
+        z: 1
+      },
+      diffuseness: 1,
+      shininess: 0,
+      fresnelPower: 8,
+      iorR: 0,
+      iorY: 0,
+      iorG: 0,
+      iorC: 0,
+      iorB: 0,
+      iorP: 0,
+      saturation: 0,
+      chromaticAberration: 0,
+      refraction: 0,
+      noiseX: 0,
+      noiseY: 0,
+      noiseZ: 0
+    }
   }
 };
 
@@ -991,75 +1046,75 @@ export const tracking = {
         max: 1
       },
       1: {
-        min: 0,
-        max: 1
+        min: 1,
+        max: 2
       },
       2: {
-        min: 0,
-        max: 1
+        min: 2,
+        max: 3
       },
       3: {
-        min: 0,
-        max: 1
+        min: 3,
+        max: 4
       },
       4: {
-        min: 0,
-        max: 1
+        min: 4,
+        max: 5
       }
     },
   },
   '/services': {
     0: {
-      min: 0,
-      max: 1
+      min: 5,
+      max: 6
     }
   },
   '/services/discovery': {
     0: {
-      min: 0,
-      max: 1
+      min: 6,
+      max: 7
     }
   },
   '/services/development': {
     0: {
-      min: 0,
-      max: 1
+      min: 7,
+      max: 8
     }
   },
   '/services/team': {
     0: {
-      min: 0,
-      max: 1
+      min: 8,
+      max: 9
     }
   },
   '/services/design': {
     0: {
-      min: 0,
-      max: 1
+      min: 9,
+      max: 10
     }
   },
   '/services/services': {
     0: {
-      min: 0,
-      max: 1
+      min: 10,
+      max: 11
     }
   },
   '/contact': {
     0: {
-      min: 0,
-      max: 1
+      min: 11,
+      max: 12
     }
   },
   '/contact/form': {
     0: {
-      min: 0,
-      max: 1
+      min: 12,
+      max: 13
     }
   },
   '/contact/info': {
     0: {
-      min: 0,
-      max: 1
+      min: 13,
+      max: 14
     }
   },
   default: {

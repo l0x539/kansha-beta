@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { Color, Vector2 } from "three";
+import { Color, MathUtils, Vector2 } from "three";
 import { useControls, Leva } from "leva";
 import { bgVertexShader } from "@/utils/shaders/vertexShaders";
 import { bgFragmentShader } from "@/utils/shaders/fragmentShaders";
@@ -77,18 +77,24 @@ const NoisyBackground: FC<{
   );
 
   const [
-    homeColor1,
-    homeColor2,
-    homeColor3,
-    aboutColor1,
-    aboutColor2,
-    aboutColor3,
+    defaultColor1,
+    defaultColor2,
+    defaultColor3,
+    partnersColor1,
+    partnersColor2,
+    partnersColor3,
     lazoColor1,
     lazoColor2,
     lazoColor3,
-    downAboutColor1,
-    downAboutColor2,
-    downAboutColor3
+    downPartnerColor1,
+    downPartnerColor2,
+    downPartnerColor3,
+    servicesColor1,
+    servicesColor2,
+    servicesColor3,
+    servicesMColor1,
+    servicesMColor2,
+    servicesMColor3
   ] = useMemo(() => {
     return [
       new Color("#000"),
@@ -105,7 +111,13 @@ const NoisyBackground: FC<{
       new Color("#1c2e2a"),
       new Color("#D14CA6"),
       new Color("#781671"),
-      new Color("#89B378")
+      new Color("#89B378"),
+      new Color("#ff0073"),
+      new Color("#000000"),
+      new Color("#100180"),
+      new Color("#D14CA6"),
+      new Color("#781671"),
+      new Color("#89B378"),
     ]
   }, []);
 
@@ -213,16 +225,16 @@ const NoisyBackground: FC<{
   useEffect(() => {
     if (pathname === '/partners') {
       setTimeout(() => {
-        aboutColor1.lerp(downAboutColor1, 1);
-        aboutColor2.lerp(downAboutColor2, 1);
-        aboutColor3.lerp(downAboutColor3, 1);
+        partnersColor1.lerp(downPartnerColor1, 1);
+        partnersColor2.lerp(downPartnerColor2, 1);
+        partnersColor3.lerp(downPartnerColor3, 1);
       }, 15000)
     }
     if (COMING_SOON && !searchParams.get('demo') && pathname === '/') {
       setTimeout(() => {
-        homeColor1.lerp(aboutColor1, 1);
-        homeColor2.lerp(aboutColor2, 1);
-        homeColor3.lerp(aboutColor3, 1);
+        defaultColor1.lerp(partnersColor1, 1);
+        defaultColor2.lerp(partnersColor2, 1);
+        defaultColor3.lerp(partnersColor3, 1);
       }, 3000)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -256,17 +268,26 @@ const NoisyBackground: FC<{
       }
     } else {
       if (pathname === '/partners') {
-        shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(aboutColor1, .01)
-        shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(aboutColor2, .02)
-        shaderMaterialRef.current.uniforms.uColor3.value = shaderMaterialRef.current.uniforms.uColor3.value.lerp(aboutColor3, .03)
+        shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(partnersColor1, .01)
+        shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(partnersColor2, .02)
+        shaderMaterialRef.current.uniforms.uColor3.value = shaderMaterialRef.current.uniforms.uColor3.value.lerp(partnersColor3, .03)
       }else if (pathname.startsWith('/portfolio/')) {
         shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(lazoColor1, .01)
         shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(lazoColor2, .02)
         shaderMaterialRef.current.uniforms.uColor3.value = shaderMaterialRef.current.uniforms.uColor3.value.lerp(lazoColor3, .03)
+      } else if (pathname === '/services') {
+        shaderMaterialRef.current.uniforms.uColor1.value.lerp(servicesColor1, 0.01)
+        shaderMaterialRef.current.uniforms.uColor2.value.lerp(servicesColor2, 0.01)
+        shaderMaterialRef.current.uniforms.uColor3.value.lerp(servicesColor3, 0.01)
+      } else if (pathname === '/services/our-method') {
+        shaderMaterialRef.current.uniforms.uColor1.value.lerp(servicesMColor1, 0.1)
+        shaderMaterialRef.current.uniforms.uColor2.value.lerp(servicesMColor2, 0.1)
+        shaderMaterialRef.current.uniforms.uColor3.value.lerp(servicesMColor3, 0.1)
+        shaderMaterialRef.current.uniforms.uAlpha.value = MathUtils.inverseLerp(shaderMaterialRef.current.uniforms.uAlpha.value, Math.random()*0.1, 0.8)
       } else {
-        shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(homeColor1, .01)
-        shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(homeColor2, .02)
-        shaderMaterialRef.current.uniforms.uColor3.value = shaderMaterialRef.current.uniforms.uColor3.value.lerp(homeColor3, .03)
+        shaderMaterialRef.current.uniforms.uColor1.value = shaderMaterialRef.current.uniforms.uColor1.value.lerp(defaultColor1, .01)
+        shaderMaterialRef.current.uniforms.uColor2.value = shaderMaterialRef.current.uniforms.uColor2.value.lerp(defaultColor2, .02)
+        shaderMaterialRef.current.uniforms.uColor3.value = shaderMaterialRef.current.uniforms.uColor3.value.lerp(defaultColor3, .03)
       }
     }
     shaderMaterialRef.current.uniforms.uBlackBorderFade.value = uBlackBorderFade
