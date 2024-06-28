@@ -30,9 +30,11 @@ const PortfolioLaPalma = () => {
             </div>
             <div>
               <p className="text-white leading-[normal]">
-                La Palma FC stands as a pioneering decentralized football 
-                <br />club, where decisions are collaboratively crafted by its 
-                <br />member community.
+                La Palma FC stands as a pioneering decentralized football
+                <br />
+                club, where decisions are collaboratively crafted by its
+                <br />
+                member community.
               </p>
               <Image
                 className="mt-[-5rem] ml-4 mix-blend-exclusion"
@@ -82,13 +84,16 @@ const PortfolioLaPalma = () => {
             <div>
               <h5 className="text-[#999] font-semibold">Lorem Ipsum</h5>
               <p className="mt-11 text-white leading-[normal] text-lg font-light">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 
-                <br />nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit 
-                <br />laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo 
-                <br />posuere malesuada. Curabitur at cursus justo. 
+                We're proud partners of this pioneering decentralized football{" "}
                 <br />
-                <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. 
-                <br />Nam vitae diam vitae felis tincidunt tristique.
+                club, where decisions are collaboratively crafted by its
+                <br />
+                passionate member community. With a history deeply entrenched in
+                <br />
+                the local island culture, La Palma FC has achieved numerous
+                <br />
+                victories, embodying the essence of community spirit.
+                <br />
               </p>
             </div>
             <div className="relative z-10 flex gap-3 flex-nowrap">
@@ -148,27 +153,27 @@ const PortfolioLaPalma = () => {
           </div>
           <div className="mx-8 mt-16 grid grid-cols-2">
             <div>
-              <h5 className="text-[#999] font-semibold">Lorem Ipsum</h5>
               <p className="mt-11 text-white leading-[normal] text-lg font-light">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 
-                <br />nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit 
-                <br />laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo 
-                <br />posuere malesuada. Curabitur at cursus justo. 
+                As partners, we're excited to propel La Palma FC into the future{" "}
                 <br />
-                <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. 
-                <br />Nam vitae diam vitae felis tincidunt tristique.
+                by offering fans an unprecedented opportunity to connect with
+                <br />
+                the club through NFT technology. With their innovative NFT
+                <br />
+                memberships, fans become integral members of the world's first
+                <br />
+                100% decentralized football club, enriching engagement with the
+                <br />
+                game like never before
               </p>
             </div>
             <div className="ml-32">
-              <h5 className="text-[#999] font-semibold">Lorem Ipsum</h5>
               <p className="mt-11 text-white leading-[normal] text-lg font-light">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 
-                <br />nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit 
-                <br />laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo 
-                <br />posuere malesuada. Curabitur at cursus justo. 
+                Experience the beta launch of their platform, designed to <br />
+                revolutionize the fan experience and foster a deeper connection
                 <br />
-                <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. 
-                <br />Nam vitae diam vitae felis tincidunt tristique.
+                between the club and its supporters.
+                <br />
               </p>
             </div>
           </div>
@@ -182,20 +187,19 @@ const PortfolioLaPalma = () => {
           </div>
           <div className="mx-10 mt-[-2.9rem] flex justify-end">
             <p className="text-5xl text-white leading-[3.62569rem] tracking-[-0.01444rem] text-end">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-              <br />Sed nec interdum erat. Nulla facilisi. Fusce tincidunt ante 
-              <br />in velit laoreet, ut pellentesque nunc eleifend. 
+              Through our partnership with La Palma FC, we're proud to introduce
+              NFT subscription modules, allowing fans to access exclusive
+              membership subscriptions and become part of the vibrant
+              decentralized community surrounding the club.
+              <br />
             </p>
           </div>
           <div className="mx-8 mt-32">
             <p className="text-white leading-[normal] text-lg font-light">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 
-              <br />nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit 
-              <br />laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo 
-              <br />posuere malesuada. Curabitur at cursus justo. 
-              <br />
-              <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. 
-              <br />Nam vitae diam vitae felis tincidunt tristique.
+              As collaborators with La Palma FC, we're excited to offer fans the
+              opportunity to engage with the club's decision-making process and
+              enjoy live streaming of matches through our decentralized voting
+              and streaming channels.
             </p>
           </div>
           <div className="flex gap-x-5">
@@ -241,12 +245,10 @@ const PortfolioLaPalma = () => {
           <div className="mx-8 mt-14 grid grid-cols-2">
             <div></div>
             <p className="text-white leading-[normal] text-lg font-light">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. 
-              <br />Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. 
-              <br />Cras et ex eget justo posuere malesuada. Curabitur at cursus justo. 
-              <br />
-              <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae 
-              <br />diam vitae felis tincidunt tristique.
+              Explore the La Palma Hub of Decentralized Innovation, a
+              collaborative effort between us and La Palma FC dedicated to
+              driving innovation in the decentralized space and enhancing the
+              fan experience.
             </p>
           </div>
           <div className="mt-20 flex justify-center mx-[-9rem] mix-blend-exclusion">
