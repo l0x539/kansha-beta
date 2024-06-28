@@ -181,13 +181,13 @@ const Background: FC<{
   return (
     <>
       <color attach="background" args={["black"]} />
-      <ScrollControls horizontal damping={0.1} pages={3} distance={1}>
+      <ScrollControls infinite horizontal damping={4} pages={4} distance={1}>
         {COMING_SOON && !searchParams.get("demo") ? (
           <ComingSoonText />
         ) : (
           <IntroText />
         )}
-        {/* <LogoBg opacity={opacity} color={color} speed={speed} /> */}
+        <LogoBg opacity={opacity} color={color} speed={speed} />
         <group>
           <Bubble
             preProgress={preProgress}
@@ -431,7 +431,7 @@ const LogoBg: FC<{
   opacity: number;
   speed: number;
 }> = ({ color, speed, opacity }) => {
-  const [logo] = useTexture(["/assets/images/Logo.png"]);
+  const [logo] = useTexture(["/assets/images/services-background.png"]);
   const meshSprite = useRef<Sprite>(null);
   const [ready, setReady] = useState(false);
   useFrame(() => {
@@ -458,11 +458,11 @@ const LogoBg: FC<{
 
   return (
     <sprite
-      position={[0, 0, -5]} /* position */
-      scale={new Vector3(64.5 / 3, 9.125 / 3, 1)}
+      position={[0, 0, 0]} /* position */
+      scale={new Vector3(20, 8, 0)}
       ref={meshSprite}
     >
-      <spriteMaterial map={logo} color={"#FFF"} alphaTest={0} opacity={0} />
+      <spriteMaterial map={logo} color={"#FFF"} alphaTest={1} opacity={1} />
     </sprite>
   );
 };
@@ -976,4 +976,5 @@ const Bubble: FC<{
 
 export default Background;
 
-useTexture.preload("/assets/images/Logo.png");
+useTexture.preload("/assets/images/services-background.png");
+useTexture.preload("/assets/images/partners-background.png");

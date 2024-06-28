@@ -10,14 +10,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { setProgress } from "@/store/features/gl/glSlice";
 
 const Menu = () => {
-  return (
-    <>
-      <div className="visible">
-        <MenuMobile />
-      </div>
-      {/* <div className="hidden xl:visible xl:block"><MenuDesktop /></div> */}
-    </>
-  );
+  return <MenuMobile />;
 };
 
 const MenuDesktop = () => {
@@ -191,7 +184,7 @@ const MenuMobile = () => {
         variants={menuVariants}
         animate={isMenuOpen ? "open" : "closed"}
         className={`absolute top-0 left-0 w-screen h-screen py-14 
-      px-16 bg-[#535353] opacity-[0.7] mix-blend-multiply 
+      px-16 bg-[#535353] opacity-[0.99] mix-blend-multiply 
       ${isMenuOpen ? "block" : "hidden"}`}
       ></motion.div>
       <div

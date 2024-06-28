@@ -1,15 +1,15 @@
-'use client'
+"use client";
 import Image from "next/image";
 import { Footer } from "./PartnersPage";
 import FooterContent from "../FooterContent";
 import { useSearchParams } from "next/navigation";
-import { Montserrat } from 'next/font/google'
+import { Montserrat } from "next/font/google";
 
 const montserrat = Montserrat({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-montserrat',
-})
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-montserrat",
+});
 
 const PortfolioSoyRada = () => {
   const searchParams = useSearchParams();
@@ -20,7 +20,9 @@ const PortfolioSoyRada = () => {
         <div className="w-[94.5rem]">
           <div className="mx-14 flex justify-between">
             <h1 className="text-right text-8xl text-white">
-              Soy Rada<br />La Caja Mágica
+              Soy Rada
+              <br />
+              La Caja Mágica
             </h1>
             <div className="grid grid-cols-2 gap-x-28 gap-y-8">
               <div className="flex items-end text-white text-lg pb-4">
@@ -50,13 +52,11 @@ const PortfolioSoyRada = () => {
             </div>
             <div>
               <p className="text-white leading-[normal]">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 
-                <br />nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit 
-                <br />laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo 
-                <br />posuere malesuada. Curabitur at cursus justo. 
-                <br />
-                <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. 
-                <br />Nam vitae diam vitae felis tincidunt tristique.
+                Experience the magic of learning from Soy Rada as he reveals the
+                secrets behind each trick in detailed instructional videos. This
+                collaborative effort between Soy Rada and AXION Energy embodies
+                the spirit of creativity and innovation, offering customers
+                unique and memorable experienc
               </p>
               <div className="flex mt-28">
                 <div className="flex flex-col items-end">
@@ -76,20 +76,18 @@ const PortfolioSoyRada = () => {
                   </div>
                 </div>
               </div>
-              
             </div>
           </div>
           <div className="mx-8">
-            {
-              searchParams.has('soyradabg') ?
+            {searchParams.has("soyradabg") ? (
               <Image
                 className="relative"
                 src={"/assets/images/soyrada_desktop_bg.png"}
                 width={1447}
                 height={1137}
                 alt="SoyRada Desktop preview by Kansha"
-              /> 
-              :
+              />
+            ) : (
               <Image
                 className="relative"
                 src={"/assets/images/soyrada_desktop.png"}
@@ -97,7 +95,7 @@ const PortfolioSoyRada = () => {
                 height={921.691}
                 alt="SoyRada Desktop preview by Kansha"
               />
-            }
+            )}
           </div>
           <div className="mx-8 mt-32 flex-col">
             <div className="flex">
@@ -172,14 +170,11 @@ const PortfolioSoyRada = () => {
               </div>
               <div>
                 <p className="text-white leading-[normal]">
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
-                  <br />Sed nec interdum erat. Nulla facilisi. Fusce tincidunt 
-                  <br />ante in velit laoreet, ut pellentesque nunc eleifend. Cras 
-                  <br />et ex eget justo posuere malesuada. Curabitur at 
-                  <br />cursus justo. 
-                  <br />
-                  <br />Sed auctor justo sed massa convallis, in rhoncus odio 
-                  <br />gravida. Nam vitae diam vitae felis tincidunt tristique.
+                  Cecilia Panetta, Executive Marketing Manager of AXION Energy,
+                  emphasizes the brand's commitment to providing exceptional
+                  experiences for customers. The partnership with Soy Rada
+                  reflects this commitment, aiming to bring joy and wonder to
+                  people's lives through the magic of 'La caja mágica'
                 </p>
               </div>
             </div>
@@ -209,13 +204,10 @@ const PortfolioSoyRada = () => {
                 />
               </div>
               <p className="text-white text-lg leading-[normal] ml-16 mt-40">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 
-                <br />nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit 
-                <br />laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo 
-                <br />posuere malesuada. Curabitur at cursus justo. 
-                <br />
-                <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. 
-                <br />Nam vitae diam vitae felis tincidunt tristique.
+                According to Agustín Aristarán 'Soy Rada', the Magic Box is more
+                than just a collection of tricks; it's a gateway to the world of
+                magic. With 8 pieces carefully curated by Soy Rada himself, this
+                product represents a culmination of dreams and creativity
               </p>
             </div>
           </div>
@@ -273,7 +265,9 @@ const PortfolioSoyRada = () => {
                     </div>
                     <div className="flex mt-3 mb-4">
                       <span className="text-[#E22490] font-bold text-xs">
-                        <span className=" border-b border-b-[#E22490] pb-1.5">CTA Hover</span>
+                        <span className=" border-b border-b-[#E22490] pb-1.5">
+                          CTA Hover
+                        </span>
                         <span className="ml-4 font-normal text-white">CTA</span>
                       </span>
                     </div>
@@ -300,18 +294,15 @@ const PortfolioSoyRada = () => {
             />
             <div className="w-full flex flex-col">
               <p className="text-white text-lg leading-[normal]">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed 
-                <br />nec interdum erat. Nulla facilisi. Fusce tincidunt ante in velit 
-                <br />laoreet, ut pellentesque nunc eleifend. Cras et ex eget justo 
-                <br />posuere malesuada. Curabitur at cursus justo. 
-                <br />
-                <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. 
-                <br />Nam vitae diam vitae felis tincidunt tristique.
+                Unlock the mysteries of magic with 'La caja mágica' and immerse
+                yourself in the world of illusions. The inclusion of
+                instructional videos ensures that anyone, from beginners to
+                seasoned magicians, can master the art of magic with ease.
               </p>
               <div className="mt-52 flex justify-evenly">
                 <Image
                   src="/assets/images/soyrada_class.png"
-                  width={296.}
+                  width={296}
                   height={300}
                   alt="Soyrada Class by Kansha"
                 />
@@ -335,7 +326,7 @@ const PortfolioSoyRada = () => {
                 />
                 <Image
                   src="/assets/images/soyrada_podcast.png"
-                  width={592.}
+                  width={592}
                   height={411}
                   alt="Soyrada Podcast by Kansha"
                 />
@@ -344,26 +335,26 @@ const PortfolioSoyRada = () => {
                 <div className="flex flex-col gap-5">
                   <Image
                     src="/assets/images/soyrada_class1.png"
-                    width={212.}
+                    width={212}
                     height={177}
                     alt="Soyrada Class one by Kansha"
                   />
                   <Image
                     src="/assets/images/soyrada_class2.png"
-                    width={212.}
+                    width={212}
                     height={177}
                     alt="Soyrada Class one by Kansha"
                   />
                 </div>
                 <Image
                   src="/assets/images/soyrada_card_tab.png"
-                  width={489.}
+                  width={489}
                   height={360.461}
                   alt="Soyrada tutorial card and menu by Kansha"
                 />
                 <Image
                   src="/assets/images/soyrada_pack.png"
-                  width={347.}
+                  width={347}
                   height={367}
                   alt="Soyrada Pack by Kansha"
                 />
@@ -387,12 +378,10 @@ const PortfolioSoyRada = () => {
           <div className="mx-8 mt-14 grid grid-cols-2">
             <div></div>
             <p className="text-white leading-[normal] text-lg font-light">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec interdum erat. 
-              <br />Nulla facilisi. Fusce tincidunt ante in velit laoreet, ut pellentesque nunc eleifend. 
-              <br />Cras et ex eget justo posuere malesuada. Curabitur at cursus justo. 
-              <br />
-              <br />Sed auctor justo sed massa convallis, in rhoncus odio gravida. Nam vitae 
-              <br />diam vitae felis tincidunt tristique.
+              Soy Rada expresses his passion for magic and the joy it brings to
+              people's lives. Through his collaboration with AXION Energy, he
+              aims to share this joy with audiences worldwide, inspiring wonder
+              and amazement with every trick performed.
             </p>
           </div>
           <div className="mt-20 flex justify-center">
